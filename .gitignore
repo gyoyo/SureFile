@@ -7,7 +7,7 @@ desktop.ini
 *.kdev4
 installer/temp/*
 .DS_Store
-Icon^M^M
+Icon
 
 # build dir(s) #
 ###############
