@@ -16,52 +16,38 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
-#include "maidsafe/common/log.h"
-
-#include "maidsafe/surefile/qt_ui/models/surefile_api.h"
-
-namespace qt_ui = maidsafe::surefile::qt_ui;
-
 int main(int argc, char *argv[]) {
   QApplication application(argc, argv);
   application.setOrganizationDomain("http://www.maidsafe.net");
   application.setOrganizationName("MaidSafe.net Ltd.");
   application.setApplicationName("SureFile");
   application.setApplicationVersion("0.1");
-  application.setWindowIcon(QPixmap(":/icons/app_icon.ico"));
 
     try {
-         int rc = 0;
-         qmlRegisterType<qt_ui::SureFileAPIModel>("SureFile", 1, 0, "SureFileAPIModel");
-         QQmlEngine engine;
-         QQmlComponent *component = new QQmlComponent(&engine);
+      int rc = 0;
+      QQmlEngine engine;
+      QQmlComponent* component = new QQmlComponent(&engine);
+      QObject::connect(&engine, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
+      component->loadUrl(QUrl("qrc:/views/MainView.qml"));
+      if (!component->isReady() ) {
+          qWarning("%s", qPrintable(component->errorString()));
+          return -1;
+      }
 
-         QObject::connect(&engine, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
+      QObject* topLevel = component->create();
+      QQuickWindow* window = qobject_cast<QQuickWindow *>(topLevel);
+      QSurfaceFormat surfaceFormat = window->requestedFormat();
+      window->setFormat(surfaceFormat);
+      window->show();
 
-         component->loadUrl(QUrl("qrc:/qml/Main.qml"));
-
-         if (!component->isReady() ) {
-             qWarning("%s", qPrintable(component->errorString()));
-             return -1;
-         }
-
-         QObject *topLevel = component->create();
-         QQuickWindow *window = qobject_cast<QQuickWindow *>(topLevel);
-
-         QSurfaceFormat surfaceFormat = window->requestedFormat();
-         window->setFormat(surfaceFormat);
-         window->show();
-
-         rc = application.exec();
-
-         delete component;
-         return rc;
-
+      rc = application.exec();
+      delete component;
+      return rc;
     } catch(const std::exception &ex) {
-      LOG(kError) << "STD Exception Caught: " << ex.what();
+      qWarning() << "STD Exception Caught: " << ex.what();
       return -1;
     } catch(...) {
-      LOG(kError) << "Default Exception Caught";
+      qWarning() << "Default Exception Caught";
       return -1;
     }
 }

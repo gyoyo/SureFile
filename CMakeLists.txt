@@ -92,19 +92,16 @@ file(GLOB HEADER_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR "${SRC_MAIDSAFE}/controlle
 source_group("Controllers\\Source Files" FILES ${SOURCE_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR})
 source_group("Controllers\\Header Files" FILES ${HEADER_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR})
 
-QT5_ADD_RESOURCES(RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR ${SRC_MAIDSAFE}/resources/resources.qrc)
+QT5_ADD_RESOURCES(RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR ${SRC_MAIDSAFE}/main_resource.qrc)
 source_group("Auto Compiled\\Resource Files" FILES ${RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR})
 
-file(GLOB UI_FILES_SUREFILE_QT_UI_VIEWS_DIR ${SRC_MAIDSAFE}/views/*.ui)
-QT5_WRAP_UI(UIC_FILES_SUREFILE_QT_UI_VIEWS_DIR ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR})
-source_group("Views\\UI" FILES ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR})
-source_group("Auto Compiled\\View Compiled Files" FILES ${UIC_FILES_SUREFILE_QT_UI_VIEWS_DIR})
+file(GLOB UI_FILES_SUREFILE_QT_UI_VIEWS_DIR ${SRC_MAIDSAFE}/views/*.*)
+source_group("Views" FILES ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR})
 
 set(ALL_SUREFILE_QT_UI_SOURCE_FILES
       ${SOURCE_FILES_SUREFILE_QT_UI_HELPERS_DIR}
       ${SOURCE_FILES_SUREFILE_QT_UI_MODELS_DIR}
       ${SOURCE_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR}
-      ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR}
       ${UIC_FILES_SUREFILE_QT_UI_VIEWS_DIR})
 set(ALL_SUREFILE_QT_UI_HEADER_FILES
       ${HEADER_FILES_SUREFILE_QT_UI_HELPERS_DIR}
@@ -149,9 +146,6 @@ source_group("Resource Files\\Animations" FILES ${RESOURCE_FILES_ANIMATIONS_DIR}
 file(GLOB RESOURCE_FILES_ICONS_DIR ${SRC_MAIDSAFE}/resources/icons/*.*)
 source_group("Resource Files\\Icons" FILES ${RESOURCE_FILES_ICONS_DIR})
 
-file(GLOB RESOURCE_FILES_QML_DIR ${SRC_MAIDSAFE}/resources/qml/*.*)
-source_group("Views\\QML" FILES ${RESOURCE_FILES_QML_DIR})
-
 file(GLOB RESOURCE_FILES_STYLES_DIR ${SRC_MAIDSAFE}/resources/styles/*.*)
 source_group("Resource Files\\Styles" FILES ${RESOURCE_FILES_STYLES_DIR})
 
@@ -161,10 +155,11 @@ source_group("Resource Files\\Translations" FILES ${RESOURCE_FILES_TRANSLATIONS_
 set(ALL_SUREFILE_QT_UI_RESOURCE_SOURCE_FILES
       ${RESOURCE_FILES_ANIMATIONS_DIR}
       ${RESOURCE_FILES_ICONS_DIR}
-      ${RESOURCE_FILES_QML_DIR}
+      ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR}
       ${RESOURCE_FILES_STYLES_DIR}
       ${RESOURCE_FILES_TRANSLATIONS_DIR})
 
+      message(STATUS ${ALL_SUREFILE_QT_UI_RESOURCE_SOURCE_FILES})
 #####    Set Application Icon    ####
 if(WIN32)
   set(SUREFILE_UI_QT_APP_ICON_RESOURCE ${SRC_MAIDSAFE}/resources/app_icon.rc)
@@ -182,7 +177,10 @@ add_executable(surefile
                   ${ALL_SUREFILE_QT_UI_HEADER_FILES}
                   ${RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR}
                   ${ALL_SUREFILE_QT_UI_RESOURCE_SOURCE_FILES})
-target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml maidsafe_lifestuff maidsafe_lifestuff_manager)
+
+# Temp - Removing backend API to bypass build errors in maidsafe_lifestuff
+target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml)
+# target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml maidsafe_lifestuff maidsafe_lifestuff_manager)
 
 if(WIN32)
   set_target_properties(surefile PROPERTIES WIN32_EXECUTABLE TRUE)
