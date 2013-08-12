@@ -1,0 +1,20 @@
+#!/bin/bash
+
+DIRECTORY=/Applications/LifeStuff.app
+echo "Checking whether LifeStuff.app exists!"
+if [ ! -d "$DIRECTORY" ]; then
+    echo "LifeStuff has been removed by the user! Removing files..."
+    # Stop and unload the daemon, and delete the configuration file
+    launchctl unload -w /Library/LaunchDaemons/com.lifestuff.invigilator.plist
+    rm /Library/LaunchDaemons/com.lifestuff.invigilator.plist
+
+    # Stop and unload the daemon, and delete the configuration file
+    echo "Removing invigilator-checker"
+    rm /usr/local/bin/invigilator-checker
+    rm /Library/LaunchDaemons/com.lifestuff.invigilator-checker.plist
+    launchctl remove com.lifestuff.invigilator-checker
+    echo "Files removed"
+else
+    echo "LifeStuff.app exists!"
+fi
+ 
