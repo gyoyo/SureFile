@@ -184,21 +184,6 @@ target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Q
 
 if(WIN32)
   set_target_properties(surefile PROPERTIES WIN32_EXECUTABLE TRUE)
-elseif(APPLE)
-  set_target_properties(surefile PROPERTIES MACOSX_BUNDLE TRUE)
-
-  execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/surefile.app/Contents/Resources)
-  execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/installer/mac/icons/mac_bundle.icns ${CMAKE_BINARY_DIR}/surefile.app/Contents/Resources/)
-  execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/installer/text/surefile/eula.txt ${CMAKE_BINARY_DIR}/surefile.app/Contents/Resources/)
-
-  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_BUNDLE_NAME surefile )
-  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_GUI_IDENTIFIER "surefile" )
-  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_ICON_FILE mac_bundle.icns )
-  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_INFO_STRING "0.2.0, Copyright 2012 MaidSafe team" )
-  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_SHORT_VERSION_STRING "0.2" )
-  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_LONG_VERSION_STRING "0.2.0" )
-  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_BUNDLE_VERSION "0.2.0" )
-  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_COPYRIGHT "(C) 2012 MaidSafe" )
 endif()
 
 rename_outdated_built_exes()
