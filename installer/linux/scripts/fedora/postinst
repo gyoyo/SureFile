@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#create user lifestuff if does not exist
+if [ -z $(getent passwd lifestuff) ]
+then
+  echo user does not exists
+  adduser -m -s /usr/sbin/nologin lifestuff
+fi
+
+ln -s /etc/systemd/user/lifestuff-mgr.service /etc/systemd/system/lifestuff-mgr.service
+#systemctl enable /etc/systemd/system/lifestuff-mgr.service
+systemctl daemon-reload
+systemctl start lifestuff-mgr.service
