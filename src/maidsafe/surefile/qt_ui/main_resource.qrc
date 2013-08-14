@@ -2,6 +2,5 @@
     <qresource prefix="/">
         <file>views/MainView.qml</file>
         <file>views/StorePath.qml</file>
-        <file>views/CustomButton.qml</file>
     </qresource>
 </RCC>
