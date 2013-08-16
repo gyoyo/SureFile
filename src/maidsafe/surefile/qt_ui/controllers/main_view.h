@@ -13,26 +13,45 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
+#ifndef MAIDSAFE_SUREFILE_QT_UI_CONTROLLERS_MAIN_VIEW_H_
+#define MAIDSAFE_SUREFILE_QT_UI_CONTROLLERS_MAIN_VIEW_H_
+
+// std
+#include <memory>
+#include <string>
+
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
-#include "maidsafe/surefile/qt_ui/controllers/main_view.h"
+namespace maidsafe {
 
-int main(int argc, char *argv[]) {
-  QApplication application(argc, argv);
-  application.setOrganizationDomain("http://www.maidsafe.net");
-  application.setOrganizationName("MaidSafe.net Ltd.");
-  application.setApplicationName("SureFile");
-  application.setApplicationVersion("0.1");
-  try {
-    maidsafe::surefile::qt_ui::MainViewController main_controller;
-    return application.exec();
-  } catch(const std::exception &ex) {
-    qWarning() << "STD Exception Caught: " << ex.what();
-    return -1;
-  } catch(...) {
-    qWarning() << "Default Exception Caught";
-    return -1;
-  }
-}
+namespace surefile {
+
+namespace qt_ui {
+
+class MainViewController : public QObject {
+  Q_OBJECT
+
+ public:
+  MainViewController(QObject* parent = 0);
+  ~MainViewController();
+
+ private slots:
+  void EventLoopStarted();
+
+ private:
+  MainViewController(const MainViewController&);
+  MainViewController& operator=(const MainViewController&);
+
+  QQmlEngine main_engine_;
+  QQmlComponent* main_component_;
+};
+
+}  // namespace qt_ui
+
+}  // namespace surefile
+
+}  // namespace maidsafe
+
+#endif  // MAIDSAFE_SUREFILE_QT_UI_CONTROLLERS_MAIN_VIEW_H_
 

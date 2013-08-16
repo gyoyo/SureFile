@@ -52,6 +52,7 @@ License.
 #endif
 
 #include "QtCore/QDebug"
+#include "QtCore/QTimer"
 #include "QtGui/QSurfaceFormat"
 #include "QtQml/QQmlComponent"
 #include "QtQml/QQmlEngine"

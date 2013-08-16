@@ -101,8 +101,7 @@ source_group("Views" FILES ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR})
 set(ALL_SUREFILE_QT_UI_SOURCE_FILES
       ${SOURCE_FILES_SUREFILE_QT_UI_HELPERS_DIR}
       ${SOURCE_FILES_SUREFILE_QT_UI_MODELS_DIR}
-      ${SOURCE_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR}
-      ${UIC_FILES_SUREFILE_QT_UI_VIEWS_DIR})
+      ${SOURCE_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR})
 set(ALL_SUREFILE_QT_UI_HEADER_FILES
       ${HEADER_FILES_SUREFILE_QT_UI_HELPERS_DIR}
       ${HEADER_FILES_SUREFILE_QT_UI_MODELS_DIR}
@@ -213,6 +212,37 @@ set(CPACK_PACKAGE_VERSION_MINOR ${ApplicationVersionMinor})
 set(CPACK_PACKAGE_VERSION_PATCH ${ApplicationVersionPatch})
 
 set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+
+#==================================================================================================#
+# Generate Qt .pro file                                                                            #
+#==================================================================================================#
+if(WIN32)
+  set(QtPROHelper ${CMAKE_BINARY_DIR}/surefile.pro)
+  set(SOURCE_FILES_COLLECTION ${UI_QT_MAIN_CC} ${ALL_SUREFILE_QT_UI_SOURCE_FILES})  
+  file(WRITE ${QtPROHelper} "#This File is Auto-Generated. Do Not Edit Manually.\nQT += qml quick widgets\nTARGET = surefile\nSOURCES += ")
+  foreach(SOURCE_FILE ${SOURCE_FILES_COLLECTION})
+    file(APPEND ${QtPROHelper} "$$quote(${SOURCE_FILE}) ")
+    # message(STATUS "$$quote(${SOURCE_FILE}) \\")
+  endforeach()
+  # file(APPEND ${QtPROHelper} "$$quote(${SOURCE_FILE}) ")
+  
+  
+  
+  # get_dependencies(maidsafe_lifestuff OptimizedDependencies DebugDependencies)
+  # get_target_property(ReleaseLocation maidsafe_lifestuff LOCATION_RELEASE)
+  # get_target_property(DebugLocation maidsafe_lifestuff LOCATION_DEBUG)
+  # list(INSERT OptimizedDependencies 0 "\"${ReleaseLocation}\"")
+  # list(INSERT DebugDependencies 0 "\"${DebugLocation}\"")
+  # if(${TargetArchitecture} STREQUAL "x86_64")
+    # set(Arch x64)
+  # elseif(${TargetArchitecture} STREQUAL "i386")
+    # set(Arch x86)
+  # else()
+    # message(FATAL_ERROR "\nUnknown target architecture.  Should be \"x86_64\" or \"i386\" but is \"${TargetArchitecture}\"")
+  # endif()
+  # file(APPEND ${WPFExportFile} "set(NativeLibs${Arch}Debug ${DebugDependencies})\n")
+  # file(APPEND ${WPFExportFile} "set(NativeLibs${Arch}Release ${OptimizedDependencies})")
+endif()
 
 
 #==================================================================================================#
