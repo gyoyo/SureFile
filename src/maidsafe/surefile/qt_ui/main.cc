@@ -16,7 +16,7 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
-#include "maidsafe/surefile/qt_ui/controllers/main_view.h"
+#include "maidsafe/surefile/qt_ui/qobjects/main_controller.h"
 
 int main(int argc, char *argv[]) {
   QApplication application(argc, argv);
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
   application.setApplicationName("SureFile");
   application.setApplicationVersion("0.1");
   try {
-    maidsafe::surefile::qt_ui::MainViewController main_controller;
+    maidsafe::surefile::qt_ui::MainController main_controller;
     return application.exec();
   } catch(const std::exception &ex) {
     qWarning() << "STD Exception Caught: " << ex.what();

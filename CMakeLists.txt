@@ -82,15 +82,10 @@ if(NOT WIN32)
   list(REMOVE_ITEM SOURCE_FILES_SUREFILE_QT_UI_HELPERS_DIR ${SRC_MAIDSAFE}/helpers/qt_push_headers.cc)
 endif()
 
-file(GLOB SOURCE_FILES_SUREFILE_QT_UI_MODELS_DIR "${SRC_MAIDSAFE}/models/*.cc")
-file(GLOB HEADER_FILES_SUREFILE_QT_UI_MODELS_DIR "${SRC_MAIDSAFE}/models/*.h")
-source_group("Models\\Source Files" FILES ${SOURCE_FILES_SUREFILE_QT_UI_MODELS_DIR})
-source_group("Models\\Header Files" FILES ${HEADER_FILES_SUREFILE_QT_UI_MODELS_DIR})
-
-file(GLOB SOURCE_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR "${SRC_MAIDSAFE}/controllers/*.cc")
-file(GLOB HEADER_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR "${SRC_MAIDSAFE}/controllers/*.h")
-source_group("Controllers\\Source Files" FILES ${SOURCE_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR})
-source_group("Controllers\\Header Files" FILES ${HEADER_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR})
+file(GLOB SOURCE_FILES_SUREFILE_QT_UI_QOBJECT_DIR "${SRC_MAIDSAFE}/qobjects/*.cc")
+file(GLOB HEADER_FILES_SUREFILE_QT_UI_QOBJECT_DIR "${SRC_MAIDSAFE}/qobjects/*.h")
+source_group("QObjects\\Source Files" FILES ${SOURCE_FILES_SUREFILE_QT_UI_QOBJECT_DIR})
+source_group("QObjects\\Header Files" FILES ${HEADER_FILES_SUREFILE_QT_UI_QOBJECT_DIR})
 
 QT5_ADD_RESOURCES(RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR ${SRC_MAIDSAFE}/main_resource.qrc)
 source_group("Auto Compiled\\Resource Files" FILES ${RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR})
@@ -100,23 +95,19 @@ source_group("Views" FILES ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR})
 
 set(ALL_SUREFILE_QT_UI_SOURCE_FILES
       ${SOURCE_FILES_SUREFILE_QT_UI_HELPERS_DIR}
-      ${SOURCE_FILES_SUREFILE_QT_UI_MODELS_DIR}
-      ${SOURCE_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR})
+      ${SOURCE_FILES_SUREFILE_QT_UI_QOBJECT_DIR})
 set(ALL_SUREFILE_QT_UI_HEADER_FILES
       ${HEADER_FILES_SUREFILE_QT_UI_HELPERS_DIR}
-      ${HEADER_FILES_SUREFILE_QT_UI_MODELS_DIR}
-      ${HEADER_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR})
+      ${HEADER_FILES_SUREFILE_QT_UI_QOBJECT_DIR})
 
 #####    Setup Localisation Sources    ####
 file(GLOB COMPILED_LOCALISATION_FILES ${SRC_MAIDSAFE}/resources/translations/*.ts)
 if(UPDATE_LOCALISATION_RESOURCES)
-  SET(LOCALISATION_LANGUAGES en fr es zh ja pt kr ar)
+  SET(LOCALISATION_LANGUAGES en fr es)
   SET(LOCALISATION_SOURCES
         ${SOURCE_FILES_SUREFILE_QT_UI_HELPERS_DIR}
-        ${SOURCE_FILES_SUREFILE_QT_UI_MODELS_DIR}
-        ${SOURCE_FILES_SUREFILE_QT_UI_CONTROLLERS_DIR}
-        ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR}
-        ${QML_FILES_SUREFILE_QT_UI_DIR})
+        ${SOURCE_FILES_SUREFILE_QT_UI_QOBJECT_DIR}
+        ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR})
   SET(LOCALISATION_TS_FILES)
   execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/Translation_Sources)
   file(COPY ${COMPILED_LOCALISATION_FILES} DESTINATION ${CMAKE_BINARY_DIR}/Translation_Sources)
@@ -134,36 +125,11 @@ endif()
 unset(UPDATE_LOCALISATION_RESOURCES CACHE)
 source_group("Auto Compiled\\Localisation Files" FILES ${LOCALISATION_QM_FILES})
 
-####    Set Source Resource File Groups    ####
-file(GLOB RESOURCE_FILES_ROOT_DIR ${SRC_MAIDSAFE}/resources/*.*)
-
-source_group("Resource Files" FILES ${RESOURCE_FILES_ROOT_DIR})
-
-file(GLOB RESOURCE_FILES_ANIMATIONS_DIR ${SRC_MAIDSAFE}/resources/animations/*.*)
-source_group("Resource Files\\Animations" FILES ${RESOURCE_FILES_ANIMATIONS_DIR})
-
-file(GLOB RESOURCE_FILES_ICONS_DIR ${SRC_MAIDSAFE}/resources/icons/*.*)
-source_group("Resource Files\\Icons" FILES ${RESOURCE_FILES_ICONS_DIR})
-
-file(GLOB RESOURCE_FILES_STYLES_DIR ${SRC_MAIDSAFE}/resources/styles/*.*)
-source_group("Resource Files\\Styles" FILES ${RESOURCE_FILES_STYLES_DIR})
-
-file(GLOB RESOURCE_FILES_TRANSLATIONS_DIR ${SRC_MAIDSAFE}/resources/translations/*.*)
-source_group("Resource Files\\Translations" FILES ${RESOURCE_FILES_TRANSLATIONS_DIR})
-
-set(ALL_SUREFILE_QT_UI_RESOURCE_SOURCE_FILES
-      ${RESOURCE_FILES_ANIMATIONS_DIR}
-      ${RESOURCE_FILES_ICONS_DIR}
-      ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR}
-      ${RESOURCE_FILES_STYLES_DIR}
-      ${RESOURCE_FILES_TRANSLATIONS_DIR})
-
-
 #####    Set Application Icon    ####
-if(WIN32)
-  set(SUREFILE_UI_QT_APP_ICON_RESOURCE ${SRC_MAIDSAFE}/resources/app_icon.rc)
-  source_group("Auto Compiled\\App Icon File" FILES ${SRC_MAIDSAFE}/resources/app_icon.rc)
-endif()
+# if(WIN32)
+  # set(SUREFILE_UI_QT_APP_ICON_RESOURCE ${SRC_MAIDSAFE}/resources/app_icon.rc)
+  # source_group("Auto Compiled\\App Icon File" FILES ${SRC_MAIDSAFE}/resources/app_icon.rc)
+# endif()
 
 
 #==================================================================================================#
@@ -174,8 +140,7 @@ add_executable(surefile
                   ${UI_QT_MAIN_CC}
                   ${ALL_SUREFILE_QT_UI_SOURCE_FILES}
                   ${ALL_SUREFILE_QT_UI_HEADER_FILES}
-                  ${RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR}
-                  ${ALL_SUREFILE_QT_UI_RESOURCE_SOURCE_FILES})
+                  ${RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR})
 
 # Temp - Removing backend API to bypass build errors in maidsafe_lifestuff
 target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml)
@@ -203,7 +168,6 @@ if(WIN32)
                               COMPILE_FLAGS "/Yc\"${QT_PCH_HEADER}\" /FI\"${QT_PCH_HEADER}\"")
 else(UNIX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-protector")
-  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error")
 endif()
 
 # Set Application Version
@@ -218,30 +182,45 @@ set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSIO
 #==================================================================================================#
 if(WIN32)
   set(QtPROHelper ${CMAKE_BINARY_DIR}/surefile.pro)
-  set(SOURCE_FILES_COLLECTION ${UI_QT_MAIN_CC} ${ALL_SUREFILE_QT_UI_SOURCE_FILES})  
-  file(WRITE ${QtPROHelper} "#This File is Auto-Generated. Do Not Edit Manually.\nQT += qml quick widgets\nTARGET = surefile\nSOURCES += ")
+  file(WRITE ${QtPROHelper} "#This File is Auto-Generated. Do Not Edit Manually.")
+  file(APPEND ${QtPROHelper} "\nQT += qml quick widgets")
+  file(APPEND ${QtPROHelper} "\nTARGET = surefile")
+
+  file(APPEND ${QtPROHelper} "\n\nSOURCES += ")
+  set(SOURCE_FILES_COLLECTION ${UI_QT_MAIN_CC} ${ALL_SUREFILE_QT_UI_SOURCE_FILES})
   foreach(SOURCE_FILE ${SOURCE_FILES_COLLECTION})
     file(APPEND ${QtPROHelper} "$$quote(${SOURCE_FILE}) ")
-    # message(STATUS "$$quote(${SOURCE_FILE}) \\")
   endforeach()
-  # file(APPEND ${QtPROHelper} "$$quote(${SOURCE_FILE}) ")
-  
-  
-  
-  # get_dependencies(maidsafe_lifestuff OptimizedDependencies DebugDependencies)
-  # get_target_property(ReleaseLocation maidsafe_lifestuff LOCATION_RELEASE)
-  # get_target_property(DebugLocation maidsafe_lifestuff LOCATION_DEBUG)
-  # list(INSERT OptimizedDependencies 0 "\"${ReleaseLocation}\"")
-  # list(INSERT DebugDependencies 0 "\"${DebugLocation}\"")
-  # if(${TargetArchitecture} STREQUAL "x86_64")
-    # set(Arch x64)
-  # elseif(${TargetArchitecture} STREQUAL "i386")
-    # set(Arch x86)
-  # else()
-    # message(FATAL_ERROR "\nUnknown target architecture.  Should be \"x86_64\" or \"i386\" but is \"${TargetArchitecture}\"")
-  # endif()
-  # file(APPEND ${WPFExportFile} "set(NativeLibs${Arch}Debug ${DebugDependencies})\n")
-  # file(APPEND ${WPFExportFile} "set(NativeLibs${Arch}Release ${OptimizedDependencies})")
+
+  file(APPEND ${QtPROHelper} "\n\nHEADERS += ")
+  foreach(HEADER_FILE ${ALL_SUREFILE_QT_UI_HEADER_FILES})
+    file(APPEND ${QtPROHelper} "$$quote(${HEADER_FILE}) ")
+  endforeach()
+
+  file(APPEND ${QtPROHelper} "\n\nRESOURCES += $$quote(${SRC_MAIDSAFE}/main_resource.qrc)")
+
+  # TODO(Viv) - Check following function to get all dependencies
+  get_dependencies(maidsafe_lifestuff OptimizedDependencies DebugDependencies)
+  get_target_property(ReleaseLocation maidsafe_lifestuff LOCATION_RELEASE)
+  get_target_property(DebugLocation maidsafe_lifestuff LOCATION_DEBUG)
+  list(INSERT OptimizedDependencies 0 "\"${ReleaseLocation}\"")
+  list(INSERT DebugDependencies 0 "\"${DebugLocation}\"")
+  message(STATUS ${DebugDependencies})
+  file(APPEND ${QtPROHelper} "\n\n*:CONFIG(release, debug|release): LIBS += ")
+  foreach(OptimizedDependency ${OptimizedDependencies})
+    file(APPEND ${QtPROHelper} "$$quote(${OptimizedDependency}) ")
+  endforeach()
+  file(APPEND ${QtPROHelper} "\nelse:*:CONFIG(debug, debug|release): LIBS += ")
+  foreach(DebugDependency ${DebugDependencies})
+    file(APPEND ${QtPROHelper} "$$quote(${DebugDependency}) ")
+  endforeach()
+
+  file(APPEND ${QtPROHelper} "\n\nINCLUDEPATH += $$quote(${maidsafe_SOURCE_DIR}/src/lifestuff/include) $$quote(${PROJECT_SOURCE_DIR}/src)")
+
+  file(APPEND ${QtPROHelper} "\n\nOTHER_FILES += ")
+  foreach(VIEW_FILE ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR})
+    file(APPEND ${QtPROHelper} "$$quote(${VIEW_FILE}) ")
+  endforeach()
 endif()
 
 

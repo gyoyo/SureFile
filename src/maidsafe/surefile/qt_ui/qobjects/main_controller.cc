@@ -13,12 +13,7 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_CONTROLLERS_MAIN_VIEW_H_
-#define MAIDSAFE_SUREFILE_QT_UI_CONTROLLERS_MAIN_VIEW_H_
-
-// std
-#include <memory>
-#include <string>
+#include "maidsafe/surefile/qt_ui/qobjects/main_controller.h"
 
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
@@ -29,29 +24,30 @@ namespace surefile {
 
 namespace qt_ui {
 
-class MainViewController : public QObject {
-  Q_OBJECT
+MainController::MainController(QObject* parent)
+    : QObject(parent),
+      main_component_(),
+      main_engine_() {
+  QTimer::singleShot(0, this, SLOT(EventLoopStarted()));
+}
 
- public:
-  MainViewController(QObject* parent = 0);
-  ~MainViewController();
+void MainController::EventLoopStarted() {
+  main_component_ = new QQmlComponent(&main_engine_, QUrl("qrc:/views/MainView.qml"));
+  QObject::connect(&main_engine_, SIGNAL(quit()), qApp, SLOT(quit()));
+  if (!main_component_->isReady() )
+    throw new std::exception(main_component_->errorString().toLatin1());
 
- private slots:
-  void EventLoopStarted();
+  QQuickWindow* window = qobject_cast<QQuickWindow*>(main_component_->create());
+  window->setFormat(window->requestedFormat());
+  window->show();
+}
 
- private:
-  MainViewController(const MainViewController&);
-  MainViewController& operator=(const MainViewController&);
-
-  QQmlEngine main_engine_;
-  QQmlComponent* main_component_;
-};
+MainController::~MainController() {
+  delete main_component_;
+}
 
 }  // namespace qt_ui
 
-}  // namespace surefile
+}  // namespace lifestuff
 
 }  // namespace maidsafe
-
-#endif  // MAIDSAFE_SUREFILE_QT_UI_CONTROLLERS_MAIN_VIEW_H_
-
