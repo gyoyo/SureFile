@@ -200,7 +200,7 @@ if(WIN32)
   file(APPEND ${QtPROHelper} "\n\nRESOURCES += $$quote(${SRC_MAIDSAFE}/main_resource.qrc)")
 
   # TODO(Viv) - Check following function to get all dependencies
-  get_dependencies(maidsafe_lifestuff OptimizedDependencies DebugDependencies)
+  get_dependencies(maidsafe_lifestuff OptimizedDependencies DebugDependencies ON)
   get_target_property(ReleaseLocation maidsafe_lifestuff LOCATION_RELEASE)
   get_target_property(DebugLocation maidsafe_lifestuff LOCATION_DEBUG)
   list(INSERT OptimizedDependencies 0 "\"${ReleaseLocation}\"")
