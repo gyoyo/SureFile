@@ -13,12 +13,8 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
-
-// std
-#include <memory>
-#include <string>
+#ifndef MAIDSAFE_SUREFILE_QT_UI_HELPERS_QML_INDEXERS_H_
+#define MAIDSAFE_SUREFILE_QT_UI_HELPERS_QML_INDEXERS_H_
 
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
@@ -29,26 +25,7 @@ namespace surefile {
 
 namespace qt_ui {
 
-class PasswordBox;
-
-class MainController : public QObject {
-  Q_OBJECT
-
- public:
-  MainController(QObject* parent = 0);
-  ~MainController();
-
- private slots:
-  void EventLoopStarted();
-
- private:
-  MainController(const MainController&);
-  MainController& operator=(const MainController&);
-
-  QQmlApplicationEngine* main_engine_;
-  QQuickWindow* main_window_;
-  std::unique_ptr<PasswordBox> password_box_handler_;
-};
+const QString kPasswordBoxHandler("passwordHandler");
 
 }  // namespace qt_ui
 
@@ -56,5 +33,5 @@ class MainController : public QObject {
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
+#endif  // MAIDSAFE_SUREFILE_QT_UI_HELPERS_QML_INDEXERS_H_
 

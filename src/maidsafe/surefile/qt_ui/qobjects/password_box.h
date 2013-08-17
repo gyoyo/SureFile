@@ -13,8 +13,8 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
+#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_PASSWORD_BOX_H_
+#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_PASSWORD_BOX_H_
 
 // std
 #include <memory>
@@ -29,25 +29,17 @@ namespace surefile {
 
 namespace qt_ui {
 
-class PasswordBox;
-
-class MainController : public QObject {
+class PasswordBox : public QObject {
   Q_OBJECT
 
  public:
-  MainController(QObject* parent = 0);
-  ~MainController();
-
- private slots:
-  void EventLoopStarted();
+  PasswordBox(QObject* parent = 0);
+  ~PasswordBox() {}
+  Q_INVOKABLE void Test();
 
  private:
-  MainController(const MainController&);
-  MainController& operator=(const MainController&);
-
-  QQmlApplicationEngine* main_engine_;
-  QQuickWindow* main_window_;
-  std::unique_ptr<PasswordBox> password_box_handler_;
+  PasswordBox(const PasswordBox&);
+  PasswordBox& operator=(const PasswordBox&);
 };
 
 }  // namespace qt_ui
@@ -56,5 +48,5 @@ class MainController : public QObject {
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
+#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_PASSWORD_BOX_H_
 

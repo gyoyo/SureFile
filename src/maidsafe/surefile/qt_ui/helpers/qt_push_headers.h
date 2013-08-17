@@ -55,6 +55,7 @@ License.
 #include "QtCore/QTimer"
 #include "QtGui/QSurfaceFormat"
 #include "QtQml/QQmlComponent"
-#include "QtQml/QQmlEngine"
+#include "QtQml/QQmlContext"
+#include "QtQml/QQmlApplicationEngine"
 #include "QtQuick/QQuickWindow"
 #include "QtWidgets/QApplication"

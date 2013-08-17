@@ -13,12 +13,7 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
-
-// std
-#include <memory>
-#include <string>
+#include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
 
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
@@ -29,32 +24,12 @@ namespace surefile {
 
 namespace qt_ui {
 
-class PasswordBox;
-
-class MainController : public QObject {
-  Q_OBJECT
-
- public:
-  MainController(QObject* parent = 0);
-  ~MainController();
-
- private slots:
-  void EventLoopStarted();
-
- private:
-  MainController(const MainController&);
-  MainController& operator=(const MainController&);
-
-  QQmlApplicationEngine* main_engine_;
-  QQuickWindow* main_window_;
-  std::unique_ptr<PasswordBox> password_box_handler_;
-};
+APIModel::APIModel(QObject* parent)
+    : QObject(parent) {
+}
 
 }  // namespace qt_ui
 
-}  // namespace surefile
+}  // namespace lifestuff
 
 }  // namespace maidsafe
-
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
-

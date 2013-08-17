@@ -18,6 +18,9 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
+#include "maidsafe/surefile/qt_ui/helpers/qml_indexers.h"
+#include "maidsafe/surefile/qt_ui/qobjects/password_box.h"
+
 namespace maidsafe {
 
 namespace surefile {
@@ -26,24 +29,28 @@ namespace qt_ui {
 
 MainController::MainController(QObject* parent)
     : QObject(parent),
-      main_component_(),
-      main_engine_() {
+      main_window_(),
+      main_engine_(),
+      password_box_handler_(new PasswordBox) {
+  qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
   QTimer::singleShot(0, this, SLOT(EventLoopStarted()));
 }
 
 void MainController::EventLoopStarted() {
-  main_component_ = new QQmlComponent(&main_engine_, QUrl("qrc:/views/MainView.qml"));
-  QObject::connect(&main_engine_, SIGNAL(quit()), qApp, SLOT(quit()));
-  if (!main_component_->isReady() )
-    throw new std::exception(main_component_->errorString().toLatin1());
-
-  QQuickWindow* window = qobject_cast<QQuickWindow*>(main_component_->create());
-  window->setFormat(window->requestedFormat());
-  window->show();
+  main_engine_ = new QQmlApplicationEngine(QUrl("qrc:/views/main.qml"));
+  auto root_context_ = main_engine_->rootContext();
+  root_context_->setContextProperty(kPasswordBoxHandler, password_box_handler_.get());
+  main_window_ = qobject_cast<QQuickWindow *>(main_engine_->rootObjects().value(0));
+  if (!main_window_) {
+    qWarning() << "Root Item not Window";
+    // TODO(Viv): Throw above warning as an app-exception and handle it gracefully
+    return;
+  }
+  main_window_->show();
 }
 
 MainController::~MainController() {
-  delete main_component_;
+  delete main_window_;
 }
 
 }  // namespace qt_ui
