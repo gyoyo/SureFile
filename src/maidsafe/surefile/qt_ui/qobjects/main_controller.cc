@@ -19,6 +19,7 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
 #include "maidsafe/surefile/qt_ui/helpers/qml_indexers.h"
+#include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
 #include "maidsafe/surefile/qt_ui/qobjects/password_box.h"
 
 namespace maidsafe {
@@ -30,16 +31,72 @@ namespace qt_ui {
 MainController::MainController(QObject* parent)
     : QObject(parent),
       main_window_(),
-      main_engine_() {
+      main_engine_(),
+      api_model_(new APIModel),
+      void_qfuture_(),
+      is_busy_(false),
+      password_(),
+      error_message_() {
   qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
+  InitSignals();
+
   QTimer::singleShot(0, this, SLOT(EventLoopStarted()));
 }
 
+bool MainController::isBusy() const {
+  return is_busy_;
+}
+
+void MainController::setIsBusy(const bool& isBusy) {
+  if (is_busy_ == isBusy)
+    return;
+
+  is_busy_ = isBusy;
+  emit isBusyChanged();
+}
+
+QString MainController::password() const {
+  return password_;
+}
+
+void MainController::setPassword(const QString& password) {
+  if (password_ == password)
+    return;
+
+  password_ = password;
+  emit passwordChanged();
+}
+
+QString MainController::errorMessage() const {
+  return error_message_;
+}
+
+void MainController::setErrorMessage(const QString& errorMessage) {
+  if (error_message_ == errorMessage)
+    return;
+
+  error_message_ = errorMessage;
+  emit errorMessageChanged();
+}
+
+void MainController::CreateAccount() {
+  setErrorMessage(QString());
+  setIsBusy(true);
+  void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::CreateAccount, password());
+}
+
+void MainController::Login() {
+  setErrorMessage(QString());
+  setIsBusy(true);
+  void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::Login, password());
+}
+
 void MainController::EventLoopStarted() {
-  main_engine_ = new QQmlApplicationEngine(QUrl("qrc:/views/main.qml"));
-  // auto root_context_ = main_engine_->rootContext();
-  // root_context_->setContextProperty(kPasswordBoxHandler, password_box_handler_.get());
-  main_window_ = qobject_cast<QQuickWindow *>(main_engine_->rootObjects().value(0));
+  main_engine_ = new QQmlApplicationEngine(QUrl("qrc:/views/Main.qml"));
+  auto root_context_ = main_engine_->rootContext();
+  root_context_->setContextProperty(kMainController, this);
+  root_context_->setContextProperty(kAPIModel, api_model_.get());
+  main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(0));
   if (!main_window_) {
     qWarning() << "Root Item not Window";
     // TODO(Viv): Throw above warning as an app-exception and handle it gracefully
@@ -48,7 +105,35 @@ void MainController::EventLoopStarted() {
   main_window_->show();
 }
 
+void MainController::CreateAccountCompleted(const QString& error_message) {
+  setIsBusy(false);
+  if (!error_message.isEmpty()) {
+    setErrorMessage(error_message);
+    return;
+  }
+  main_window_->hide();
+  // Start procedure for first time tour from here
+}
+
+void MainController::LoginCompleted(const QString& error_message) {
+  setIsBusy(false);
+  if (!error_message.isEmpty()) {
+    setErrorMessage(error_message);
+    return;
+  }
+  main_window_->hide();
+  // Start procedure for first time tour from here
+}
+
+void MainController::InitSignals() {
+  connect(api_model_.get(), SIGNAL(CreateAccountCompleted(const QString&)),
+          this,             SLOT(CreateAccountCompleted(const QString&)));
+  connect(api_model_.get(), SIGNAL(LoginCompleted(const QString&)),
+          this,             SLOT(LoginCompleted(const QString&)));
+}
+
 MainController::~MainController() {
+  void_qfuture_.waitForFinished();
   delete main_window_;
 }
 

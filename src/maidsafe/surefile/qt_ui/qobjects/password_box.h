@@ -33,7 +33,7 @@ class PasswordBox : public QObject {
   Q_OBJECT
 
  public:
-  PasswordBox(QObject* parent = 0);
+  explicit PasswordBox(QObject* parent = 0);
   ~PasswordBox() {}
   Q_INVOKABLE void Test();
 

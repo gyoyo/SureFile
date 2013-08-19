@@ -28,9 +28,9 @@ PasswordBox::PasswordBox(QObject* parent)
     : QObject(parent) {
 }
 
- void PasswordBox::Test() {
+void PasswordBox::Test() {
   qDebug() << "Called";
- }
+}
 
 }  // namespace qt_ui
 

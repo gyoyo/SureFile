@@ -33,8 +33,15 @@ class APIModel : public QObject {
   Q_OBJECT
 
  public:
-  APIModel(QObject* parent = 0);
+  explicit APIModel(QObject* parent = 0);
   ~APIModel() {}
+  Q_INVOKABLE bool CanCreateAccount();
+  void CreateAccount(const QString& password);
+  void Login(const QString& password);
+
+ signals:
+  void CreateAccountCompleted(const QString& error_message);
+  void LoginCompleted(const QString& error_message);
 
  private:
   APIModel(const APIModel&);

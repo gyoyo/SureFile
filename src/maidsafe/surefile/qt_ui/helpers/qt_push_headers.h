@@ -51,8 +51,10 @@ License.
 #  pragma GCC diagnostic ignored "-Wfloat-equal"
 #endif
 
+#include "QtConcurrent/QtConcurrentRun"
 #include "QtCore/QDebug"
 #include "QtCore/QTimer"
+#include "QtCore/QFuture"
 #include "QtGui/QSurfaceFormat"
 #include "QtQml/QQmlComponent"
 #include "QtQml/QQmlContext"

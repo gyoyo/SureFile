@@ -1,5 +1,13 @@
 <RCC>
-    <qresource prefix="/">
-        <file>views/main.qml</file>
-    </qresource>
+  <qresource prefix="/">
+    <file>images/error.png</file>
+    <file>images/loading.png</file>
+  </qresource>
+  <qresource prefix="/">
+    <file>views/ErrorView.qml</file>
+    <file>views/Main.qml</file>
+    <file>views/Login.qml</file>
+    <file>views/CreateAccount.qml</file>
+    <file>views/Progress.qml</file>
+  </qresource>
 </RCC>

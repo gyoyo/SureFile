@@ -28,6 +28,24 @@ APIModel::APIModel(QObject* parent)
     : QObject(parent) {
 }
 
+bool APIModel::CanCreateAccount() {
+  return false;
+}
+
+void APIModel::CreateAccount(const QString& password) {
+  // Mock - Replace with API call
+  qDebug() << QString("Creating Account with Pass: %1").arg(password);
+  QThread::sleep(3);
+  emit CreateAccountCompleted(password.isEmpty() ? QString("Some Error") : QString());
+}
+
+void APIModel::Login(const QString& password) {
+  // Mock - Replace with API call
+  qDebug() << QString("Logging In with Pass: %1").arg(password);
+  QThread::sleep(3);
+  emit LoginCompleted(password.isEmpty() ? QString("Some Error") : QString());
+}
+
 }  // namespace qt_ui
 
 }  // namespace lifestuff

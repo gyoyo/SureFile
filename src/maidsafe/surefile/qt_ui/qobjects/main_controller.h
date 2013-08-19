@@ -13,8 +13,8 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
+#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_CONTROLLER_H_
+#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_CONTROLLER_H_
 
 // std
 #include <memory>
@@ -30,23 +30,50 @@ namespace surefile {
 namespace qt_ui {
 
 class PasswordBox;
+class APIModel;
 
 class MainController : public QObject {
   Q_OBJECT
+  Q_PROPERTY(bool isBusy READ isBusy WRITE setIsBusy NOTIFY isBusyChanged)
+  Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
+  Q_PROPERTY(QString errorMessage READ errorMessage
+                                  WRITE setErrorMessage
+                                  NOTIFY errorMessageChanged)
 
  public:
-  MainController(QObject* parent = 0);
+  explicit MainController(QObject* parent = 0);
   ~MainController();
+  bool isBusy() const;
+  void setIsBusy(const bool& isBusy);
+  QString password() const;
+  void setPassword(const QString& password);
+  QString errorMessage() const;
+  void setErrorMessage(const QString& errorMessage);
+  Q_INVOKABLE void CreateAccount();
+  Q_INVOKABLE void Login();
 
- private slots:
+ signals:
+  void isBusyChanged();
+  void passwordChanged();
+  void errorMessageChanged();
+
+ private slots:  // NOLINT - Viv
   void EventLoopStarted();
+  void CreateAccountCompleted(const QString& error_message);
+  void LoginCompleted(const QString& error_message);
 
  private:
   MainController(const MainController&);
   MainController& operator=(const MainController&);
+  void InitSignals();
 
   QQmlApplicationEngine* main_engine_;
   QQuickWindow* main_window_;
+  std::unique_ptr<APIModel> api_model_;
+  QFuture<void> void_qfuture_;
+  bool is_busy_;
+  QString password_;
+  QString error_message_;
 };
 
 }  // namespace qt_ui
@@ -55,5 +82,5 @@ class MainController : public QObject {
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_COINTROLLER_H_
+#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_CONTROLLER_H_
 
