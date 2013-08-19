@@ -30,16 +30,15 @@ namespace qt_ui {
 MainController::MainController(QObject* parent)
     : QObject(parent),
       main_window_(),
-      main_engine_(),
-      password_box_handler_(new PasswordBox) {
+      main_engine_() {
   qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
   QTimer::singleShot(0, this, SLOT(EventLoopStarted()));
 }
 
 void MainController::EventLoopStarted() {
   main_engine_ = new QQmlApplicationEngine(QUrl("qrc:/views/main.qml"));
-  auto root_context_ = main_engine_->rootContext();
-  root_context_->setContextProperty(kPasswordBoxHandler, password_box_handler_.get());
+  // auto root_context_ = main_engine_->rootContext();
+  // root_context_->setContextProperty(kPasswordBoxHandler, password_box_handler_.get());
   main_window_ = qobject_cast<QQuickWindow *>(main_engine_->rootObjects().value(0));
   if (!main_window_) {
     qWarning() << "Root Item not Window";

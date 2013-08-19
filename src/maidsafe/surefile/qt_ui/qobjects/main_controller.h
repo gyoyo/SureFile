@@ -47,7 +47,6 @@ class MainController : public QObject {
 
   QQmlApplicationEngine* main_engine_;
   QQuickWindow* main_window_;
-  std::unique_ptr<PasswordBox> password_box_handler_;
 };
 
 }  // namespace qt_ui

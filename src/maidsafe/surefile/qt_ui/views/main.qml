@@ -1,17 +1,26 @@
 import QtQuick 2.1
-import QtQuick.Window 2.1
 import QtQuick.Controls 1.0
-import QtQuick.XmlListModel 2.0
 import QtQuick.Layouts 1.0
-import SureFile 1.0
 
 ApplicationWindow {
-  title: qsTr("SureFile")
-
+  title: qsTr("Some App")
   ColumnLayout {
+    Rectangle {
+      color: "Blue"
+      width: 50
+      height: 50
+      focus: true
+      Keys.priority: Keys.BeforeItem
+      Keys.onPressed: res.text = res.text == "" ? "Rect" : "";
+    }
     TextField {
-      text: "Hello"
-      onTextChanged: passwordHandler.Test()
+      Keys.onReleased: {
+        event.accepted = true;
+      }
+    }
+    TextField {
+      id:res
+      text: "0"
     }
   }
 }
