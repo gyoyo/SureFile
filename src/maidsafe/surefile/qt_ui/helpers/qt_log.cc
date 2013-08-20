@@ -22,7 +22,7 @@ namespace surefile {
 namespace qt_ui {
 
 void QtLog(const QString& message) {
-#if DEBUG
+#ifdef DEBUG
   qDebug() << message;
 #endif
   message.isEmpty();
