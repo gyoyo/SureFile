@@ -60,4 +60,7 @@ License.
 #include "QtQml/QQmlContext"
 #include "QtQml/QQmlApplicationEngine"
 #include "QtQuick/QQuickWindow"
+#include "QtWidgets/QAction"
 #include "QtWidgets/QApplication"
+#include "QtWidgets/QMenu"
+#include "QtWidgets/QSystemTrayIcon"

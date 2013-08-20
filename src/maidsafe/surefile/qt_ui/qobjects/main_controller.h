@@ -31,6 +31,7 @@ namespace qt_ui {
 
 class PasswordBox;
 class APIModel;
+class SystemTrayIcon;
 
 class MainController : public QObject {
   Q_OBJECT
@@ -66,6 +67,7 @@ class MainController : public QObject {
   QQmlApplicationEngine* main_engine_;
   QQuickWindow* main_window_;
   std::unique_ptr<APIModel> api_model_;
+  std::unique_ptr<SystemTrayIcon> system_tray_;
   QFuture<void> void_qfuture_;
   bool is_busy_;
   QString error_message_;

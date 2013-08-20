@@ -21,6 +21,7 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qml_indexers.h"
 #include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
 #include "maidsafe/surefile/qt_ui/qobjects/password_box.h"
+#include "maidsafe/surefile/qt_ui/qobjects/system_tray_icon.h"
 
 namespace maidsafe {
 
@@ -33,12 +34,12 @@ MainController::MainController(QObject* parent)
       main_window_(),
       main_engine_(),
       api_model_(new APIModel),
+      system_tray_(new SystemTrayIcon),
       void_qfuture_(),
       is_busy_(false),
       error_message_() {
   qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
   InitSignals();
-
   QTimer::singleShot(0, this, SLOT(EventLoopStarted()));
 }
 
@@ -90,6 +91,7 @@ void MainController::EventLoopStarted() {
     return;
   }
   main_window_->show();
+  system_tray_->show();
 }
 
 void MainController::CreateAccountCompleted(const QString& error_message) {
@@ -99,6 +101,7 @@ void MainController::CreateAccountCompleted(const QString& error_message) {
     return;
   }
   main_window_->hide();
+  system_tray_->SetIsLoggedIn(true);
   // Start procedure for first time tour from here
 }
 
@@ -109,6 +112,7 @@ void MainController::LoginCompleted(const QString& error_message) {
     return;
   }
   main_window_->hide();
+  system_tray_->SetIsLoggedIn(true);
   // Start procedure for first time tour from here
 }
 
