@@ -13,6 +13,8 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
+#include <iostream>
+
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
@@ -28,10 +30,10 @@ int main(int argc, char *argv[]) {
     maidsafe::surefile::qt_ui::MainController main_controller;
     return application.exec();
   } catch(const std::exception &ex) {
-    qWarning() << "STD Exception Caught: " << ex.what();
+    std::cerr << "STD Exception Caught: " << ex.what();
     return -1;
   } catch(...) {
-    qWarning() << "Default Exception Caught";
+    std::cerr << "Default Exception Caught";
     return -1;
   }
 }

@@ -4,6 +4,7 @@
     <file>images/loading.png</file>
   </qresource>
   <qresource prefix="/">
+    <file>views/ChooseStorePath.qml</file>
     <file>views/ErrorView.qml</file>
     <file>views/Main.qml</file>
     <file>views/Login.qml</file>

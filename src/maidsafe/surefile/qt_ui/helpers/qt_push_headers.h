@@ -53,8 +53,10 @@ License.
 
 #include "QtConcurrent/QtConcurrentRun"
 #include "QtCore/QDebug"
+#include "QtCore/QDir"
 #include "QtCore/QTimer"
 #include "QtCore/QFuture"
+#include "QtCore/QUrl"
 #include "QtGui/QSurfaceFormat"
 #include "QtQml/QQmlComponent"
 #include "QtQml/QQmlContext"

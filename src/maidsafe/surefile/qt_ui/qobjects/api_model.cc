@@ -59,9 +59,9 @@ bool APIModel::CanCreateAccount() {
 
 void APIModel::CreateAccount() {
   // Mock - Replace with API call
-  qDebug() <<
-      QString("Creating Account with Pass: %1 and Conf Pass: %2").arg(password())
-                                                                 .arg(confirmPassword());
+  // qDebug() <<
+  //    QString("Creating Account with Pass: %1 and Conf Pass: %2").arg(password())
+  //                                                               .arg(confirmPassword());
   if (password() != confirmPassword()) {
     emit CreateAccountCompleted(QString("Entries do not Match"));
     return;
@@ -72,7 +72,7 @@ void APIModel::CreateAccount() {
 
 void APIModel::Login() {
   // Mock - Replace with API call
-  qDebug() << QString("Logging In with Pass: %1").arg(password());
+  // qDebug() << QString("Logging In with Pass: %1").arg(password());
   QThread::sleep(3);
   emit LoginCompleted(password().isEmpty() ? QString("Some Error") : QString());
 }

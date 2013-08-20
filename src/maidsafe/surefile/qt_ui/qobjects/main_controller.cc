@@ -21,6 +21,7 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qml_indexers.h"
 #include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
 #include "maidsafe/surefile/qt_ui/qobjects/password_box.h"
+#include "maidsafe/surefile/qt_ui/qobjects/store_path_controller.h"
 #include "maidsafe/surefile/qt_ui/qobjects/system_tray_icon.h"
 
 namespace maidsafe {
@@ -31,14 +32,15 @@ namespace qt_ui {
 
 MainController::MainController(QObject* parent)
     : QObject(parent),
-      main_window_(),
       main_engine_(),
+      main_window_(),
       api_model_(new APIModel),
       system_tray_(new SystemTrayIcon),
       void_qfuture_(),
       is_busy_(false),
       error_message_() {
   qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
+  qmlRegisterType<StorePathController>("SureFile", 1, 0, "StorePathController");
   InitSignals();
   QTimer::singleShot(0, this, SLOT(EventLoopStarted()));
 }
@@ -86,7 +88,6 @@ void MainController::EventLoopStarted() {
   root_context_->setContextProperty(kAPIModel, api_model_.get());
   main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(0));
   if (!main_window_) {
-    qWarning() << "Root Item not Window";
     // TODO(Viv): Throw above warning as an app-exception and handle it gracefully
     return;
   }
