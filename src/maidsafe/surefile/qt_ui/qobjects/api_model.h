@@ -31,21 +31,34 @@ namespace qt_ui {
 
 class APIModel : public QObject {
   Q_OBJECT
+  Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
+  Q_PROPERTY(QString confirmPassword READ confirmPassword
+                                     WRITE setConfirmPassword
+                                     NOTIFY confirmPasswordChanged)
 
  public:
   explicit APIModel(QObject* parent = 0);
   ~APIModel() {}
+  QString password() const;
+  void setPassword(const QString& password);
+  QString confirmPassword() const;
+  void setConfirmPassword(const QString& confirmPassword);
   Q_INVOKABLE bool CanCreateAccount();
-  void CreateAccount(const QString& password);
-  void Login(const QString& password);
+  void CreateAccount();
+  void Login();
 
  signals:
+  void passwordChanged();
+  void confirmPasswordChanged();
   void CreateAccountCompleted(const QString& error_message);
   void LoginCompleted(const QString& error_message);
 
  private:
   APIModel(const APIModel&);
   APIModel& operator=(const APIModel&);
+
+  QString password_;
+  QString confirm_password_;
 };
 
 }  // namespace qt_ui

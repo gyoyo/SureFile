@@ -26,7 +26,7 @@ Item {
       echoMode: TextInput.Password
       Layout.alignment: Qt.AlignHCenter
       Binding {
-        target: mainController;
+        target: apiModel;
         property: "password";
         value: passwordBox.text
       }

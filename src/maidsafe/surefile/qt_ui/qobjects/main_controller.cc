@@ -35,7 +35,6 @@ MainController::MainController(QObject* parent)
       api_model_(new APIModel),
       void_qfuture_(),
       is_busy_(false),
-      password_(),
       error_message_() {
   qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
   InitSignals();
@@ -55,18 +54,6 @@ void MainController::setIsBusy(const bool& isBusy) {
   emit isBusyChanged();
 }
 
-QString MainController::password() const {
-  return password_;
-}
-
-void MainController::setPassword(const QString& password) {
-  if (password_ == password)
-    return;
-
-  password_ = password;
-  emit passwordChanged();
-}
-
 QString MainController::errorMessage() const {
   return error_message_;
 }
@@ -82,13 +69,13 @@ void MainController::setErrorMessage(const QString& errorMessage) {
 void MainController::CreateAccount() {
   setErrorMessage(QString());
   setIsBusy(true);
-  void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::CreateAccount, password());
+  void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::CreateAccount);
 }
 
 void MainController::Login() {
   setErrorMessage(QString());
   setIsBusy(true);
-  void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::Login, password());
+  void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::Login);
 }
 
 void MainController::EventLoopStarted() {

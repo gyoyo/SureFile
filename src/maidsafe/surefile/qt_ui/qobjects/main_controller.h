@@ -35,7 +35,6 @@ class APIModel;
 class MainController : public QObject {
   Q_OBJECT
   Q_PROPERTY(bool isBusy READ isBusy WRITE setIsBusy NOTIFY isBusyChanged)
-  Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
   Q_PROPERTY(QString errorMessage READ errorMessage
                                   WRITE setErrorMessage
                                   NOTIFY errorMessageChanged)
@@ -45,8 +44,6 @@ class MainController : public QObject {
   ~MainController();
   bool isBusy() const;
   void setIsBusy(const bool& isBusy);
-  QString password() const;
-  void setPassword(const QString& password);
   QString errorMessage() const;
   void setErrorMessage(const QString& errorMessage);
   Q_INVOKABLE void CreateAccount();
@@ -54,7 +51,6 @@ class MainController : public QObject {
 
  signals:
   void isBusyChanged();
-  void passwordChanged();
   void errorMessageChanged();
 
  private slots:  // NOLINT - Viv
@@ -72,7 +68,6 @@ class MainController : public QObject {
   std::unique_ptr<APIModel> api_model_;
   QFuture<void> void_qfuture_;
   bool is_busy_;
-  QString password_;
   QString error_message_;
 };
 

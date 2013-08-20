@@ -24,10 +24,10 @@ Item {
       horizontalAlignment: Text.AlignHCenter
       placeholderText: qsTr("Password")
       echoMode: TextInput.Password
-      Layout.alignment: Qt.AlignHCenter
       onTextChanged: mainController.errorMessage = ""
+      Layout.alignment: Qt.AlignHCenter
       Binding {
-        target: mainController;
+        target: apiModel;
         property: "password";
         value: passwordBox.text
       }
@@ -42,6 +42,11 @@ Item {
       echoMode: TextInput.Password
       onTextChanged: mainController.errorMessage = ""
       Layout.alignment: Qt.AlignHCenter
+      Binding {
+        target: apiModel;
+        property: "confirmPassword";
+        value: confirmPasswordBox.text
+      }
       Keys.onReturnPressed: createAccountButton.clicked()
       Keys.onEnterPressed: createAccountButton.clicked()
     }
@@ -52,13 +57,7 @@ Item {
       isDefault: true
       Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
       Layout.alignment: Qt.AlignHCenter
-      onClicked: {
-        if (passwordBox.text == confirmPasswordBox.text) {
-          mainController.CreateAccount()
-        } else {
-          mainController.errorMessage = qsTr("Entries do not match")
-        }
-      }
+      onClicked: mainController.CreateAccount()
     }
 
     Item {

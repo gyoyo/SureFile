@@ -25,25 +25,56 @@ namespace surefile {
 namespace qt_ui {
 
 APIModel::APIModel(QObject* parent)
-    : QObject(parent) {
+    : QObject(parent),
+      password_() {
+}
+
+QString APIModel::password() const {
+  return password_;
+}
+
+void APIModel::setPassword(const QString& password) {
+  if (password_ == password)
+    return;
+
+  password_ = password;
+  emit passwordChanged();
+}
+
+QString APIModel::confirmPassword() const {
+  return confirm_password_;
+}
+
+void APIModel::setConfirmPassword(const QString& confirmPassword) {
+  if (confirm_password_ == confirmPassword)
+    return;
+
+  confirm_password_ = confirmPassword;
+  emit passwordChanged();
 }
 
 bool APIModel::CanCreateAccount() {
   return false;
 }
 
-void APIModel::CreateAccount(const QString& password) {
+void APIModel::CreateAccount() {
   // Mock - Replace with API call
-  qDebug() << QString("Creating Account with Pass: %1").arg(password);
+  qDebug() <<
+      QString("Creating Account with Pass: %1 and Conf Pass: %2").arg(password())
+                                                                 .arg(confirmPassword());
+  if (password() != confirmPassword()) {
+    emit CreateAccountCompleted(QString("Entries do not Match"));
+    return;
+  }
   QThread::sleep(3);
-  emit CreateAccountCompleted(password.isEmpty() ? QString("Some Error") : QString());
+  emit CreateAccountCompleted(password().isEmpty() ? QString("Some Error") : QString());
 }
 
-void APIModel::Login(const QString& password) {
+void APIModel::Login() {
   // Mock - Replace with API call
-  qDebug() << QString("Logging In with Pass: %1").arg(password);
+  qDebug() << QString("Logging In with Pass: %1").arg(password());
   QThread::sleep(3);
-  emit LoginCompleted(password.isEmpty() ? QString("Some Error") : QString());
+  emit LoginCompleted(password().isEmpty() ? QString("Some Error") : QString());
 }
 
 }  // namespace qt_ui
