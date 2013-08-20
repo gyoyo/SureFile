@@ -22,6 +22,11 @@ Window {
     id: storePathController
   }
 
+  // Following bugs seem to occur in debug builds(Win-8) very frequently
+  // QtBug: https://bugreports.qt-project.org/browse/QTBUG-32494
+  // QtBug: https://bugreports.qt-project.org/browse/QTBUG-32860
+  // QtBug: https://bugreports.qt-project.org/browse/QTBUG-32558
+  // QtBug: https://bugreports.qt-project.org/browse/QTBUG-32821
   FileDialog {
       id: fileDialog
       selectFolder: true
@@ -32,7 +37,7 @@ Window {
     anchors.fill: parent
     anchors.margins: 15
     Label {
-      text: qsTr("Choose Store Path for: %1").arg(Qt.platform.os)
+      text: qsTr("Choose Store Path for: %1").arg(apiModel.storeAlias)
       font.bold: true
       font.pixelSize: 20
       Layout.fillWidth: true
@@ -42,7 +47,6 @@ Window {
       Layout.fillWidth: true
       Layout.fillHeight: true
       Label {
-        id: chosenPath
         text: storePathController.displayStorePath
         elide: Text.ElideMiddle
         Layout.fillWidth: true
@@ -50,6 +54,8 @@ Window {
       Button {
         text: qsTr("Change")
         onClicked: {
+          // Setting folder uri does not seem to work on Windows-8
+          // Might be related to QTBUG-29814
           fileDialog.folder = storePathController.actualStorePath
           fileDialog.open()
         }
@@ -61,10 +67,13 @@ Window {
       Button {
         text: qsTr("OK")
         Layout.column: Qt.platform.os === "windows" ? 0 : 1
+        onClicked: apiModel.SetStorePathForAlias(apiModel.storeAlias, storePathController.displayStorePath)
       }
       Button {
         text: qsTr("Cancel")
+        tooltip: qsTr("Cancelling this will remove the folder from your SureFile drive")
         Layout.column: Qt.platform.os === "windows" ? 1 : 0
+        onClicked: apiModel.DeleteAlias(apiModel.storeAlias)
       }
     }
   }

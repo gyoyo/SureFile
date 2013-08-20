@@ -35,7 +35,6 @@ class PasswordBox : public QObject {
  public:
   explicit PasswordBox(QObject* parent = 0);
   ~PasswordBox() {}
-  Q_INVOKABLE void Test();
 
  private:
   PasswordBox(const PasswordBox&);

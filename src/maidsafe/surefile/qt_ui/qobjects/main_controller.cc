@@ -19,6 +19,7 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
 #include "maidsafe/surefile/qt_ui/helpers/qml_indexers.h"
+#include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
 #include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
 #include "maidsafe/surefile/qt_ui/qobjects/password_box.h"
 #include "maidsafe/surefile/qt_ui/qobjects/store_path_controller.h"
@@ -89,6 +90,7 @@ void MainController::EventLoopStarted() {
   main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(0));
   if (!main_window_) {
     // TODO(Viv): Throw above warning as an app-exception and handle it gracefully
+    QtLog("App Startup Failed");
     return;
   }
   main_window_->show();
@@ -119,9 +121,11 @@ void MainController::LoginCompleted(const QString& error_message) {
 
 void MainController::InitSignals() {
   connect(api_model_.get(), SIGNAL(CreateAccountCompleted(const QString&)),
-          this,             SLOT(CreateAccountCompleted(const QString&)));
+          this,             SLOT(CreateAccountCompleted(const QString&)),
+          Qt::QueuedConnection);
   connect(api_model_.get(), SIGNAL(LoginCompleted(const QString&)),
-          this,             SLOT(LoginCompleted(const QString&)));
+          this,             SLOT(LoginCompleted(const QString&)),
+          Qt::QueuedConnection);
 }
 
 MainController::~MainController() {

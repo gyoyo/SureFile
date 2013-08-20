@@ -22,6 +22,6 @@ ApplicationWindow {
   }
 
   ChooseStorePath {
-    visible: true
+    visible: apiModel.storeAlias.length > 0
   }
 }

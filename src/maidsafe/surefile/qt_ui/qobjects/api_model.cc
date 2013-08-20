@@ -18,6 +18,8 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
+#include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
+
 namespace maidsafe {
 
 namespace surefile {
@@ -26,7 +28,9 @@ namespace qt_ui {
 
 APIModel::APIModel(QObject* parent)
     : QObject(parent),
-      password_() {
+      password_(),
+      confirm_password_(),
+      store_alias_() {
 }
 
 QString APIModel::password() const {
@@ -53,28 +57,57 @@ void APIModel::setConfirmPassword(const QString& confirmPassword) {
   emit passwordChanged();
 }
 
+QString APIModel::storeAlias() const {
+  return store_alias_;
+}
+
+void APIModel::setStoreAlias(const QString& storeAlias) {
+  if (store_alias_ == storeAlias)
+    return;
+
+  store_alias_ = storeAlias;
+  emit storeAliasChanged();
+}
+
 bool APIModel::CanCreateAccount() {
   return false;
 }
 
+void APIModel::SetStorePathForAlias(const QString& alias, const QString& path) {
+  setStoreAlias(QString());
+  // Invoke to set store path for alias from backend api
+  QtLog(QString("Alias: %1 Path: %2").arg(alias).arg(path));
+}
+
+void APIModel::DeleteAlias(const QString& alias) {
+  setStoreAlias(QString());
+  // Invoke to delete alias from backend api
+  QtLog(QString("Deleting Alias: %1").arg(alias));
+}
+
+void APIModel::StorePathRequested(const std::string& alias) {
+  setStoreAlias(QString::fromStdString(alias));
+}
+
 void APIModel::CreateAccount() {
   // Mock - Replace with API call
-  // qDebug() <<
-  //    QString("Creating Account with Pass: %1 and Conf Pass: %2").arg(password())
-  //                                                               .arg(confirmPassword());
+  QtLog(QString("Creating Account with Pass: %1 and Conf Pass: %2").arg(password())
+                                                                   .arg(confirmPassword()));
   if (password() != confirmPassword()) {
     emit CreateAccountCompleted(QString("Entries do not Match"));
     return;
   }
   QThread::sleep(3);
   emit CreateAccountCompleted(password().isEmpty() ? QString("Some Error") : QString());
+  StorePathRequested("Dropbox");
 }
 
 void APIModel::Login() {
   // Mock - Replace with API call
-  // qDebug() << QString("Logging In with Pass: %1").arg(password());
+  QtLog(QString("Logging In with Pass: %1").arg(password()));
   QThread::sleep(3);
   emit LoginCompleted(password().isEmpty() ? QString("Some Error") : QString());
+  StorePathRequested("Dropbox");
 }
 
 }  // namespace qt_ui

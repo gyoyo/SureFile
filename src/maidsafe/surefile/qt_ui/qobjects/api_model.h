@@ -35,6 +35,9 @@ class APIModel : public QObject {
   Q_PROPERTY(QString confirmPassword READ confirmPassword
                                      WRITE setConfirmPassword
                                      NOTIFY confirmPasswordChanged)
+  Q_PROPERTY(QString storeAlias READ storeAlias
+                                WRITE setStoreAlias
+                                NOTIFY storeAliasChanged)
 
  public:
   explicit APIModel(QObject* parent = 0);
@@ -43,13 +46,19 @@ class APIModel : public QObject {
   void setPassword(const QString& password);
   QString confirmPassword() const;
   void setConfirmPassword(const QString& confirmPassword);
+  QString storeAlias() const;
+  void setStoreAlias(const QString& storeAlias);
   Q_INVOKABLE bool CanCreateAccount();
+  Q_INVOKABLE void SetStorePathForAlias(const QString& alias, const QString& path);
+  Q_INVOKABLE void DeleteAlias(const QString& alias);
+  void StorePathRequested(const std::string& alias);
   void CreateAccount();
   void Login();
 
  signals:
   void passwordChanged();
   void confirmPasswordChanged();
+  void storeAliasChanged();
   void CreateAccountCompleted(const QString& error_message);
   void LoginCompleted(const QString& error_message);
 
@@ -59,6 +68,7 @@ class APIModel : public QObject {
 
   QString password_;
   QString confirm_password_;
+  QString store_alias_;
 };
 
 }  // namespace qt_ui

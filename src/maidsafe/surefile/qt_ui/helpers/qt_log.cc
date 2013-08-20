@@ -13,10 +13,7 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
-#include "maidsafe/surefile/qt_ui/qobjects/password_box.h"
-
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
 
 namespace maidsafe {
 
@@ -24,12 +21,16 @@ namespace surefile {
 
 namespace qt_ui {
 
-PasswordBox::PasswordBox(QObject* parent)
-    : QObject(parent) {
+void QtLog(const QString& message) {
+#if DEBUG
+  qDebug() << message;
+#endif
+  message.isEmpty();
 }
 
 }  // namespace qt_ui
 
-}  // namespace lifestuff
+}  // namespace surefile
 
 }  // namespace maidsafe
+
