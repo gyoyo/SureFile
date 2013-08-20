@@ -140,6 +140,7 @@ add_executable(surefile
                   ${UI_QT_MAIN_CC}
                   ${ALL_SUREFILE_QT_UI_SOURCE_FILES}
                   ${ALL_SUREFILE_QT_UI_HEADER_FILES}
+                  ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR}
                   ${RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR})
 
 # Temp - Removing backend API to bypass build errors in maidsafe_lifestuff
@@ -180,26 +181,26 @@ set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSIO
 #==================================================================================================#
 # Generate Qt .pro file                                                                            #
 #==================================================================================================#
+
+set(QtPROHelper ${CMAKE_BINARY_DIR}/surefile.pro)
+file(WRITE ${QtPROHelper} "#This File is Auto-Generated. Do Not Edit Manually.")
+file(APPEND ${QtPROHelper} "\nQT += qml quick widgets")
+file(APPEND ${QtPROHelper} "\nTARGET = surefile")
+
+file(APPEND ${QtPROHelper} "\n\nSOURCES += ")
+set(SOURCE_FILES_COLLECTION ${UI_QT_MAIN_CC} ${ALL_SUREFILE_QT_UI_SOURCE_FILES})
+foreach(SOURCE_FILE ${SOURCE_FILES_COLLECTION})
+  file(APPEND ${QtPROHelper} "$$quote(${SOURCE_FILE}) ")
+endforeach()
+
+file(APPEND ${QtPROHelper} "\n\nHEADERS += ")
+foreach(HEADER_FILE ${ALL_SUREFILE_QT_UI_HEADER_FILES})
+  file(APPEND ${QtPROHelper} "$$quote(${HEADER_FILE}) ")
+endforeach()
+
+file(APPEND ${QtPROHelper} "\n\nRESOURCES += $$quote(${SRC_MAIDSAFE}/main_resource.qrc)")
+
 if(WIN32)
-  set(QtPROHelper ${CMAKE_BINARY_DIR}/surefile.pro)
-  file(WRITE ${QtPROHelper} "#This File is Auto-Generated. Do Not Edit Manually.")
-  file(APPEND ${QtPROHelper} "\nQT += qml quick widgets")
-  file(APPEND ${QtPROHelper} "\nTARGET = surefile")
-
-  file(APPEND ${QtPROHelper} "\n\nSOURCES += ")
-  set(SOURCE_FILES_COLLECTION ${UI_QT_MAIN_CC} ${ALL_SUREFILE_QT_UI_SOURCE_FILES})
-  foreach(SOURCE_FILE ${SOURCE_FILES_COLLECTION})
-    file(APPEND ${QtPROHelper} "$$quote(${SOURCE_FILE}) ")
-  endforeach()
-
-  file(APPEND ${QtPROHelper} "\n\nHEADERS += ")
-  foreach(HEADER_FILE ${ALL_SUREFILE_QT_UI_HEADER_FILES})
-    file(APPEND ${QtPROHelper} "$$quote(${HEADER_FILE}) ")
-  endforeach()
-
-  file(APPEND ${QtPROHelper} "\n\nRESOURCES += $$quote(${SRC_MAIDSAFE}/main_resource.qrc)")
-
-  # TODO(Viv) - Check following function to get all dependencies
   get_dependencies(maidsafe_lifestuff OptimizedDependencies DebugDependencies ON)
   get_target_property(ReleaseLocation maidsafe_lifestuff LOCATION_RELEASE)
   get_target_property(DebugLocation maidsafe_lifestuff LOCATION_DEBUG)
@@ -213,14 +214,15 @@ if(WIN32)
   foreach(DebugDependency ${DebugDependencies})
     file(APPEND ${QtPROHelper} "$$quote(${DebugDependency}) ")
   endforeach()
-
-  file(APPEND ${QtPROHelper} "\n\nINCLUDEPATH += $$quote(${maidsafe_SOURCE_DIR}/src/lifestuff/include) $$quote(${PROJECT_SOURCE_DIR}/src)")
-
-  file(APPEND ${QtPROHelper} "\n\nOTHER_FILES += ")
-  foreach(VIEW_FILE ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR})
-    file(APPEND ${QtPROHelper} "$$quote(${VIEW_FILE}) ")
-  endforeach()
+  file(APPEND ${QtPROHelper} "\n\nINCLUDEPATH += $$quote(${maidsafe_SOURCE_DIR}/src/lifestuff/include)")
 endif()
+
+file(APPEND ${QtPROHelper} "\n\nINCLUDEPATH += $$quote(${PROJECT_SOURCE_DIR}/src)")
+
+file(APPEND ${QtPROHelper} "\n\nOTHER_FILES += ")
+foreach(VIEW_FILE ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR})
+  file(APPEND ${QtPROHelper} "$$quote(${VIEW_FILE}) ")
+endforeach()
 
 
 #==================================================================================================#
