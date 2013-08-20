@@ -105,6 +105,7 @@ void MainController::CreateAccountCompleted(const QString& error_message) {
   }
   main_window_->hide();
   system_tray_->SetIsLoggedIn(true);
+  qApp->setQuitOnLastWindowClosed(false);
   // Start procedure for first time tour from here
 }
 
@@ -116,7 +117,7 @@ void MainController::LoginCompleted(const QString& error_message) {
   }
   main_window_->hide();
   system_tray_->SetIsLoggedIn(true);
-  // Start procedure for first time tour from here
+  qApp->setQuitOnLastWindowClosed(false);
 }
 
 void MainController::InitSignals() {

@@ -17,6 +17,7 @@ Window {
   minimumHeight: windowHeight
   maximumWidth: windowWidth
   maximumHeight: windowHeight
+  onClosing: apiModel.DeleteAlias(apiModel.storeAlias)
 
   StorePathController {
     id: storePathController
