@@ -13,8 +13,8 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_STORE_PATH_CONTROLLER_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_STORE_PATH_CONTROLLER_H_
+#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_STORE_PATH_CONVERTER_H_
+#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_STORE_PATH_CONVERTER_H_
 
 // std
 #include <memory>
@@ -29,7 +29,7 @@ namespace surefile {
 
 namespace qt_ui {
 
-class StorePathController : public QObject {
+class StorePathConverter : public QObject {
   Q_OBJECT
   Q_PROPERTY(QString displayStorePath READ displayStorePath
                                       WRITE setDisplayStorePath
@@ -39,8 +39,8 @@ class StorePathController : public QObject {
                                       NOTIFY actualStorePathChanged)
 
  public:
-  explicit StorePathController(QObject* parent = 0);
-  ~StorePathController() {}
+  explicit StorePathConverter(QObject* parent = 0);
+  ~StorePathConverter() {}
   QString displayStorePath() const;
   void setDisplayStorePath(const QString& storePath);
   QString actualStorePath() const;
@@ -51,8 +51,8 @@ class StorePathController : public QObject {
   void actualStorePathChanged();
 
  private:
-  StorePathController(const StorePathController&);
-  StorePathController& operator=(const StorePathController&);
+  StorePathConverter(const StorePathConverter&);
+  StorePathConverter& operator=(const StorePathConverter&);
 
   QString display_store_path_;
   QString actual_store_path_;
@@ -64,5 +64,5 @@ class StorePathController : public QObject {
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_STORE_PATH_CONTROLLER_H_
+#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_STORE_PATH_CONVERTER_H_
 

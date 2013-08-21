@@ -5,10 +5,12 @@ import QtQuick.Dialogs 1.0
 import QtQuick.Layouts 1.0
 import SureFile 1.0
 
-Window {
+ApplicationWindow {
   property int windowWidth : 400
   property int windowHeight : 150
+  property string storeAlias
 
+  id: chooseStorepath
   title: "SureFile"
   flags: Qt.Window
   width: windowWidth
@@ -17,10 +19,10 @@ Window {
   minimumHeight: windowHeight
   maximumWidth: windowWidth
   maximumHeight: windowHeight
-  onClosing: apiModel.DeleteAlias(apiModel.storeAlias)
+  onClosing: apiModel.DeleteAlias(storeAlias)
 
-  StorePathController {
-    id: storePathController
+  StorePathConverter {
+    id: storePathConverter
   }
 
   // Following bugs seem to occur in debug builds(Win-8) very frequently
@@ -31,14 +33,14 @@ Window {
   FileDialog {
       id: fileDialog
       selectFolder: true
-      onAccepted: storePathController.actualStorePath = fileUrl
+      onAccepted: storePathConverter.actualStorePath = fileUrl
   }
 
   ColumnLayout {
     anchors.fill: parent
     anchors.margins: 15
     Label {
-      text: qsTr("Choose Store Path for: %1").arg(apiModel.storeAlias)
+      text: qsTr("Choose Store Path for: %1").arg(storeAlias)
       font.bold: true
       font.pixelSize: 20
       Layout.fillWidth: true
@@ -48,7 +50,7 @@ Window {
       Layout.fillWidth: true
       Layout.fillHeight: true
       Label {
-        text: storePathController.displayStorePath
+        text: storePathConverter.displayStorePath
         elide: Text.ElideMiddle
         Layout.fillWidth: true
       }
@@ -57,24 +59,29 @@ Window {
         onClicked: {
           // Setting folder uri does not seem to work on Windows-8
           // Might be related to QTBUG-29814
-          fileDialog.folder = storePathController.actualStorePath
+          fileDialog.folder = storePathConverter.actualStorePath
           fileDialog.open()
         }
       }
     }
     GridLayout {
       Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-      columns: 2
+      columns: 3
       Button {
         text: qsTr("OK")
-        Layout.column: Qt.platform.os === "windows" ? 0 : 1
-        onClicked: apiModel.SetStorePathForAlias(apiModel.storeAlias, storePathController.displayStorePath)
+        Layout.column: Qt.platform.os === "windows" ? 0 : 2
+        onClicked: {
+          chooseStorepath.hide()
+          apiModel.SetStorePathForAlias(storeAlias, storePathConverter.displayStorePath)
+        }
       }
       Button {
         text: qsTr("Cancel")
         tooltip: qsTr("Cancelling this will remove the folder from your SureFile drive")
-        Layout.column: Qt.platform.os === "windows" ? 1 : 0
-        onClicked: apiModel.DeleteAlias(apiModel.storeAlias)
+        onClicked: {
+          chooseStorepath.hide()
+          apiModel.DeleteAlias(storeAlias)
+        }
       }
     }
   }

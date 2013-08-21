@@ -22,6 +22,13 @@ ApplicationWindow {
   }
 
   ChooseStorePath {
-    visible: apiModel.storeAlias.length > 0
+    id: chooseStorepath
+    Connections {
+      target: apiModel
+      onGetStorePath: {
+        chooseStorepath.storeAlias = storeAlias
+        chooseStorepath.show()
+      }
+    }
   }
 }

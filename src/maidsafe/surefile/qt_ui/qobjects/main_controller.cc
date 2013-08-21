@@ -22,7 +22,7 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
 #include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
 #include "maidsafe/surefile/qt_ui/qobjects/password_box.h"
-#include "maidsafe/surefile/qt_ui/qobjects/store_path_controller.h"
+#include "maidsafe/surefile/qt_ui/qobjects/store_path_converter.h"
 #include "maidsafe/surefile/qt_ui/qobjects/system_tray_icon.h"
 
 namespace maidsafe {
@@ -41,7 +41,7 @@ MainController::MainController(QObject* parent)
       is_busy_(false),
       error_message_() {
   qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
-  qmlRegisterType<StorePathController>("SureFile", 1, 0, "StorePathController");
+  qmlRegisterType<StorePathConverter>("SureFile", 1, 0, "StorePathConverter");
   InitSignals();
   QTimer::singleShot(0, this, SLOT(EventLoopStarted()));
 }
@@ -55,6 +55,8 @@ void MainController::setIsBusy(const bool& isBusy) {
     return;
 
   is_busy_ = isBusy;
+  if (is_busy_)
+    setErrorMessage(QString());
   emit isBusyChanged();
 }
 
@@ -67,17 +69,17 @@ void MainController::setErrorMessage(const QString& errorMessage) {
     return;
 
   error_message_ = errorMessage;
+  if (error_message_.isEmpty())
+    setIsBusy(false);
   emit errorMessageChanged();
 }
 
 void MainController::CreateAccount() {
-  setErrorMessage(QString());
   setIsBusy(true);
   void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::CreateAccount);
 }
 
 void MainController::Login() {
-  setErrorMessage(QString());
   setIsBusy(true);
   void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::Login);
 }
@@ -98,14 +100,7 @@ void MainController::EventLoopStarted() {
 }
 
 void MainController::CreateAccountCompleted(const QString& error_message) {
-  setIsBusy(false);
-  if (!error_message.isEmpty()) {
-    setErrorMessage(error_message);
-    return;
-  }
-  main_window_->hide();
-  system_tray_->SetIsLoggedIn(true);
-  qApp->setQuitOnLastWindowClosed(false);
+  LoginCompleted(error_message);
   // Start procedure for first time tour from here
 }
 

@@ -29,9 +29,7 @@ namespace qt_ui {
 APIModel::APIModel(QObject* parent)
     : QObject(parent),
       password_(),
-      confirm_password_(),
-      store_alias_() {
-}
+      confirm_password_() {}
 
 QString APIModel::password() const {
   return password_;
@@ -57,36 +55,23 @@ void APIModel::setConfirmPassword(const QString& confirmPassword) {
   emit passwordChanged();
 }
 
-QString APIModel::storeAlias() const {
-  return store_alias_;
-}
-
-void APIModel::setStoreAlias(const QString& storeAlias) {
-  if (store_alias_ == storeAlias)
-    return;
-
-  store_alias_ = storeAlias;
-  emit storeAliasChanged();
-}
-
 bool APIModel::CanCreateAccount() {
   return false;
 }
 
 void APIModel::SetStorePathForAlias(const QString& alias, const QString& path) {
-  setStoreAlias(QString());
   // Invoke to set store path for alias from backend api
   QtLog(QString("Alias: %1 Path: %2").arg(alias).arg(path));
 }
 
 void APIModel::DeleteAlias(const QString& alias) {
-  setStoreAlias(QString());
   // Invoke to delete alias from backend api
   QtLog(QString("Deleting Alias: %1").arg(alias));
 }
 
 void APIModel::StorePathRequested(const std::string& alias) {
-  setStoreAlias(QString::fromStdString(alias));
+  // setStoreAlias(QString::fromStdString(alias));
+  emit getStorePath(QString::fromStdString(alias));
 }
 
 void APIModel::CreateAccount() {
