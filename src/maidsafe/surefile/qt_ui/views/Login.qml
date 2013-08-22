@@ -1,6 +1,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
+import SureFile 1.0
 
 Item {
   anchors.fill: parent
@@ -24,13 +25,14 @@ Item {
       horizontalAlignment: Text.AlignHCenter
       placeholderText: qsTr("Password")
       echoMode: TextInput.Password
+      enabled: apiModel.operationState != APIModel.Progress
+      onTextChanged: apiModel.operationState = APIModel.Ready
       Layout.alignment: Qt.AlignHCenter
       Binding {
         target: apiModel;
         property: "password";
         value: passwordBox.text
       }
-      onTextChanged: mainController.errorMessage = ""
       Keys.onReturnPressed: loginButton.clicked()
       Keys.onEnterPressed: loginButton.clicked()
     }
@@ -39,6 +41,7 @@ Item {
       id: loginButton
       text: qsTr("Log In")
       isDefault: true
+      enabled: apiModel.operationState != APIModel.Progress
       Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
       Layout.alignment: Qt.AlignHCenter
       onClicked: mainController.Login()
@@ -47,13 +50,10 @@ Item {
     Item {
       Layout.fillHeight: true
       Layout.fillWidth: true
-      Progress {
-        visible: mainController.isBusy
-        progressMessage: qsTr("Logging in...")
-      }
-      ErrorView {
-        visible: mainController.errorMessage.length > 0
-        errorMessage: mainController.errorMessage
+
+      StatusInfo {
+        visible: apiModel.operationState != APIModel.Ready
+        progressMessage: qsTr("Logging in")
       }
     }
   }

@@ -5,10 +5,9 @@
   </qresource>
   <qresource prefix="/">
     <file>views/ChooseStorePath.qml</file>
-    <file>views/ErrorView.qml</file>
     <file>views/Main.qml</file>
     <file>views/Login.qml</file>
     <file>views/CreateAccount.qml</file>
-    <file>views/Progress.qml</file>
+    <file>views/StatusInfo.qml</file>
   </qresource>
 </RCC>

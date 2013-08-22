@@ -1,6 +1,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
+import SureFile 1.0
 
 Item {
   anchors.fill: parent
@@ -24,7 +25,8 @@ Item {
       horizontalAlignment: Text.AlignHCenter
       placeholderText: qsTr("Password")
       echoMode: TextInput.Password
-      onTextChanged: mainController.errorMessage = ""
+      onTextChanged: apiModel.operationState = APIModel.Ready
+      enabled: apiModel.operationState != APIModel.Progress
       Layout.alignment: Qt.AlignHCenter
       Binding {
         target: apiModel;
@@ -40,7 +42,8 @@ Item {
       horizontalAlignment: Text.AlignHCenter
       placeholderText: qsTr("Confirm Password")
       echoMode: TextInput.Password
-      onTextChanged: mainController.errorMessage = ""
+      onTextChanged: apiModel.operationState = APIModel.Ready
+      enabled: apiModel.operationState != APIModel.Progress
       Layout.alignment: Qt.AlignHCenter
       Binding {
         target: apiModel;
@@ -55,6 +58,7 @@ Item {
       id: createAccountButton
       text: qsTr("Create Account")
       isDefault: true
+      enabled: apiModel.operationState != APIModel.Progress
       Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
       Layout.alignment: Qt.AlignHCenter
       onClicked: mainController.CreateAccount()
@@ -63,13 +67,10 @@ Item {
     Item {
       Layout.fillHeight: true
       Layout.fillWidth: true
-      Progress {
-        visible: mainController.isBusy
-        progressMessage: qsTr("Creating Account...")
-      }
-      ErrorView {
-        visible: mainController.errorMessage.length > 0
-        errorMessage: mainController.errorMessage
+
+      StatusInfo {
+        visible: apiModel.operationState != APIModel.Ready
+        progressMessage: qsTr("Creating Account")
       }
     }
   }

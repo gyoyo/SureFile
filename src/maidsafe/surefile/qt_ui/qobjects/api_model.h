@@ -31,18 +31,35 @@ namespace qt_ui {
 
 class APIModel : public QObject {
   Q_OBJECT
+  Q_ENUMS(OperationState)
+  Q_PROPERTY(OperationState operationState READ operationState
+                                           WRITE setOperationState
+                                           NOTIFY operationStateChanged)
+  Q_PROPERTY(QString errorMessage READ errorMessage
+                                  WRITE setErrorMessage
+                                  NOTIFY errorMessageChanged)
   Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
   Q_PROPERTY(QString confirmPassword READ confirmPassword
                                      WRITE setConfirmPassword
                                      NOTIFY confirmPasswordChanged)
 
  public:
+  enum OperationState {
+    Ready,
+    Progress,
+    Error
+  };
+
   explicit APIModel(QObject* parent = 0);
   ~APIModel() {}
   void StorePathRequested(const std::string& alias);
-  void CreateAccount();
-  void Login();
+  bool CreateAccount();
+  bool Login();
 
+  OperationState operationState() const;
+  void setOperationState(const OperationState& operationState);
+  QString errorMessage() const;
+  void setErrorMessage(const QString& errorMessage);
   QString password() const;
   void setPassword(const QString& password);
   QString confirmPassword() const;
@@ -53,19 +70,20 @@ class APIModel : public QObject {
   Q_INVOKABLE void DeleteAlias(const QString& alias);
 
  signals:
+  void operationStateChanged();
+  void errorMessageChanged();
   void passwordChanged();
   void confirmPasswordChanged();
   void getStorePath(const QString& storeAlias);
-
-  void CreateAccountCompleted(const QString& error_message);
-  void LoginCompleted(const QString& error_message);
 
  private:
   APIModel(const APIModel&);
   APIModel& operator=(const APIModel&);
 
+  OperationState operation_state_;
   QString password_;
   QString confirm_password_;
+  QString error_message_;
 };
 
 }  // namespace qt_ui

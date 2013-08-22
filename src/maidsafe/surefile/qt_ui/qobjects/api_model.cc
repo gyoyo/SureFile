@@ -28,8 +28,36 @@ namespace qt_ui {
 
 APIModel::APIModel(QObject* parent)
     : QObject(parent),
+      operation_state_(APIModel::Ready),
+      error_message_(),
       password_(),
-      confirm_password_() {}
+      confirm_password_() {
+  emit errorMessageChanged();
+}
+
+APIModel::OperationState APIModel::operationState() const {
+  return operation_state_;
+}
+
+void APIModel::setOperationState(const APIModel::OperationState& operationState) {
+  if (operation_state_ == operationState)
+    return;
+
+  operation_state_ = operationState;
+  emit operationStateChanged();
+}
+
+QString APIModel::errorMessage() const {
+  return error_message_;
+}
+
+void APIModel::setErrorMessage(const QString& errorMessage) {
+  if (error_message_ == errorMessage)
+    return;
+
+  error_message_ = errorMessage;
+  emit errorMessageChanged();
+}
 
 QString APIModel::password() const {
   return password_;
@@ -56,7 +84,7 @@ void APIModel::setConfirmPassword(const QString& confirmPassword) {
 }
 
 bool APIModel::CanCreateAccount() {
-  return false;
+  return true;
 }
 
 void APIModel::SetStorePathForAlias(const QString& alias, const QString& path) {
@@ -74,25 +102,48 @@ void APIModel::StorePathRequested(const std::string& alias) {
   emit getStorePath(QString::fromStdString(alias));
 }
 
-void APIModel::CreateAccount() {
-  // Mock - Replace with API call
+bool APIModel::CreateAccount() {
+  setOperationState(APIModel::Progress);
+
+  // Mock - Start
   QtLog(QString("Creating Account with Pass: %1 and Conf Pass: %2").arg(password())
                                                                    .arg(confirmPassword()));
-  if (password() != confirmPassword()) {
-    emit CreateAccountCompleted(QString("Entries do not Match"));
-    return;
-  }
   QThread::sleep(3);
-  emit CreateAccountCompleted(password().isEmpty() ? QString("Some Error") : QString());
-  StorePathRequested("Dropbox");
+  if (password() != confirmPassword()) {
+    setErrorMessage(QString("Entries do not Match"));
+    setOperationState(APIModel::Error);
+    return false;
+  }
+
+  if (password().isEmpty()) {
+    setErrorMessage(QString("Some Error Message"));
+    setOperationState(APIModel::Error);
+    return false;
+  }
+  // Mock - End
+
+  setOperationState(APIModel::Ready);
+  StorePathRequested("New Folder");  // Mock
+  return true;
 }
 
-void APIModel::Login() {
-  // Mock - Replace with API call
+bool APIModel::Login() {
+  setOperationState(APIModel::Progress);
+
+  // Mock - Start
   QtLog(QString("Logging In with Pass: %1").arg(password()));
   QThread::sleep(3);
-  emit LoginCompleted(password().isEmpty() ? QString("Some Error") : QString());
-  StorePathRequested("Dropbox");
+
+  if (password().isEmpty()) {
+    setErrorMessage(QString("Some Error Message"));
+    setOperationState(APIModel::Error);
+    return false;
+  }
+  // Mock - End
+
+  setOperationState(APIModel::Ready);
+  StorePathRequested("New Folder");  // Mock
+  return true;
 }
 
 }  // namespace qt_ui

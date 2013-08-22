@@ -37,51 +37,21 @@ MainController::MainController(QObject* parent)
       main_window_(),
       api_model_(new APIModel),
       system_tray_(new SystemTrayIcon),
-      void_qfuture_(),
-      is_busy_(false),
-      error_message_() {
+      future_watcher_() {
   qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
+  qmlRegisterType<APIModel>("SureFile", 1, 0, "APIModel");
   qmlRegisterType<StorePathConverter>("SureFile", 1, 0, "StorePathConverter");
-  InitSignals();
   QTimer::singleShot(0, this, SLOT(EventLoopStarted()));
 }
 
-bool MainController::isBusy() const {
-  return is_busy_;
-}
-
-void MainController::setIsBusy(const bool& isBusy) {
-  if (is_busy_ == isBusy)
-    return;
-
-  is_busy_ = isBusy;
-  if (is_busy_)
-    setErrorMessage(QString());
-  emit isBusyChanged();
-}
-
-QString MainController::errorMessage() const {
-  return error_message_;
-}
-
-void MainController::setErrorMessage(const QString& errorMessage) {
-  if (error_message_ == errorMessage)
-    return;
-
-  error_message_ = errorMessage;
-  if (error_message_.isEmpty())
-    setIsBusy(false);
-  emit errorMessageChanged();
-}
-
 void MainController::CreateAccount() {
-  setIsBusy(true);
-  void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::CreateAccount);
+  connect(&future_watcher_, SIGNAL(finished()), this, SLOT(CreateAccountCompleted()));
+  future_watcher_.setFuture(QtConcurrent::run(api_model_.get(), &APIModel::CreateAccount));
 }
 
 void MainController::Login() {
-  setIsBusy(true);
-  void_qfuture_ = QtConcurrent::run(api_model_.get(), &APIModel::Login);
+  connect(&future_watcher_, SIGNAL(finished()), this, SLOT(LoginCompleted()));
+  future_watcher_.setFuture(QtConcurrent::run(api_model_.get(), &APIModel::Login));
 }
 
 void MainController::EventLoopStarted() {
@@ -95,37 +65,30 @@ void MainController::EventLoopStarted() {
     QtLog("App Startup Failed");
     return;
   }
+
   main_window_->show();
   system_tray_->show();
 }
 
-void MainController::CreateAccountCompleted(const QString& error_message) {
-  LoginCompleted(error_message);
+void MainController::CreateAccountCompleted() {
+  disconnect(&future_watcher_, SIGNAL(finished()), this, SLOT(CreateAccountCompleted()));
+  LoginCompleted();
+  system_tray_->showMessage(tr(""), tr("SureFile is running"));
   // Start procedure for first time tour from here
 }
 
-void MainController::LoginCompleted(const QString& error_message) {
-  setIsBusy(false);
-  if (!error_message.isEmpty()) {
-    setErrorMessage(error_message);
+void MainController::LoginCompleted() {
+  disconnect(&future_watcher_, SIGNAL(finished()), this, SLOT(LoginCompleted()));
+  if (future_watcher_.isCanceled() || !future_watcher_.result())
     return;
-  }
+
   main_window_->hide();
   system_tray_->SetIsLoggedIn(true);
   qApp->setQuitOnLastWindowClosed(false);
 }
 
-void MainController::InitSignals() {
-  connect(api_model_.get(), SIGNAL(CreateAccountCompleted(const QString&)),
-          this,             SLOT(CreateAccountCompleted(const QString&)),
-          Qt::QueuedConnection);
-  connect(api_model_.get(), SIGNAL(LoginCompleted(const QString&)),
-          this,             SLOT(LoginCompleted(const QString&)),
-          Qt::QueuedConnection);
-}
-
 MainController::~MainController() {
-  void_qfuture_.waitForFinished();
+  future_watcher_.waitForFinished();
   delete main_window_;
 }
 

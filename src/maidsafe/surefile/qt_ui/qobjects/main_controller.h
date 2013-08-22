@@ -35,42 +35,27 @@ class SystemTrayIcon;
 
 class MainController : public QObject {
   Q_OBJECT
-  Q_PROPERTY(bool isBusy READ isBusy WRITE setIsBusy NOTIFY isBusyChanged)
-  Q_PROPERTY(QString errorMessage READ errorMessage
-                                  WRITE setErrorMessage
-                                  NOTIFY errorMessageChanged)
 
  public:
   explicit MainController(QObject* parent = 0);
   ~MainController();
-  bool isBusy() const;
-  void setIsBusy(const bool& isBusy);
-  QString errorMessage() const;
-  void setErrorMessage(const QString& errorMessage);
   Q_INVOKABLE void CreateAccount();
   Q_INVOKABLE void Login();
 
- signals:
-  void isBusyChanged();
-  void errorMessageChanged();
-
  private slots:  // NOLINT - Viv
   void EventLoopStarted();
-  void CreateAccountCompleted(const QString& error_message);
-  void LoginCompleted(const QString& error_message);
+  void CreateAccountCompleted();
+  void LoginCompleted();
 
  private:
   MainController(const MainController&);
   MainController& operator=(const MainController&);
-  void InitSignals();
 
   QQmlApplicationEngine* main_engine_;
   QQuickWindow* main_window_;
   std::unique_ptr<APIModel> api_model_;
   std::unique_ptr<SystemTrayIcon> system_tray_;
-  QFuture<void> void_qfuture_;
-  bool is_busy_;
-  QString error_message_;
+  QFutureWatcher<bool> future_watcher_;
 };
 
 }  // namespace qt_ui

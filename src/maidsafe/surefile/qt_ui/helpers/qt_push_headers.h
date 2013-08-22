@@ -56,6 +56,7 @@ License.
 #include "QtCore/QDir"
 #include "QtCore/QTimer"
 #include "QtCore/QFuture"
+#include "QtCore/QFutureWatcher"
 #include "QtCore/QUrl"
 #include "QtGui/QSurfaceFormat"
 #include "QtQml/QQmlComponent"
