@@ -78,6 +78,7 @@ ApplicationWindow {
       Button {
         text: qsTr("Cancel")
         tooltip: qsTr("Cancelling this will remove the folder from your SureFile drive")
+        Layout.column: 1
         onClicked: {
           chooseStorepath.hide()
           apiModel.DeleteAlias(storeAlias)
