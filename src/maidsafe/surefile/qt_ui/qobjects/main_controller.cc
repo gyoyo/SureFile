@@ -72,19 +72,25 @@ void MainController::EventLoopStarted() {
 
 void MainController::CreateAccountCompleted() {
   disconnect(&future_watcher_, SIGNAL(finished()), this, SLOT(CreateAccountCompleted()));
-  LoginCompleted();
+  if (!InitialisePostLogin())
+    return;
   system_tray_->showMessage(tr(""), tr("SureFile is running"));
   // Start procedure for first time tour from here
 }
 
 void MainController::LoginCompleted() {
   disconnect(&future_watcher_, SIGNAL(finished()), this, SLOT(LoginCompleted()));
+  InitialisePostLogin();
+}
+
+bool MainController::InitialisePostLogin() {
   if (future_watcher_.isCanceled() || !future_watcher_.result())
-    return;
+    return false;
 
   main_window_->hide();
   system_tray_->SetIsLoggedIn(true);
   qApp->setQuitOnLastWindowClosed(false);
+  return true;
 }
 
 MainController::~MainController() {

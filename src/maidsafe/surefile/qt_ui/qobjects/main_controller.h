@@ -50,6 +50,7 @@ class MainController : public QObject {
  private:
   MainController(const MainController&);
   MainController& operator=(const MainController&);
+  bool InitialisePostLogin();
 
   QQmlApplicationEngine* main_engine_;
   QQuickWindow* main_window_;
