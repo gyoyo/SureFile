@@ -4,8 +4,15 @@ import QtQuick.Layouts 1.0
 import SureFile 1.0
 
 ApplicationWindow {
-  property int windowWidth : 340
-  property int windowHeight : 430
+  property int windowWidth : 350
+  property int windowHeight : 450
+  color: "white"
+
+  Image {
+    id: headerLogo
+    source: "qrc:/images/app_header.svg"
+    fillMode: Image.PreserveAspectFit
+  }
 
   id: root
   title: "SureFile"
@@ -19,6 +26,7 @@ ApplicationWindow {
   Loader {
     anchors.fill: parent
     source: apiModel.CanCreateAccount() ? "CreateAccount.qml" : "Login.qml"
+    anchors.topMargin: headerLogo.height
   }
 
   ChooseStorePath {

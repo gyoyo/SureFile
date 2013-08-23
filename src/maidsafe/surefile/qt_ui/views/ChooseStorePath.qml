@@ -6,9 +6,16 @@ import QtQuick.Layouts 1.0
 import SureFile 1.0
 
 ApplicationWindow {
-  property int windowWidth : 400
-  property int windowHeight : 150
+  property int windowWidth : 350
+  property int windowHeight : 450
   property string storeAlias
+  color: "white"
+
+  Image {
+    id: headerLogo
+    source: "qrc:/images/app_header.svg"
+    fillMode: Image.PreserveAspectFit
+  }
 
   id: chooseStorepath
   title: "SureFile"
@@ -38,24 +45,43 @@ ApplicationWindow {
 
   ColumnLayout {
     anchors.fill: parent
-    anchors.margins: 15
+    anchors.margins: 30
+    anchors.topMargin: headerLogo.height +20
     Label {
-      text: qsTr("Choose Store Path for: %1").arg(storeAlias)
+      text: qsTr("Choose Store Path...")
       font.bold: true
-      font.pixelSize: 20
+      font.pixelSize: 18
       Layout.fillWidth: true
-      Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+      verticalAlignment: Text.AlignTop
+      Layout.alignment: Qt.AlignHCenter
+      horizontalAlignment: Text.AlignHCenter
     }
-    RowLayout {
+    Label {
+      text: (storeAlias)
+      font.bold: true
+      font.pixelSize: 18
+      Layout.fillWidth: true
+      verticalAlignment: Text.AlignTop
+      Layout.alignment: Qt.AlignHCenter
+      horizontalAlignment: Text.AlignHCenter
+      color: Qt.rgba(0.35,0.59,0.84,1)
+    }
+    ColumnLayout {
       Layout.fillWidth: true
       Layout.fillHeight: true
+      Layout.alignment: Qt.AlignTop
+      spacing: 20
+
       Label {
         text: storePathConverter.displayStorePath
         elide: Text.ElideMiddle
         Layout.fillWidth: true
+        horizontalAlignment: Text.AlignHCenter
+        Layout.alignment: Qt.AlignHCenter
       }
       Button {
-        text: qsTr("Change")
+        text: qsTr("Edit Path")
+        Layout.alignment: Qt.AlignHCenter
         onClicked: {
           // Setting folder uri does not seem to work on Windows-8
           // Might be related to QTBUG-29814
@@ -64,9 +90,8 @@ ApplicationWindow {
         }
       }
     }
-    GridLayout {
-      Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-      columns: 3
+    RowLayout {
+      Layout.alignment: Qt.AlignHCenter
       Button {
         text: qsTr("OK")
         Layout.column: Qt.platform.os === "windows" ? 0 : 2

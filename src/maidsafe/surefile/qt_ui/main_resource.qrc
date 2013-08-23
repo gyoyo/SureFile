@@ -1,14 +1,15 @@
 <RCC>
-  <qresource prefix="/">
-    <file>images/error.png</file>
-    <file>images/loading.png</file>
-  </qresource>
-  <qresource prefix="/">
-    <file>views/ChooseStorePath.qml</file>
-    <file>views/ErrorView.qml</file>
-    <file>views/Main.qml</file>
-    <file>views/Login.qml</file>
-    <file>views/CreateAccount.qml</file>
-    <file>views/Progress.qml</file>
-  </qresource>
+    <qresource prefix="/">
+        <file>images/error.png</file>
+        <file>images/loading.png</file>
+        <file>views/ChooseStorePath.qml</file>
+        <file>views/ErrorView.qml</file>
+        <file>views/Main.qml</file>
+        <file>views/Login.qml</file>
+        <file>views/CreateAccount.qml</file>
+        <file>views/Progress.qml</file>
+        <file>views/LicenseAgreement.qml</file>
+        <file>images/app_header.svg</file>
+        <file>images/surefile_app_normal.png</file>
+    </qresource>
 </RCC>

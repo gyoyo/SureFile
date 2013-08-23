@@ -11,46 +11,44 @@ Item {
     spacing: 25
 
     Label {
-      text: qsTr("Log In")
+      text: qsTr("License Agreement")
       verticalAlignment: Text.AlignBottom
       font.bold: true
       font.pixelSize: 18
       Layout.minimumHeight: implicitHeight
       Layout.alignment: Qt.AlignHCenter
     }
-
-    TextField {
-      id: passwordBox
+    TextArea {
+      id: licenseAgreement
       horizontalAlignment: Text.AlignHCenter
-      placeholderText: qsTr("Password")
-      echoMode: TextInput.Password
       Layout.alignment: Qt.AlignHCenter
-      Binding {
-        target: apiModel;
-        property: "password";
-        value: passwordBox.text
-      }
-      Layout.minimumWidth: implicitWidth *2
-      onTextChanged: mainController.errorMessage = ""
-      Keys.onReturnPressed: loginButton.clicked()
-      Keys.onEnterPressed: loginButton.clicked()
+      frameVisible: frameCheckbox.checked
+      text: qsTr("License Agreement blah blah blah")
+      wrapMode: wrapCheck.checked ? TextEdit.WordWrap : TextEdit.NoWrap
+      Layout.fillWidth: true
     }
-
+    Label {
+      textFormat: Text.RichText
+      text: qsTr("You must agree to the <br>Terms and Conditions to proceed")
+      horizontalAlignment: Text.AlignHCenter
+      Layout.alignment: Qt.AlignHCenter
+      width:parent.width
+      wrapMode: Text.Wrap
+      Layout.fillWidth: true
+    }
     Button {
-      id: loginButton
-      text: qsTr("Log In")
+      id: createAccountButton
+      text: qsTr("Agree")
       isDefault: true
       Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
       Layout.alignment: Qt.AlignHCenter
-      onClicked: mainController.Login()
     }
-
     Item {
       Layout.fillHeight: true
       Layout.fillWidth: true
       Progress {
         visible: mainController.isBusy
-        progressMessage: qsTr("Logging in...")
+        progressMessage: qsTr("Creating Account...")
       }
       ErrorView {
         visible: mainController.errorMessage.length > 0

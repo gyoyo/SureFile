@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.0
 
 Item {
   anchors.fill: parent
-  anchors.margins: 15
+  anchors.margins: 30
 
   ColumnLayout {
     anchors.fill: parent
@@ -12,10 +12,10 @@ Item {
 
     Label {
       text: qsTr("Create Account")
-      verticalAlignment: Text.AlignVCenter
+      verticalAlignment: Text.AlignBottom
       font.bold: true
-      font.pixelSize: 24
-      Layout.minimumHeight: implicitHeight + 100
+      font.pixelSize: 18
+      Layout.minimumHeight: implicitHeight
       Layout.alignment: Qt.AlignHCenter      
     }
 
@@ -26,6 +26,7 @@ Item {
       echoMode: TextInput.Password
       onTextChanged: mainController.errorMessage = ""
       Layout.alignment: Qt.AlignHCenter
+      Layout.minimumWidth: implicitWidth *2
       Binding {
         target: apiModel;
         property: "password";
@@ -42,6 +43,7 @@ Item {
       echoMode: TextInput.Password
       onTextChanged: mainController.errorMessage = ""
       Layout.alignment: Qt.AlignHCenter
+      Layout.minimumWidth: implicitWidth *2
       Binding {
         target: apiModel;
         property: "confirmPassword";
