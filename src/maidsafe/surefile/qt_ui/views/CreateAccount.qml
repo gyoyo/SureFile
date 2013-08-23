@@ -11,6 +11,7 @@ ColumnLayout {
 
   Loader {
     id: createAccountLoader
+    Layout.alignment: Qt.AlignHCenter
     Layout.minimumHeight: parent.height - (spacingUsed * 2) - createAccountButton.implicitHeight - statusInfo.heightRequired
     Layout.maximumHeight: parent.height - (spacingUsed * 2) - createAccountButton.implicitHeight - statusInfo.heightRequired
     source: "create_account/LicenseAgreement.qml"

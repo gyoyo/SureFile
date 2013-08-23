@@ -30,7 +30,7 @@ ApplicationWindow {
   }
 
   Loader {
-    property int loaderMargin : 30
+   property int loaderMargin : 30
 
     id: mainLoader
     anchors.fill: parent
