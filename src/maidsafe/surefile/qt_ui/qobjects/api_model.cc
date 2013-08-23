@@ -28,10 +28,10 @@ namespace qt_ui {
 
 APIModel::APIModel(QObject* parent)
     : QObject(parent),
-      operation_state_(APIModel::Ready),
-      error_message_(),
+      operation_state_(APIModel::Ready),  
       password_(),
-      confirm_password_() {
+      confirm_password_(),
+      error_message_(){
   emit errorMessageChanged();
 }
 
