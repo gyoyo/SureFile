@@ -47,6 +47,9 @@ class MainController : public QObject {
   void CreateAccountCompleted();
   void LoginCompleted();
 
+ signals:
+  void hideAppWindow();
+
  private:
   MainController(const MainController&);
   MainController& operator=(const MainController&);

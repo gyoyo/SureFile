@@ -5,10 +5,9 @@ import SureFile 1.0
 
 RowLayout {
   property string progressMessage
-  anchors.bottom: parent.bottom
-  anchors.horizontalCenter: parent.horizontalCenter
-  anchors.margins: 15
+  property int heightRequired : textLabel.implicitHeight + 15
   spacing: 15
+
   Image {
     id: progressIcon
     source: "../images/loading.png"
@@ -28,6 +27,7 @@ RowLayout {
   }
 
   Label {
+    id: textLabel
     text: apiModel.operationState == APIModel.Error ? apiModel.errorMessage : progressMessage
     Layout.alignment: Qt.AlignVCenter
   }

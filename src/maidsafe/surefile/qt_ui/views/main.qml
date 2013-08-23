@@ -4,11 +4,12 @@ import QtQuick.Layouts 1.0
 import SureFile 1.0
 
 ApplicationWindow {
-  property int windowWidth : 340
-  property int windowHeight : 430
+  property int windowWidth : 350
+  property int windowHeight : 450
 
-  id: root
+  id: rootWindow
   title: "SureFile"
+  color: "white"
   width: windowWidth
   height: windowHeight
   minimumWidth: windowWidth
@@ -16,19 +17,38 @@ ApplicationWindow {
   maximumWidth: windowWidth
   maximumHeight: windowHeight
 
-  Loader {
-    anchors.fill: parent
-    source: apiModel.CanCreateAccount() ? "CreateAccount.qml" : "Login.qml"
+  onClosing: {
+    if (mainLoader.item.objectName == "chooseStorePath")
+      apiModel.DeleteAlias(mainLoader.item.storeAlias)
   }
 
-  ChooseStorePath {
-    id: chooseStorepath
+
+  Image {
+    id: headerLogo
+    source: "qrc:/images/app_header.svg"
+    fillMode: Image.PreserveAspectFit
+  }
+
+  Loader {
+    property int loaderMargin : 30
+
+    id: mainLoader
+    anchors.fill: parent
+    source: apiModel.CanCreateAccount() ? "CreateAccount.qml" : "Login.qml"
     Connections {
       target: apiModel
       onGetStorePath: {
-        chooseStorepath.storeAlias = storeAlias
-        chooseStorepath.show()
+        mainLoader.source = "ChooseStorePath.qml"
+        mainLoader.item.objectName = "chooseStorePath"
+        mainLoader.item.storeAlias = storeAlias
+        rootWindow.show()
       }
+    }
+    onItemChanged: {
+      mainLoader.item.anchors.leftMargin = loaderMargin
+      mainLoader.item.anchors.topMargin = loaderMargin + headerLogo.height
+      mainLoader.item.anchors.rightMargin = loaderMargin
+      mainLoader.item.anchors.bottomMargin = loaderMargin
     }
   }
 }

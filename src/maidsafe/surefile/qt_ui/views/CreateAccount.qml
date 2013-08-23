@@ -2,76 +2,48 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 import SureFile 1.0
+import "create_account"
 
-Item {
+ColumnLayout {
+  property int spacingUsed : 25
   anchors.fill: parent
-  anchors.margins: 15
+  spacing: spacingUsed
 
-  ColumnLayout {
-    anchors.fill: parent
-    spacing: 25
+  Loader {
+    id: createAccountLoader
+    Layout.minimumHeight: parent.height - (spacingUsed * 2) - createAccountButton.implicitHeight - statusInfo.heightRequired
+    Layout.maximumHeight: parent.height - (spacingUsed * 2) - createAccountButton.implicitHeight - statusInfo.heightRequired
+    source: "create_account/LicenseAgreement.qml"
+  }
 
-    Label {
-      text: qsTr("Create Account")
-      verticalAlignment: Text.AlignVCenter
-      font.bold: true
-      font.pixelSize: 24
-      Layout.minimumHeight: implicitHeight + 100
-      Layout.alignment: Qt.AlignHCenter      
-    }
-
-    TextField {
-      id: passwordBox
-      horizontalAlignment: Text.AlignHCenter
-      placeholderText: qsTr("Password")
-      echoMode: TextInput.Password
-      onTextChanged: apiModel.operationState = APIModel.Ready
-      enabled: apiModel.operationState != APIModel.Progress
-      Layout.alignment: Qt.AlignHCenter
-      Binding {
-        target: apiModel;
-        property: "password";
-        value: passwordBox.text
-      }
-      Keys.onReturnPressed: createAccountButton.clicked()
-      Keys.onEnterPressed: createAccountButton.clicked()
-    }
-
-    TextField {
-      id: confirmPasswordBox
-      horizontalAlignment: Text.AlignHCenter
-      placeholderText: qsTr("Confirm Password")
-      echoMode: TextInput.Password
-      onTextChanged: apiModel.operationState = APIModel.Ready
-      enabled: apiModel.operationState != APIModel.Progress
-      Layout.alignment: Qt.AlignHCenter
-      Binding {
-        target: apiModel;
-        property: "confirmPassword";
-        value: confirmPasswordBox.text
-      }
-      Keys.onReturnPressed: createAccountButton.clicked()
-      Keys.onEnterPressed: createAccountButton.clicked()
-    }
-
-    Button {
-      id: createAccountButton
-      text: qsTr("Create Account")
-      isDefault: true
-      enabled: apiModel.operationState != APIModel.Progress
-      Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
-      Layout.alignment: Qt.AlignHCenter
-      onClicked: mainController.CreateAccount()
-    }
-
-    Item {
-      Layout.fillHeight: true
-      Layout.fillWidth: true
-
-      StatusInfo {
-        visible: apiModel.operationState != APIModel.Ready
-        progressMessage: qsTr("Creating Account")
+  Button {
+    id: createAccountButton
+    text: createAccountLoader.item.objectName == "credentialPage" ? qsTr("Create Account") : qsTr("Agree")
+    //text: some.height
+    isDefault: true
+    enabled: apiModel.operationState != APIModel.Progress
+    Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
+    Layout.alignment: Qt.AlignHCenter
+    onClicked: {
+      if (createAccountLoader.item.objectName == "credentialPage") {
+        mainController.CreateAccount()
+      } else {
+        createAccountLoader.source = "create_account/Credential.qml"
+        createAccountLoader.item.objectName = "credentialPage"
       }
     }
   }
+  Item {
+    Layout.minimumHeight: statusInfo.heightRequired
+    Layout.maximumHeight: statusInfo.heightRequired
+    Layout.alignment: Qt.AlignHCenter
+    Layout.fillWidth: true
+    StatusInfo {
+      id: statusInfo
+      visible: apiModel.operationState != APIModel.Ready
+      progressMessage: qsTr("Creating Account")
+      anchors.horizontalCenter: parent.horizontalCenter
+    }
+  }
 }
+

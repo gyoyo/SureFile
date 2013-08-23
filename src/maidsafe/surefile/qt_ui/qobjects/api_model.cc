@@ -123,7 +123,6 @@ bool APIModel::CreateAccount() {
   // Mock - End
 
   setOperationState(APIModel::Ready);
-  StorePathRequested("New Folder");  // Mock
   return true;
 }
 
@@ -142,7 +141,6 @@ bool APIModel::Login() {
   // Mock - End
 
   setOperationState(APIModel::Ready);
-  StorePathRequested("New Folder");  // Mock
   return true;
 }
 

@@ -5,21 +5,12 @@ import QtQuick.Dialogs 1.0
 import QtQuick.Layouts 1.0
 import SureFile 1.0
 
-ApplicationWindow {
-  property int windowWidth : 400
-  property int windowHeight : 150
+ColumnLayout {
   property string storeAlias
 
-  id: chooseStorepath
-  title: "SureFile"
-  flags: Qt.Window
-  width: windowWidth
-  height: windowHeight
-  minimumWidth: windowWidth
-  minimumHeight: windowHeight
-  maximumWidth: windowWidth
-  maximumHeight: windowHeight
-  onClosing: apiModel.DeleteAlias(storeAlias)
+  spacing: 25
+  anchors.fill: parent
+
 
   StorePathConverter {
     id: storePathConverter
@@ -36,53 +27,58 @@ ApplicationWindow {
       onAccepted: storePathConverter.actualStorePath = fileUrl
   }
 
-  ColumnLayout {
-    anchors.fill: parent
-    anchors.margins: 15
-    Label {
-      text: qsTr("Choose Store Path for: %1").arg(storeAlias)
-      font.bold: true
-      font.pixelSize: 20
-      Layout.fillWidth: true
-      Layout.alignment: Qt.AlignLeft | Qt.AlignTop
+  Label {
+    text: qsTr("Choose Store Path...")
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignTop
+    font.bold: true
+    font.pixelSize: 18
+    Layout.alignment: Qt.AlignHCenter
+
+  }
+  Label {
+    text: (storeAlias)
+    verticalAlignment: Text.AlignTop
+    horizontalAlignment: Text.AlignHCenter
+    font.bold: true
+    font.pixelSize: 18
+    Layout.alignment: Qt.AlignHCenter
+    color: Qt.rgba(0.35,0.59,0.84,1)
+  }
+  Label {
+    text: storePathConverter.displayStorePath
+    elide: Text.ElideMiddle
+    horizontalAlignment: Text.AlignHCenter
+    Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+    Layout.minimumWidth: implicitWidth + 20
+  }
+  Button {
+    text: qsTr("Edit Path")
+    Layout.alignment: Qt.AlignHCenter
+    onClicked: {
+      // Setting folder uri does not seem to work on Windows-8
+      // Might be related to QTBUG-29814
+      fileDialog.folder = storePathConverter.actualStorePath
+      fileDialog.open()
     }
-    RowLayout {
-      Layout.fillWidth: true
-      Layout.fillHeight: true
-      Label {
-        text: storePathConverter.displayStorePath
-        elide: Text.ElideMiddle
-        Layout.fillWidth: true
-      }
-      Button {
-        text: qsTr("Change")
-        onClicked: {
-          // Setting folder uri does not seem to work on Windows-8
-          // Might be related to QTBUG-29814
-          fileDialog.folder = storePathConverter.actualStorePath
-          fileDialog.open()
-        }
+  }
+  RowLayout {
+    Layout.alignment: Qt.AlignHCenter
+    Button {
+      text: qsTr("OK")
+      Layout.column: Qt.platform.os == "windows" ? 0 : 2
+      onClicked: {
+        rootWindow.hide()
+        apiModel.SetStorePathForAlias(storeAlias, storePathConverter.displayStorePath)
       }
     }
-    GridLayout {
-      Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-      columns: 3
-      Button {
-        text: qsTr("OK")
-        Layout.column: Qt.platform.os === "windows" ? 0 : 2
-        onClicked: {
-          chooseStorepath.hide()
-          apiModel.SetStorePathForAlias(storeAlias, storePathConverter.displayStorePath)
-        }
-      }
-      Button {
-        text: qsTr("Cancel")
-        tooltip: qsTr("Cancelling this will remove the folder from your SureFile drive")
-        Layout.column: 1
-        onClicked: {
-          chooseStorepath.hide()
-          apiModel.DeleteAlias(storeAlias)
-        }
+    Button {
+      text: qsTr("Cancel")
+      tooltip: qsTr("Cancelling this will remove the folder from your SureFile drive")
+      Layout.column: 1
+      onClicked: {
+        rootWindow.hide()
+        apiModel.DeleteAlias(storeAlias)
       }
     }
   }
