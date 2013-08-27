@@ -10,6 +10,8 @@
     <file>views/Main.qml</file>
     <file>views/Login.qml</file>
     <file>views/CreateAccount.qml</file>
+    <file>views/PasswordBox.qml</file>
+    <file>views/Progress.qml</file>
     <file>views/StatusInfo.qml</file>
     <file>views/create_account/Credential.qml</file>
     <file>views/create_account/LicenseAgreement.qml</file>

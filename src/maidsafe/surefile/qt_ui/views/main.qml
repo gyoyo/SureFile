@@ -22,7 +22,6 @@ ApplicationWindow {
       apiModel.DeleteAlias(mainLoader.item.storeAlias)
   }
 
-
   Image {
     id: headerLogo
     source: "qrc:/images/app_header.svg"

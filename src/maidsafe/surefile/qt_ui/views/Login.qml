@@ -3,54 +3,74 @@ import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 import SureFile 1.0
 
-ColumnLayout {
-  spacing: 25
+Loader {
   anchors.fill: parent
+  sourceComponent: apiModel.operationState == APIModel.Progress ? progressView : loginView
 
-  Label {
-    text: qsTr("Log In")
-    verticalAlignment: Text.AlignBottom
-    font.bold: true
-    font.pixelSize: 18
-    Layout.minimumHeight: implicitHeight
-    Layout.alignment: Qt.AlignHCenter
-  }
+  Component {
+    id: loginView
 
-  TextField {
-    id: passwordBox
-    horizontalAlignment: Text.AlignHCenter
-    placeholderText: qsTr("Password")
-    echoMode: TextInput.Password
-    enabled: apiModel.operationState != APIModel.Progress
-    onTextChanged: apiModel.operationState = APIModel.Ready
-    Layout.alignment: Qt.AlignHCenter
-    Layout.minimumWidth: loginButton.Layout.minimumWidth + 20
-    Keys.onReturnPressed: loginButton.clicked()
-    Keys.onEnterPressed: loginButton.clicked()
-    Binding {
-      target: apiModel;
-      property: "password";
-      value: passwordBox.text
+    ColumnLayout {
+      spacing: 15
+      anchors.fill: parent
+
+      Label {
+        text: qsTr("Log In")
+        font.bold: true
+        font.pixelSize: 18
+        Layout.alignment: Qt.AlignHCenter
+      }
+
+      Item {
+        Layout.preferredHeight: 10
+      }
+
+      PasswordBox {
+        id: passwordBox
+        borderThickness: 1
+        placeholderText: qsTr("Password")
+        Layout.alignment: Qt.AlignHCenter
+        echoMode: TextInput.Password
+        enabled: apiModel.operationState != APIModel.Progress
+        hasError: apiModel.operationState == APIModel.Error
+        onTextChanged: apiModel.operationState = APIModel.Ready
+        Keys.onReturnPressed: loginButton.clicked()
+        Keys.onEnterPressed: loginButton.clicked()
+        Binding {
+          target: apiModel;
+          property: "password";
+          value: passwordBox.text
+        }
+      }
+
+      Label {
+        text: qsTr("Some Error")
+        color: "red"
+        visible: false
+        Layout.alignment: Qt.AlignHCenter
+      }
+
+      Item {
+        Layout.fillHeight: true
+      }
+
+      Button {
+        id: loginButton
+        text: qsTr("Log In")
+        isDefault: true
+        enabled: apiModel.operationState != APIModel.Progress
+        Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
+        Layout.alignment: Qt.AlignHCenter
+        onClicked: mainController.Login()
+      }
     }
   }
 
-  Button {
-    id: loginButton
-    text: qsTr("Log In")
-    isDefault: true
-    enabled: apiModel.operationState != APIModel.Progress
-    Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
-    Layout.alignment: Qt.AlignHCenter
-    onClicked: mainController.Login()
-  }
+  Component {
+    id: progressView
 
-  Item {
-    Layout.fillHeight: true
-    Layout.fillWidth: true
-
-    StatusInfo {
-      visible: apiModel.operationState != APIModel.Ready
-      progressMessage: qsTr("Logging in")
+    Progress {
+      progressMessage: qsTr("Logging in...")
     }
   }
 }
