@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.0
 import SureFile 1.0
 
 ColumnLayout {
+  property bool isValid : true
   spacing: 10
   Label {
     text: qsTr("Create Account")
@@ -17,13 +18,13 @@ ColumnLayout {
   TextField {
     id: passwordBox
     placeholderText: qsTr("Password")
-    Layout.alignment: Qt.AlignHCenter
-    Layout.preferredWidth: passwordBox.implicitWidth * 2
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
     onTextChanged: apiModel.operationState = APIModel.Ready
-    Keys.onReturnPressed: loginButton.clicked()
-    Keys.onEnterPressed: loginButton.clicked()
+    Layout.alignment: Qt.AlignHCenter
+    Layout.preferredWidth: passwordBox.implicitWidth * 2
+    Keys.onReturnPressed: createAccountButton.clicked()
+    Keys.onEnterPressed: createAccountButton.clicked()
     Binding {
       target: apiModel;
       property: "password";
@@ -31,9 +32,9 @@ ColumnLayout {
     }
   }
   Label {
-    text: qsTr("Some Error")
+    text: apiModel.errorMessage
     color: "red"
-    visible: apiModel.operationState == APIModel.Error
+    opacity: apiModel.operationState == APIModel.Error ? 1 : 0
     Layout.alignment: Qt.AlignHCenter
   }
 
@@ -41,25 +42,25 @@ ColumnLayout {
     Layout.preferredHeight: 15
   }
   TextField {
-    id: passwordBox2
+    id: confirmPasswordBox
     placeholderText: qsTr("Confirm Password")
-    Layout.alignment: Qt.AlignHCenter
-    Layout.preferredWidth: passwordBox.implicitWidth * 2
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
     onTextChanged: apiModel.operationState = APIModel.Ready
-    Keys.onReturnPressed: loginButton.clicked()
-    Keys.onEnterPressed: loginButton.clicked()
+    Layout.alignment: Qt.AlignHCenter
+    Layout.preferredWidth: confirmPasswordBox.implicitWidth * 2
+    Keys.onReturnPressed: createAccountButton.clicked()
+    Keys.onEnterPressed: createAccountButton.clicked()
     Binding {
       target: apiModel;
-      property: "password";
-      value: passwordBox.text
+      property: "confirmPassword";
+      value: confirmPasswordBox.text
     }
   }
   Label {
-    text: qsTr("Some Error")
+    text: apiModel.errorMessage
     color: "red"
-    visible: apiModel.operationState == APIModel.Error
+    opacity: apiModel.operationState == APIModel.Error
     Layout.alignment: Qt.AlignHCenter
   }
   Item {

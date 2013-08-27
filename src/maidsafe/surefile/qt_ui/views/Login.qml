@@ -28,13 +28,13 @@ Loader {
       TextField {
         id: passwordBox
         placeholderText: qsTr("Password")
-        Layout.alignment: Qt.AlignHCenter
-        Layout.preferredWidth: passwordBox.implicitWidth * 2
         echoMode: TextInput.Password
         enabled: apiModel.operationState != APIModel.Progress
         onTextChanged: apiModel.operationState = APIModel.Ready
         Keys.onReturnPressed: loginButton.clicked()
         Keys.onEnterPressed: loginButton.clicked()
+        Layout.alignment: Qt.AlignHCenter
+        Layout.preferredWidth: passwordBox.implicitWidth * 2
         Binding {
           target: apiModel;
           property: "password";
@@ -43,7 +43,7 @@ Loader {
       }
 
       Label {
-        text: qsTr("Some Error")
+        text: apiModel.errorMessage
         color: "red"
         visible: apiModel.operationState == APIModel.Error
         Layout.alignment: Qt.AlignHCenter

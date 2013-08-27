@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.0
 
 ColumnLayout {
   property bool isValid : false
+
+  id: passwordWarningPage
   spacing: 15
   anchors.fill: parent
 
@@ -25,18 +27,18 @@ ColumnLayout {
   }
 
   CheckBox {
-    id: passwordReminderCheckBox
-    text: qsTr("I understand if I forget my Password all <br>my data will be lost.")
-    onCheckedChanged: updateIsValid()
+    id: passwordWarningCheckBox
+    text: qsTr("I understand if I forget my Password all <br>my data will be lost.")    
     Layout.maximumWidth: parent.width
     Layout.alignment: Qt.AlignHCenter
+    Binding {
+      target: passwordWarningPage;
+      property: "isValid";
+      value: passwordWarningCheckBox.checked
+    }
   }
 
   Item {
     Layout.fillHeight: true
-  }
-
-  function updateIsValid() {
-    isValid = licenseCheckBox.checked && passwordReminderCheckBox.checked
   }
 }

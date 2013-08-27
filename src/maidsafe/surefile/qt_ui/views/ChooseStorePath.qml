@@ -43,8 +43,8 @@ ColumnLayout {
     horizontalAlignment: Text.AlignHCenter
     font.bold: true
     font.pixelSize: 18
-    Layout.alignment: Qt.AlignHCenter
     color: "royalblue"
+    Layout.alignment: Qt.AlignHCenter
   }
   Label {
     text: storePathConverter.displayStorePath

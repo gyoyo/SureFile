@@ -3,6 +3,7 @@ import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 
 ColumnLayout {
+  id: licensePage
   property bool isValid : false
   spacing: 15
 
@@ -29,15 +30,15 @@ ColumnLayout {
   CheckBox {
     id: licenseCheckBox
     text: qsTr("I agree")
-    onCheckedChanged: updateIsValid()
     Layout.alignment: Qt.AlignHCenter
+    Binding {
+      target: licensePage;
+      property: "isValid";
+      value: licenseCheckBox.checked
+    }
   }
 
   Item {
     Layout.fillHeight: true
-  }
-
-  function updateIsValid() {
-    isValid = licenseCheckBox.checked && passwordReminderCheckBox.checked
   }
 }

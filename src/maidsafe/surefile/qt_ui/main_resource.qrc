@@ -1,7 +1,6 @@
 <RCC>
   <qresource prefix="/">
     <file>images/app_header.svg</file>
-    <file>images/error.png</file>
     <file>images/loading.png</file>    
     <file>images/surefile_app_normal.png</file>
   </qresource>
@@ -14,6 +13,6 @@
     <file>views/StatusInfo.qml</file>    
     <file>views/create_account/Credential.qml</file>
     <file>views/create_account/LicenseAgreement.qml</file>
-    <file>views/create_account//Warning.qml</file>
+    <file>views/create_account/PasswordWarning.qml</file>
   </qresource>
 </RCC>

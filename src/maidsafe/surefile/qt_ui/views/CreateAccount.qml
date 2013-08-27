@@ -20,22 +20,32 @@ Loader {
         Layout.alignment: Qt.AlignHCenter
         Layout.fillHeight: true
         Layout.fillWidth: true
-        source: "create_account/Warning.qml"
+        Component.onCompleted: {
+          if (apiModel.operationState == APIModel.Error) {
+            createAccountLoader.source = "create_account/Credential.qml"
+            createAccountLoader.item.objectName = "credentialPage"
+          } else {
+            createAccountLoader.source = "create_account/LicenseAgreement.qml"
+          }
+        }
       }
 
       Button {
         id: createAccountButton
         text: createAccountLoader.item.objectName == "credentialPage" ? qsTr("Create") : qsTr("Next")
         isDefault: true
-        enabled: apiModel.operationState != APIModel.Progress
+        visible: createAccountLoader.item.isValid
         Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
         Layout.alignment: Qt.AlignHCenter
         onClicked: {
           if (createAccountLoader.item.objectName == "credentialPage") {
             mainController.CreateAccount()
-          } else {
+          } else if (createAccountLoader.item.objectName == "passwordWarningPage") {
             createAccountLoader.source = "create_account/Credential.qml"
             createAccountLoader.item.objectName = "credentialPage"
+          } else {
+            createAccountLoader.source = "create_account/PasswordWarning.qml"
+            createAccountLoader.item.objectName = "passwordWarningPage"
           }
         }
       }
