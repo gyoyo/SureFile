@@ -21,7 +21,6 @@ ColumnLayout {
     Layout.preferredWidth: passwordBox.implicitWidth * 2
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
-    //hasError: apiModel.operationState == APIModel.Error
     onTextChanged: apiModel.operationState = APIModel.Ready
     Keys.onReturnPressed: loginButton.clicked()
     Keys.onEnterPressed: loginButton.clicked()

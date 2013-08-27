@@ -22,7 +22,6 @@ ColumnLayout {
     text: qsTr("For security reasons we don’t store your Password. If you forget your password all your data will be lost forever. Please make sure you memorise it.")
     wrapMode: TextEdit.WordWrap
     Layout.maximumWidth: parent.width
-
   }
 
   CheckBox {
