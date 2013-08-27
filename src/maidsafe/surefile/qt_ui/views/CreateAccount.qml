@@ -19,12 +19,13 @@ Loader {
         id: createAccountLoader
         Layout.alignment: Qt.AlignHCenter
         Layout.fillHeight: true
+        Layout.fillWidth: true
         source: "create_account/LicenseAgreement.qml"
       }
 
       Button {
         id: createAccountButton
-        text: createAccountLoader.item.objectName == "credentialPage" ? qsTr("Create Account") : qsTr("Next")
+        text: createAccountLoader.item.objectName == "credentialPage" ? qsTr("Create") : qsTr("Next")
         isDefault: true
         enabled: apiModel.operationState != APIModel.Progress
         Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth

@@ -8,8 +8,9 @@ import SureFile 1.0
 ColumnLayout {
   property string storeAlias
 
-  spacing: 25
+  spacing: 10
   anchors.fill: parent
+  anchors.topMargin: 20
 
 
   StorePathConverter {
@@ -34,7 +35,9 @@ ColumnLayout {
     font.bold: true
     font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
-
+  }
+  Item {
+    Layout.preferredHeight: 10
   }
   Label {
     text: (storeAlias)
@@ -43,7 +46,7 @@ ColumnLayout {
     font.bold: true
     font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
-    color: Qt.rgba(0.35,0.59,0.84,1)
+    color: "royalblue"
   }
   Label {
     text: storePathConverter.displayStorePath
@@ -51,6 +54,9 @@ ColumnLayout {
     horizontalAlignment: Text.AlignHCenter
     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
     Layout.minimumWidth: implicitWidth + 20
+  }
+  Item {
+    Layout.preferredHeight: 5
   }
   Button {
     text: qsTr("Edit Path")
@@ -61,6 +67,9 @@ ColumnLayout {
       fileDialog.folder = storePathConverter.actualStorePath
       fileDialog.open()
     }
+  }
+  Item {
+    Layout.fillHeight: true
   }
   RowLayout {
     Layout.alignment: Qt.AlignHCenter

@@ -5,9 +5,10 @@ import QtQuick.Layouts 1.0
 ColumnLayout {
   property bool isValid : false
   spacing: 15
+  anchors.fill: parent
 
   Label {
-    text: qsTr("License Agreement")
+    text: qsTr("Password Warning")
     font.bold: true
     font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
@@ -18,18 +19,18 @@ ColumnLayout {
   }
 
   Label {
-    textFormat: Text.RichText
-    text: qsTr("You must read and agree to the <br><a href=\"http://google.com\">SureFile License Agreement</a>.")
+    text: qsTr("For security reasons we don’t store your Password. If you forget your password all your data will be lost forever. Please make sure you memorise it.")
     wrapMode: TextEdit.WordWrap
-    onLinkActivated: Qt.openUrlExternally(link)
-    horizontalAlignment: Qt.AlignHCenter
-    Layout.fillWidth: true
+    Layout.maximumWidth: parent.width
+
   }
 
   CheckBox {
-    id: licenseCheckBox
-    text: qsTr("I agree")
+    id: passwordReminderCheckBox
+    text: qsTr("I understand if i forget my Password all <br>my data will be lost.")
     onCheckedChanged: updateIsValid()
+    Layout.maximumWidth: parent.width
+    Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
   }
 

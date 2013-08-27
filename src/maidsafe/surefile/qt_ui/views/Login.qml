@@ -30,6 +30,7 @@ Loader {
         borderThickness: 1
         placeholderText: qsTr("Password")
         Layout.alignment: Qt.AlignHCenter
+        Layout.preferredWidth: passwordBox.implicitWidth * 2
         echoMode: TextInput.Password
         enabled: apiModel.operationState != APIModel.Progress
         hasError: apiModel.operationState == APIModel.Error
@@ -46,7 +47,7 @@ Loader {
       Label {
         text: qsTr("Some Error")
         color: "red"
-        visible: false
+        visible: apiModel.operationState == APIModel.Error
         Layout.alignment: Qt.AlignHCenter
       }
 

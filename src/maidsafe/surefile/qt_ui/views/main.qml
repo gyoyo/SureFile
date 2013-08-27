@@ -29,7 +29,7 @@ ApplicationWindow {
   }
 
   Loader {
-   property int loaderMargin : 30
+    property int loaderMargin : 30
 
     id: mainLoader
     anchors.fill: parent
@@ -45,7 +45,7 @@ ApplicationWindow {
     }
     onItemChanged: {
       mainLoader.item.anchors.leftMargin = loaderMargin
-      mainLoader.item.anchors.topMargin = loaderMargin + headerLogo.height
+      mainLoader.item.anchors.topMargin = loaderMargin + headerLogo.height + 20
       mainLoader.item.anchors.rightMargin = loaderMargin
       mainLoader.item.anchors.bottomMargin = loaderMargin
     }

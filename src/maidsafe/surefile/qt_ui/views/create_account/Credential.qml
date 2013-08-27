@@ -2,51 +2,74 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 import SureFile 1.0
+import ".."
 
 ColumnLayout {
-  spacing: 25
-
+  spacing: 10
   Label {
     text: qsTr("Create Account")
-    verticalAlignment: Text.AlignBottom
-    Layout.alignment: Qt.AlignHCenter
     font.bold: true
     font.pixelSize: 18
-  }
-
-  TextField {
-    id: passwordBox
-    horizontalAlignment: Text.AlignHCenter
-    placeholderText: qsTr("Password")
-    echoMode: TextInput.Password
-    onTextChanged: apiModel.operationState = APIModel.Ready
-    enabled: apiModel.operationState != APIModel.Progress
     Layout.alignment: Qt.AlignHCenter
-    Layout.minimumWidth: createAccountButton.Layout.minimumWidth + 20
-    Keys.onReturnPressed: createAccountButton.clicked()
-    Keys.onEnterPressed: createAccountButton.clicked()
+  }
+  Item {
+    Layout.preferredHeight: 15
+  }
+  PasswordBox {
+    id: passwordBox
+    borderThickness: 1
+    placeholderText: qsTr("Password")
+    Layout.alignment: Qt.AlignHCenter
+    Layout.preferredWidth: passwordBox.implicitWidth * 2
+    echoMode: TextInput.Password
+    enabled: apiModel.operationState != APIModel.Progress
+    hasError: apiModel.operationState == APIModel.Error
+    onTextChanged: apiModel.operationState = APIModel.Ready
+    Keys.onReturnPressed: loginButton.clicked()
+    Keys.onEnterPressed: loginButton.clicked()
     Binding {
       target: apiModel;
       property: "password";
       value: passwordBox.text
     }
   }
-
-  TextField {
-    id: confirmPasswordBox
-    horizontalAlignment: Text.AlignHCenter
-    placeholderText: qsTr("Confirm Password")
-    echoMode: TextInput.Password
-    onTextChanged: apiModel.operationState = APIModel.Ready
-    enabled: apiModel.operationState != APIModel.Progress
+  Label {
+    text: qsTr("Some Error")
+    color: "red"
+    visible: apiModel.operationState == APIModel.Error
+    //visible: true
     Layout.alignment: Qt.AlignHCenter
-    Layout.minimumWidth: createAccountButton.Layout.minimumWidth + 20
-    Keys.onReturnPressed: createAccountButton.clicked()
-    Keys.onEnterPressed: createAccountButton.clicked()
+  }
+
+  Item {
+    Layout.preferredHeight: 15
+  }
+  PasswordBox {
+    id: passwordBox2
+    borderThickness: 1
+    placeholderText: qsTr("Confirm Password")
+    Layout.alignment: Qt.AlignHCenter
+    Layout.preferredWidth: passwordBox.implicitWidth * 2
+    echoMode: TextInput.Password
+    enabled: apiModel.operationState != APIModel.Progress
+    hasError: apiModel.operationState == APIModel.Error
+    onTextChanged: apiModel.operationState = APIModel.Ready
+    Keys.onReturnPressed: loginButton.clicked()
+    Keys.onEnterPressed: loginButton.clicked()
     Binding {
       target: apiModel;
-      property: "confirmPassword";
-      value: confirmPasswordBox.text
+      property: "password";
+      value: passwordBox.text
     }
+  }
+  Label {
+    text: qsTr("Some Error")
+    color: "red"
+    visible: apiModel.operationState == APIModel.Error
+    //visible: true
+    Layout.alignment: Qt.AlignHCenter
+  }
+  Item {
+    Layout.fillHeight: true
   }
 }
