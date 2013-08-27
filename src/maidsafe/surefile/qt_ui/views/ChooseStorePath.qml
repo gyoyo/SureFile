@@ -10,8 +10,6 @@ ColumnLayout {
 
   spacing: 10
   anchors.fill: parent
-  anchors.topMargin: 20
-
 
   StorePathConverter {
     id: storePathConverter
@@ -54,6 +52,7 @@ ColumnLayout {
     horizontalAlignment: Text.AlignHCenter
     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
     Layout.minimumWidth: implicitWidth + 20
+    Layout.maximumWidth: parent.width
   }
   Item {
     Layout.preferredHeight: 5

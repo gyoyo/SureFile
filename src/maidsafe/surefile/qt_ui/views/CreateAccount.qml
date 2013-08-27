@@ -20,7 +20,7 @@ Loader {
         Layout.alignment: Qt.AlignHCenter
         Layout.fillHeight: true
         Layout.fillWidth: true
-        source: "create_account/LicenseAgreement.qml"
+        source: "create_account/Warning.qml"
       }
 
       Button {

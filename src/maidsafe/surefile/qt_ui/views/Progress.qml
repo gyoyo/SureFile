@@ -7,7 +7,6 @@ ColumnLayout {
   property string progressMessage
   spacing: 15
   anchors.fill: parent
-  //anchors.topMargin: 20
 
   Label {
     id: textLabel

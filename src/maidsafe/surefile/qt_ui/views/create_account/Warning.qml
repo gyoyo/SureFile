@@ -27,10 +27,9 @@ ColumnLayout {
 
   CheckBox {
     id: passwordReminderCheckBox
-    text: qsTr("I understand if i forget my Password all <br>my data will be lost.")
+    text: qsTr("I understand if I forget my Password all <br>my data will be lost.")
     onCheckedChanged: updateIsValid()
     Layout.maximumWidth: parent.width
-    Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
   }
 

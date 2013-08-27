@@ -25,15 +25,13 @@ Loader {
         Layout.preferredHeight: 10
       }
 
-      PasswordBox {
+      TextField {
         id: passwordBox
-        borderThickness: 1
         placeholderText: qsTr("Password")
         Layout.alignment: Qt.AlignHCenter
         Layout.preferredWidth: passwordBox.implicitWidth * 2
         echoMode: TextInput.Password
         enabled: apiModel.operationState != APIModel.Progress
-        hasError: apiModel.operationState == APIModel.Error
         onTextChanged: apiModel.operationState = APIModel.Ready
         Keys.onReturnPressed: loginButton.clicked()
         Keys.onEnterPressed: loginButton.clicked()
