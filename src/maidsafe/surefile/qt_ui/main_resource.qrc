@@ -2,7 +2,8 @@
   <qresource prefix="/">
     <file>images/app_header.svg</file>
     <file>images/loading.png</file>    
-    <file>images/surefile_app_normal.png</file>
+    <file>images/surefile_app_mac.png</file>
+    <file>images/surefile_app_windows.png</file>
   </qresource>
   <qresource prefix="/">
     <file>views/ChooseStorePath.qml</file>
@@ -14,5 +15,6 @@
     <file>views/create_account/Credential.qml</file>
     <file>views/create_account/LicenseAgreement.qml</file>
     <file>views/create_account/PasswordWarning.qml</file>
+    <file>views/tour/Tour.qml</file>
   </qresource>
 </RCC>
