@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.0
 ColumnLayout {
   id: licensePage
   property bool isValid : false
-  spacing: 15
+  spacing: 10
 
   Label {
     text: qsTr("License Agreement")
@@ -15,7 +15,7 @@ ColumnLayout {
   }
 
   Item {
-    Layout.preferredHeight: 10
+    Layout.preferredHeight: 20
   }
 
   Label {
@@ -25,6 +25,10 @@ ColumnLayout {
     onLinkActivated: Qt.openUrlExternally(link)
     horizontalAlignment: Qt.AlignHCenter
     Layout.fillWidth: true
+  }
+
+  Item {
+    Layout.preferredHeight: 10
   }
 
   CheckBox {

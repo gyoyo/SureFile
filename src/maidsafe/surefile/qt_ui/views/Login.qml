@@ -30,11 +30,12 @@ Loader {
         placeholderText: qsTr("Password")
         echoMode: TextInput.Password
         enabled: apiModel.operationState != APIModel.Progress
+        horizontalAlignment: Qt.AlignHCenter
         onTextChanged: apiModel.operationState = APIModel.Ready
         Keys.onReturnPressed: loginButton.clicked()
         Keys.onEnterPressed: loginButton.clicked()
         Layout.alignment: Qt.AlignHCenter
-        Layout.preferredWidth: passwordBox.implicitWidth * 2
+        Layout.preferredWidth: passwordBox.implicitWidth * 1.5
         Binding {
           target: apiModel;
           property: "password";
@@ -44,7 +45,7 @@ Loader {
 
       Label {
         text: apiModel.errorMessage
-        color: "red"
+        color: "crimson"
         visible: apiModel.operationState == APIModel.Error
         Layout.alignment: Qt.AlignHCenter
       }

@@ -84,7 +84,7 @@ void APIModel::setConfirmPassword(const QString& confirmPassword) {
 }
 
 bool APIModel::CanCreateAccount() {
-  return false;
+  return true;
 }
 
 void APIModel::SetStorePathForAlias(const QString& alias, const QString& path) {

@@ -21,14 +21,15 @@ ColumnLayout {
   }
 
   Label {
-    text: qsTr("For security reasons we don’t store your Password. If you forget your password all your data will be lost forever. Please make sure you memorise it.")
+    text: qsTr("For security reasons we don't store your password. If you forget your password all your data will be lost forever.<br/><br/>Please make sure you memorise it.")
     wrapMode: TextEdit.WordWrap
     Layout.maximumWidth: parent.width
+    horizontalAlignment: Qt.AlignHCenter
   }
 
   CheckBox {
     id: passwordWarningCheckBox
-    text: qsTr("I understand if I forget my Password all <br>my data will be lost.")    
+    text: qsTr("I understand the Password Warning")
     Layout.maximumWidth: parent.width
     Layout.alignment: Qt.AlignHCenter
     Binding {

@@ -65,7 +65,6 @@ void MainController::EventLoopStarted() {
     QtLog("App Startup Failed");
     return;
   }
-
   main_window_->show();
   system_tray_->show();
 }
