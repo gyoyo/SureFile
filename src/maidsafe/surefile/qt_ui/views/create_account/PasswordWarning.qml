@@ -21,7 +21,7 @@ ColumnLayout {
   }
 
   Label {
-    text: qsTr("For security reasons we don't store your Password.<br/>If you forget your password all your data will be lost forever.<br/><br/>Please make sure you memorise it.")
+    text: qsTr("For security reasons we don't store your password. If you forget your password all your data will be lost forever.<br/><br/>Please make sure you memorise it.")
     wrapMode: TextEdit.WordWrap
     Layout.maximumWidth: parent.width
     horizontalAlignment: Qt.AlignHCenter
