@@ -48,6 +48,28 @@ include(${MaidSafeExport})
 
 
 #==================================================================================================#
+#  Brings SureFile library into scope as CMake target.                                             #
+#==================================================================================================#
+find_file(SureFileLibExport NAMES surefile_export.cmake
+                         PATHS ${SUREFILE_LIB_BINARY_DIR} ../build ../../build
+                         NO_DEFAULT_PATH)
+
+if(NOT SureFileLibExport)
+  set(ErrorMessage "\n\nCan't find surefile_export.cmake in SUREFILE_LIB_BINARY_DIR.  ")
+  set(ErrorMessage "${ErrorMessage}Currently SUREFILE_LIB_BINARY_DIR is set to ")
+  set(ErrorMessage "${ErrorMessage}\"${SUREFILE_LIB_BINARY_DIR}\"  It must be set to the ")
+  set(ErrorMessage "${ErrorMessage}SureFile-Lib's build root.\nTo set it, run:\n")
+  set(ErrorMessage "${ErrorMessage}    cmake . -SUREFILE_LIB_BINARY_DIR=\"<path to build root>\"\n\n")
+  message(FATAL_ERROR "${ErrorMessage}")
+else()
+  get_filename_component(SureFileLibExportDir "${SureFileLibExport}" PATH)
+  get_filename_component(SUREFILE_LIB_BINARY_DIR "${SureFileLibExportDir}" PATH CACHE)
+endif()
+
+include(${SureFileLibExport})
+
+
+#==================================================================================================#
 #  Standard Setup.                                                                                 #
 #==================================================================================================#
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -56,6 +78,10 @@ include(utils)
 get_target_platform()
 get_target_architecture()
 
+if(WIN32)
+  set(CBFS_KEY "${MAIDSAFE_BINARY_DIR}/MaidSafe-Drive-Private/eldos_licence_key.txt")
+  include(maidsafe_find_cbfs)
+endif()
 
 #==================================================================================================#
 # Qt library search                                                                                #
@@ -144,7 +170,7 @@ add_executable(surefile
                   ${RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR})
 
 # Temp - Removing backend API to bypass build errors in maidsafe_lifestuff
-target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml)
+target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml maidsafe_surefile)
 # target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml maidsafe_lifestuff maidsafe_lifestuff_manager)
 
 if(WIN32)
@@ -158,6 +184,9 @@ rename_outdated_built_exes()
 # Set compiler and linker flags                                                                    #
 #==================================================================================================#
 include(standard_flags)
+if(Cbfs_FOUND)
+  add_definitions(-DCBFS_KEY=${Cbfs_KEY} -DHAVE_CBFS)
+endif()
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DQT_NO_DEBUG_OUTPUT -DQT_NO_WARNING_OUTPUT -DQT_NO_DEBUG_STREAM")
 

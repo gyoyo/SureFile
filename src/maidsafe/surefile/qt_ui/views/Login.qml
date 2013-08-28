@@ -31,15 +31,20 @@ Loader {
         echoMode: TextInput.Password
         enabled: apiModel.operationState != APIModel.Progress
         horizontalAlignment: Qt.AlignHCenter
-        onTextChanged: apiModel.operationState = APIModel.Ready
         Keys.onReturnPressed: loginButton.clicked()
         Keys.onEnterPressed: loginButton.clicked()
         Layout.alignment: Qt.AlignHCenter
         Layout.preferredWidth: passwordBox.implicitWidth * 1.5
-        Binding {
-          target: apiModel;
-          property: "password";
-          value: passwordBox.text
+        Component.onCompleted: {
+          passwordBox.text = apiModel.password
+          passwordBox.textChanged.connect(onTextChangedSlot)
+        }
+        Component.onDestruction: {
+          passwordBox.textChanged.disconnect(onTextChangedSlot)
+        }
+        function onTextChangedSlot() {
+          apiModel.operationState = APIModel.Ready
+          apiModel.password = passwordBox.text
         }
       }
 

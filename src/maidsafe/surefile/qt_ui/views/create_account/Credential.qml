@@ -21,15 +21,20 @@ ColumnLayout {
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
     horizontalAlignment: Qt.AlignHCenter
-    onTextChanged: apiModel.operationState = APIModel.Ready
     Layout.alignment: Qt.AlignHCenter
     Layout.preferredWidth: passwordBox.implicitWidth * 1.5
     Keys.onReturnPressed: createAccountButton.clicked()
     Keys.onEnterPressed: createAccountButton.clicked()
-    Binding {
-      target: apiModel;
-      property: "password";
-      value: passwordBox.text
+    Component.onCompleted: {
+      passwordBox.text = apiModel.password
+      passwordBox.textChanged.connect(onTextChangedSlot)
+    }
+    Component.onDestruction: {
+      passwordBox.textChanged.disconnect(onTextChangedSlot)
+    }
+    function onTextChangedSlot() {
+      apiModel.operationState = APIModel.Ready
+      apiModel.password = passwordBox.text
     }
   }
   Item {
@@ -41,15 +46,20 @@ ColumnLayout {
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
     horizontalAlignment: Qt.AlignHCenter
-    onTextChanged: apiModel.operationState = APIModel.Ready
     Layout.alignment: Qt.AlignHCenter
     Layout.preferredWidth: confirmPasswordBox.implicitWidth * 1.5
     Keys.onReturnPressed: createAccountButton.clicked()
     Keys.onEnterPressed: createAccountButton.clicked()
-    Binding {
-      target: apiModel;
-      property: "confirmPassword";
-      value: confirmPasswordBox.text
+    Component.onCompleted: {
+      confirmPasswordBox.text = apiModel.confirmPassword
+      confirmPasswordBox.textChanged.connect(onTextChangedSlot)
+    }
+    Component.onDestruction: {
+      confirmPasswordBox.textChanged.disconnect(onTextChangedSlot)
+    }
+    function onTextChangedSlot() {
+      apiModel.operationState = APIModel.Ready
+      apiModel.confirmPassword = confirmPasswordBox.text
     }
   }
   Item {

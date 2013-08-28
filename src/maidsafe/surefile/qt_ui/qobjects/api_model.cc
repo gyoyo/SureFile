@@ -26,13 +26,22 @@ namespace surefile {
 
 namespace qt_ui {
 
+namespace surefile_api_imports = maidsafe::lifestuff;
+
 APIModel::APIModel(QObject* parent)
     : QObject(parent),
       operation_state_(APIModel::Ready),
       password_(),
       confirm_password_(),
-      error_message_() {
+      error_message_(),
+      surefile_api_() {
   emit errorMessageChanged();
+  surefile_api_imports::Slots surefile_slots;
+  surefile_slots.on_service_added = std::bind(&APIModel::StorePathRequested,
+                                              this,
+                                              std::placeholders::_1);
+  surefile_slots.configuration_error = std::bind(&APIModel::APIConfigurationError, this);
+  surefile_api_.reset(new SureFile(surefile_slots));
 }
 
 APIModel::OperationState APIModel::operationState() const {
@@ -84,44 +93,57 @@ void APIModel::setConfirmPassword(const QString& confirmPassword) {
 }
 
 bool APIModel::CanCreateAccount() {
-  return true;
+  return surefile_api_->CanCreateUser();
 }
 
 void APIModel::SetStorePathForAlias(const QString& alias, const QString& path) {
-  // Invoke to set store path for alias from backend api
-  QtLog(QString("Alias: %1 Path: %2").arg(alias).arg(path));
+  surefile_api_->AddService(path.toStdString(), alias.toStdString());
 }
 
 void APIModel::DeleteAlias(const QString& alias) {
-  // Invoke to delete alias from backend api
-  QtLog(QString("Deleting Alias: %1").arg(alias));
+  surefile_api_->AddServiceFailed(alias.toStdString());
+}
+
+void APIModel::APIConfigurationError() {
+  // Don't Care
 }
 
 void APIModel::StorePathRequested(const std::string& alias) {
-  // setStoreAlias(QString::fromStdString(alias));
   emit getStorePath(QString::fromStdString(alias));
 }
 
 bool APIModel::CreateAccount() {
   setOperationState(APIModel::Progress);
+  try {
+    // Key credential into shitty api
+    int i = 0;
+    foreach(QString character, password()) {
+      surefile_api_->InsertInput(i++, character.toStdString(), surefile_api_imports::kPassword);
+    }
 
-  // Mock - Start
-  QtLog(QString("Creating Account with Pass: %1 and Conf Pass: %2").arg(password())
-                                                                   .arg(confirmPassword()));
-  QThread::sleep(3);
-  if (password() != confirmPassword()) {
-    setErrorMessage(QString("Entries do not Match"));
+    i = 0;
+    foreach(QString character, confirmPassword()) {
+      surefile_api_->InsertInput(i++,
+                                 character.toStdString(),
+                                 surefile_api_imports::kConfirmationPassword);
+    }
+    surefile_api_->CreateUser();
+  } catch(const surefile_error& error_code) {
     setOperationState(APIModel::Error);
+    if (error_code.code() == make_error_code(SureFileErrors::invalid_password)) {
+      setErrorMessage(tr("Invalid Password"));
+    } else if (error_code.code() == make_error_code(SureFileErrors::password_confirmation_failed)) {
+      setErrorMessage(tr("Entries do not match"));
+    }
+    return false;
+  } catch(...) {
+    emit APICrashed();
+    QtLog("Unknown Exception");
     return false;
   }
 
-  if (password().isEmpty()) {
-    setErrorMessage(QString("Some Error Message"));
-    setOperationState(APIModel::Error);
-    return false;
-  }
-  // Mock - End
-
+  setPassword(QString());
+  setConfirmPassword(QString());
   setOperationState(APIModel::Ready);
   return true;
 }
@@ -129,16 +151,10 @@ bool APIModel::CreateAccount() {
 bool APIModel::Login() {
   setOperationState(APIModel::Progress);
 
-  // Mock - Start
-  QtLog(QString("Logging In with Pass: %1").arg(password()));
-  QThread::sleep(3);
-
-  if (password().isEmpty()) {
-    setErrorMessage(QString("Some Error Message"));
-    setOperationState(APIModel::Error);
-    return false;
+    try {
+    surefile_api_->LogIn();
+  } catch(...) {
   }
-  // Mock - End
 
   setOperationState(APIModel::Ready);
   return true;
