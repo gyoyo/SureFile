@@ -20,6 +20,7 @@ ColumnLayout {
     placeholderText: qsTr("Password")
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
+    horizontalAlignment: Qt.AlignHCenter
     onTextChanged: apiModel.operationState = APIModel.Ready
     Layout.alignment: Qt.AlignHCenter
     Layout.preferredWidth: passwordBox.implicitWidth * 2
@@ -46,6 +47,7 @@ ColumnLayout {
     placeholderText: qsTr("Confirm Password")
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
+    horizontalAlignment: Qt.AlignHCenter
     onTextChanged: apiModel.operationState = APIModel.Ready
     Layout.alignment: Qt.AlignHCenter
     Layout.preferredWidth: confirmPasswordBox.implicitWidth * 2
