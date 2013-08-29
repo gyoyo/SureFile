@@ -23,6 +23,8 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
+#include "maidsafe/surefile/surefile.h"
+
 namespace maidsafe {
 
 namespace surefile {
@@ -52,9 +54,6 @@ class APIModel : public QObject {
 
   explicit APIModel(QObject* parent = 0);
   ~APIModel() {}
-  void StorePathRequested(const std::string& alias);
-  bool CreateAccount();
-  bool Login();
 
   OperationState operationState() const;
   void setOperationState(const OperationState& operationState);
@@ -69,12 +68,18 @@ class APIModel : public QObject {
   Q_INVOKABLE void SetStorePathForAlias(const QString& alias, const QString& path);
   Q_INVOKABLE void DeleteAlias(const QString& alias);
 
+  void APIConfigurationError();
+  void StorePathRequested(const std::string& alias);
+  bool CreateAccount();
+  bool Login();
+
  signals:
   void operationStateChanged();
   void errorMessageChanged();
   void passwordChanged();
   void confirmPasswordChanged();
   void getStorePath(const QString& storeAlias);
+  void APICrashed();
 
  private:
   APIModel(const APIModel&);
@@ -84,6 +89,7 @@ class APIModel : public QObject {
   QString password_;
   QString confirm_password_;
   QString error_message_;
+  std::unique_ptr<SureFile> surefile_api_;
 };
 
 }  // namespace qt_ui

@@ -18,17 +18,17 @@ ColumnLayout {
   TextField {
     id: passwordBox
     placeholderText: qsTr("Password")
+    text: apiModel.password
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
     horizontalAlignment: Qt.AlignHCenter
-    onTextChanged: apiModel.operationState = APIModel.Ready
     Layout.alignment: Qt.AlignHCenter
     Layout.preferredWidth: passwordBox.implicitWidth * 1.5
     Keys.onReturnPressed: createAccountButton.clicked()
     Keys.onEnterPressed: createAccountButton.clicked()
     Binding {
-      target: apiModel;
-      property: "password";
+      target: apiModel
+      property: "password"
       value: passwordBox.text
     }
   }
@@ -38,17 +38,17 @@ ColumnLayout {
   TextField {
     id: confirmPasswordBox
     placeholderText: qsTr("Confirm Password")
+    text: apiModel.confirmPassword
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
     horizontalAlignment: Qt.AlignHCenter
-    onTextChanged: apiModel.operationState = APIModel.Ready
     Layout.alignment: Qt.AlignHCenter
     Layout.preferredWidth: confirmPasswordBox.implicitWidth * 1.5
     Keys.onReturnPressed: createAccountButton.clicked()
     Keys.onEnterPressed: createAccountButton.clicked()
     Binding {
-      target: apiModel;
-      property: "confirmPassword";
+      target: apiModel
+      property: "confirmPassword"
       value: confirmPasswordBox.text
     }
   }
@@ -60,7 +60,7 @@ ColumnLayout {
     color: "crimson"
     horizontalAlignment: Qt.AlignHCenter
     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-    visible: apiModel.operationState == APIModel.Error
+    opacity: apiModel.operationState == APIModel.Error ? 1 : 0
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
   }
