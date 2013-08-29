@@ -58,6 +58,7 @@ License.
 #include "QtCore/QFuture"
 #include "QtCore/QFutureWatcher"
 #include "QtCore/QUrl"
+#include "QtCore/QTranslator"
 #include "QtGui/QSurfaceFormat"
 #include "QtQml/QQmlComponent"
 #include "QtQml/QQmlContext"
@@ -66,4 +67,5 @@ License.
 #include "QtWidgets/QAction"
 #include "QtWidgets/QApplication"
 #include "QtWidgets/QMenu"
+#include "QtWidgets/QMessageBox"
 #include "QtWidgets/QSystemTrayIcon"

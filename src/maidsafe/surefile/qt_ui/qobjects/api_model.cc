@@ -40,7 +40,7 @@ APIModel::APIModel(QObject* parent)
   surefile_slots.on_service_added = std::bind(&APIModel::StorePathRequested,
                                               this,
                                               std::placeholders::_1);
-  surefile_slots.configuration_error = std::bind(&APIModel::APIConfigurationError, this);
+  surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
   surefile_api_.reset(new SureFile(surefile_slots));
 }
 
@@ -97,15 +97,19 @@ bool APIModel::CanCreateAccount() {
 }
 
 void APIModel::SetStorePathForAlias(const QString& alias, const QString& path) {
-  surefile_api_->AddService(path.toStdString(), alias.toStdString());
+  try {
+    surefile_api_->AddService(path.toStdString(), alias.toStdString());
+  } catch(const surefile_error&) {
+    emit InvalidStoreLocationError();
+  }
 }
 
 void APIModel::DeleteAlias(const QString& alias) {
   surefile_api_->AddServiceFailed(alias.toStdString());
 }
 
-void APIModel::APIConfigurationError() {
-  // Partial failure parsing config file
+void APIModel::ParseConfigurationFileError() {
+  emit OnParseConfigurationFileError();
 }
 
 void APIModel::StorePathRequested(const std::string& alias) {
@@ -139,7 +143,7 @@ bool APIModel::CreateAccount() {
     }
     return false;
   } catch(...) {
-    emit APICrashed();
+    emit UnhandledException();
     QtLog("Unknown Exception");
     return false;
   }
@@ -163,7 +167,7 @@ bool APIModel::Login() {
     setErrorMessage(tr("Invalid Password"));
     return false;
   } catch(...) {
-    emit APICrashed();
+    emit UnhandledException();
     QtLog("Unknown Exception");
     return false;
   }

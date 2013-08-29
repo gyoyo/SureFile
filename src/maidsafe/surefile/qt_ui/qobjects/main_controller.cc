@@ -18,6 +18,7 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
+#include "maidsafe/surefile/qt_ui/helpers/application.h"
 #include "maidsafe/surefile/qt_ui/helpers/qml_indexers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
 #include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
@@ -35,12 +36,13 @@ MainController::MainController(QObject* parent)
     : QObject(parent),
       main_engine_(),
       main_window_(),
-      api_model_(new APIModel),
+      api_model_(),
       system_tray_(new SystemTrayIcon),
       future_watcher_() {
   qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
   qmlRegisterType<APIModel>("SureFile", 1, 0, "APIModel");
   qmlRegisterType<StorePathConverter>("SureFile", 1, 0, "StorePathConverter");
+  installEventFilter(this);
   QTimer::singleShot(0, this, SLOT(EventLoopStarted()));
 }
 
@@ -54,7 +56,23 @@ void MainController::Login() {
   future_watcher_.setFuture(QtConcurrent::run(api_model_.get(), &APIModel::Login));
 }
 
+bool MainController::eventFilter(QObject* object, QEvent* event) {
+  if (object == this && event->type() >= QEvent::User && event->type() <= QEvent::MaxUser) {
+    UnhandledException();
+    return true;
+  }
+  return QObject::eventFilter(object, event);
+}
+
 void MainController::EventLoopStarted() {
+  api_model_.reset(new APIModel);
+  connect(api_model_.get(), SIGNAL(OnParseConfigurationFileError()),
+          this,             SLOT(ParseConfigurationFileError()));
+  connect(api_model_.get(), SIGNAL(UnhandledException()),
+          this,             SLOT(UnhandledException()));
+  connect(api_model_.get(), SIGNAL(InvalidStoreLocationError()),
+          this,             SLOT(InvalidStoreLocationError()));
+
   main_engine_ = new QQmlApplicationEngine(QUrl("qrc:/views/Main.qml"));
   auto root_context_ = main_engine_->rootContext();
   root_context_->setContextProperty(kMainController, this);
@@ -65,6 +83,7 @@ void MainController::EventLoopStarted() {
     QtLog("App Startup Failed");
     return;
   }
+
   main_window_->show();
   system_tray_->show();
 }
@@ -80,6 +99,31 @@ void MainController::CreateAccountCompleted() {
 void MainController::LoginCompleted() {
   disconnect(&future_watcher_, SIGNAL(finished()), this, SLOT(LoginCompleted()));
   InitialisePostLogin();
+}
+
+void MainController::ParseConfigurationFileError() {
+  QMessageBox msg;
+  msg.setIcon(QMessageBox::Information);
+  msg.setWindowTitle("SureFile");
+  msg.setText(tr("SureFile is unable to locate all of your data"));
+  msg.exec();
+}
+
+void MainController::UnhandledException() {
+  QMessageBox msg;
+  msg.setIcon(QMessageBox::Critical);
+  msg.setWindowTitle("SureFile");
+  msg.setText(tr("SureFile has encountered an unexpected error. Please relaunch SureFile"));
+  msg.exec();
+  qApp->quit();
+}
+
+void MainController::InvalidStoreLocationError() {
+  QMessageBox msg;
+  msg.setIcon(QMessageBox::Critical);
+  msg.setWindowTitle("SureFile");
+  msg.setText(tr("SureFile cannot store data in this chosen location"));
+  msg.exec();
 }
 
 bool MainController::InitialisePostLogin() {

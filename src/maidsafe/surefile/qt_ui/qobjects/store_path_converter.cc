@@ -51,7 +51,10 @@ void StorePathConverter::setActualStorePath(const QString& storePathUrl) {
   if (actual_store_path_ == storePathUrl)
     return;
 
-  actual_store_path_ = storePathUrl;
+  QDir dir(storePathUrl);
+  dir.mkdir("SureFile");
+  dir.cd("SureFile");
+  actual_store_path_ = dir.path();
 
   setDisplayStorePath(QDir::toNativeSeparators(QUrl(actual_store_path_).toLocalFile()));
   emit actualStorePathChanged();

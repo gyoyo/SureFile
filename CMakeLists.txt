@@ -152,10 +152,10 @@ unset(UPDATE_LOCALISATION_RESOURCES CACHE)
 source_group("Auto Compiled\\Localisation Files" FILES ${LOCALISATION_QM_FILES})
 
 #####    Set Application Icon    ####
-# if(WIN32)
-  # set(SUREFILE_UI_QT_APP_ICON_RESOURCE ${SRC_MAIDSAFE}/resources/app_icon.rc)
-  # source_group("Auto Compiled\\App Icon File" FILES ${SRC_MAIDSAFE}/resources/app_icon.rc)
-# endif()
+if(WIN32)
+  set(SUREFILE_UI_QT_APP_ICON_RESOURCE ${SRC_MAIDSAFE}/app_icon.rc)
+  source_group("Auto Compiled\\App Icon File" FILES ${SUREFILE_UI_QT_APP_ICON_RESOURCE})
+endif()
 
 
 #==================================================================================================#
@@ -167,7 +167,8 @@ add_executable(surefile
                   ${ALL_SUREFILE_QT_UI_SOURCE_FILES}
                   ${ALL_SUREFILE_QT_UI_HEADER_FILES}
                   ${UI_FILES_SUREFILE_QT_UI_VIEWS_DIR}
-                  ${RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR})
+                  ${RESOURCE_FILES_SUREFILE_QT_UI_RESOURCES_DIR}
+                  ${SUREFILE_UI_QT_APP_ICON_RESOURCE})
 
 # Temp - Removing backend API to bypass build errors in maidsafe_lifestuff
 target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml maidsafe_surefile)
