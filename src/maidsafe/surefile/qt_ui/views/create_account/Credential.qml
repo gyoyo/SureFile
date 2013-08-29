@@ -18,6 +18,7 @@ ColumnLayout {
   TextField {
     id: passwordBox
     placeholderText: qsTr("Password")
+    text: apiModel.password
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
     horizontalAlignment: Qt.AlignHCenter
@@ -25,16 +26,10 @@ ColumnLayout {
     Layout.preferredWidth: passwordBox.implicitWidth * 1.5
     Keys.onReturnPressed: createAccountButton.clicked()
     Keys.onEnterPressed: createAccountButton.clicked()
-    Component.onCompleted: {
-      passwordBox.text = apiModel.password
-      passwordBox.textChanged.connect(onTextChangedSlot)
-    }
-    Component.onDestruction: {
-      passwordBox.textChanged.disconnect(onTextChangedSlot)
-    }
-    function onTextChangedSlot() {
-      apiModel.operationState = APIModel.Ready
-      apiModel.password = passwordBox.text
+    Binding {
+      target: apiModel
+      property: "password"
+      value: passwordBox.text
     }
   }
   Item {
@@ -43,6 +38,7 @@ ColumnLayout {
   TextField {
     id: confirmPasswordBox
     placeholderText: qsTr("Confirm Password")
+    text: apiModel.confirmPassword
     echoMode: TextInput.Password
     enabled: apiModel.operationState != APIModel.Progress
     horizontalAlignment: Qt.AlignHCenter
@@ -50,16 +46,10 @@ ColumnLayout {
     Layout.preferredWidth: confirmPasswordBox.implicitWidth * 1.5
     Keys.onReturnPressed: createAccountButton.clicked()
     Keys.onEnterPressed: createAccountButton.clicked()
-    Component.onCompleted: {
-      confirmPasswordBox.text = apiModel.confirmPassword
-      confirmPasswordBox.textChanged.connect(onTextChangedSlot)
-    }
-    Component.onDestruction: {
-      confirmPasswordBox.textChanged.disconnect(onTextChangedSlot)
-    }
-    function onTextChangedSlot() {
-      apiModel.operationState = APIModel.Ready
-      apiModel.confirmPassword = confirmPasswordBox.text
+    Binding {
+      target: apiModel
+      property: "confirmPassword"
+      value: confirmPasswordBox.text
     }
   }
   Item {
@@ -70,7 +60,7 @@ ColumnLayout {
     color: "crimson"
     horizontalAlignment: Qt.AlignHCenter
     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-    visible: apiModel.operationState == APIModel.Error
+    opacity: apiModel.operationState == APIModel.Error ? 1 : 0
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
   }

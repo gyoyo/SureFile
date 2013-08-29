@@ -89,7 +89,7 @@ void APIModel::setConfirmPassword(const QString& confirmPassword) {
     return;
 
   confirm_password_ = confirmPassword;
-  emit passwordChanged();
+  emit confirmPasswordChanged();
 }
 
 bool APIModel::CanCreateAccount() {
@@ -105,7 +105,7 @@ void APIModel::DeleteAlias(const QString& alias) {
 }
 
 void APIModel::APIConfigurationError() {
-  // Don't Care
+  // Partial failure parsing config file
 }
 
 void APIModel::StorePathRequested(const std::string& alias) {
@@ -115,7 +115,6 @@ void APIModel::StorePathRequested(const std::string& alias) {
 bool APIModel::CreateAccount() {
   setOperationState(APIModel::Progress);
   try {
-    // Key credential into shitty api
     int i = 0;
     foreach(QString character, password()) {
       surefile_api_->InsertInput(i++, character.toStdString(), surefile_api_imports::kPassword);
@@ -127,8 +126,11 @@ bool APIModel::CreateAccount() {
                                  character.toStdString(),
                                  surefile_api_imports::kConfirmationPassword);
     }
+
     surefile_api_->CreateUser();
   } catch(const surefile_error& error_code) {
+    setPassword(QString());
+    setConfirmPassword(QString());
     setOperationState(APIModel::Error);
     if (error_code.code() == make_error_code(SureFileErrors::invalid_password)) {
       setErrorMessage(tr("Invalid Password"));
@@ -142,18 +144,28 @@ bool APIModel::CreateAccount() {
     return false;
   }
 
-  setPassword(QString());
-  setConfirmPassword(QString());
   setOperationState(APIModel::Ready);
   return true;
 }
 
 bool APIModel::Login() {
-  setOperationState(APIModel::Progress);
+    setOperationState(APIModel::Progress);
+  try {
+    int i = 0;
+    foreach(QString character, password()) {
+      surefile_api_->InsertInput(i++, character.toStdString(), surefile_api_imports::kPassword);
+    }
 
-    try {
-    surefile_api_->LogIn();
+    surefile_api_->Login();
+  } catch(const surefile_error&) {
+    setPassword(QString());
+    setOperationState(APIModel::Error);
+    setErrorMessage(tr("Invalid Password"));
+    return false;
   } catch(...) {
+    emit APICrashed();
+    QtLog("Unknown Exception");
+    return false;
   }
 
   setOperationState(APIModel::Ready);

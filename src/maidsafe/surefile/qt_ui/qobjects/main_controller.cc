@@ -89,8 +89,6 @@ bool MainController::InitialisePostLogin() {
   main_window_->hide();
   system_tray_->SetIsLoggedIn(true);
   qApp->setQuitOnLastWindowClosed(false);
-
-  api_model_->StorePathRequested("Dummy FolderName");  // Mock
   return true;
 }
 
