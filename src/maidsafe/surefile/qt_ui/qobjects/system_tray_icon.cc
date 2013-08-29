@@ -26,7 +26,7 @@ namespace qt_ui {
 SystemTrayIcon::SystemTrayIcon()
   : menu_(new QMenu),
     is_logged_in_() {
-  setIcon(QIcon(":/images/surefile_app_normal.png"));
+  setIcon(QIcon(":/images/surefile_app_mac.png"));
   setToolTip("SureFile");
   open_drive_ = menu_->addAction(tr("Open Drive"), this, SIGNAL(OpenDriveRequested()));
   open_drive_->setEnabled(false);

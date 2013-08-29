@@ -50,4 +50,8 @@ ApplicationWindow {
       mainLoader.item.anchors.bottomMargin = loaderMargin
     }
   }
+  Tour {
+    id:tourView
+    visible: true
+  }
 }

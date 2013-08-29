@@ -4,6 +4,11 @@
     <file>images/loading.png</file>    
     <file>images/surefile_app_mac.png</file>
     <file>images/surefile_app_windows.png</file>
+    <file>images/tour_header.svg</file>
+    <file>images/tour_picture01.png</file>
+    <file>images/tour_picture02.png</file>
+    <file>images/tour_picture03.png</file>
+    <file>images/tour_picture04.png</file>
   </qresource>
   <qresource prefix="/">
     <file>views/ChooseStorePath.qml</file>
@@ -11,10 +16,15 @@
     <file>views/Login.qml</file>
     <file>views/CreateAccount.qml</file>
     <file>views/Progress.qml</file>
-    <file>views/StatusInfo.qml</file>    
+    <file>views/StatusInfo.qml</file> 
+    <file>views/Tour.qml</file>   
     <file>views/create_account/Credential.qml</file>
     <file>views/create_account/LicenseAgreement.qml</file>
     <file>views/create_account/PasswordWarning.qml</file>
-    <file>views/tour/Tour.qml</file>
+    <file>views/tour/Page1.qml</file>
+    <file>views/tour/Page2.qml</file>
+    <file>views/tour/Page3.qml</file>
+    <file>views/tour/Page4.qml</file>
+    <file>views/tour/Page5.qml</file>
   </qresource>
 </RCC>
