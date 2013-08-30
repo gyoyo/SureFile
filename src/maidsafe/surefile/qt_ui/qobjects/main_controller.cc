@@ -66,12 +66,14 @@ bool MainController::eventFilter(QObject* object, QEvent* event) {
 
 void MainController::EventLoopStarted() {
   api_model_.reset(new APIModel);
-  connect(api_model_.get(), SIGNAL(OnParseConfigurationFileError()),
-          this,             SLOT(ParseConfigurationFileError()));
-  connect(api_model_.get(), SIGNAL(UnhandledException()),
-          this,             SLOT(UnhandledException()));
-  connect(api_model_.get(), SIGNAL(InvalidStoreLocationError()),
-          this,             SLOT(InvalidStoreLocationError()));
+  connect(api_model_.get(),   SIGNAL(OnParseConfigurationFileError()),
+          this,               SLOT(ParseConfigurationFileError()));
+  connect(api_model_.get(),   SIGNAL(UnhandledException()),
+          this,               SLOT(UnhandledException()));
+  connect(api_model_.get(),   SIGNAL(InvalidStoreLocationError()),
+          this,               SLOT(InvalidStoreLocationError()));
+  connect(system_tray_.get(), SIGNAL(OpenDriveRequested()),
+          api_model_.get(),   SLOT(OpenDrive()));
 
   main_engine_ = new QQmlApplicationEngine(QUrl("qrc:/views/Main.qml"));
   auto root_context_ = main_engine_->rootContext();

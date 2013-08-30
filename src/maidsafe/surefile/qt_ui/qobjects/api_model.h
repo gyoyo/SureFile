@@ -73,6 +73,9 @@ class APIModel : public QObject {
   bool CreateAccount();
   bool Login();
 
+ public slots: // NOLINT - Viv
+  void OpenDrive();
+
  signals:
   void operationStateChanged();
   void errorMessageChanged();

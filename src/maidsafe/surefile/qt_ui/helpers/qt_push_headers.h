@@ -31,6 +31,7 @@ License.
 #  pragma warning(disable: 4660) /* template-class specialization 'identifier' is already instantiated */
 #  pragma warning(disable: 4706) /* assignment within conditional expression */
 #  pragma warning(disable: 4710) /* function not inlined */
+#  pragma warning(disable: 4718) /* recursive call has no side effects */
 #  pragma warning(disable: 4786) /* truncating debug info after 255 characters */
 #  pragma warning(disable: 4800) /* 'type' : forcing value to bool 'true' or 'false' (performance warning) */
 #endif
@@ -57,8 +58,10 @@ License.
 #include "QtCore/QTimer"
 #include "QtCore/QFuture"
 #include "QtCore/QFutureWatcher"
+#include "QtCore/QMap"
 #include "QtCore/QUrl"
 #include "QtCore/QTranslator"
+#include "QtGui/QDesktopServices"
 #include "QtGui/QSurfaceFormat"
 #include "QtQml/QQmlComponent"
 #include "QtQml/QQmlContext"

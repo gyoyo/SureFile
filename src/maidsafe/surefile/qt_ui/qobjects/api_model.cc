@@ -176,6 +176,10 @@ bool APIModel::Login() {
   return true;
 }
 
+void APIModel::OpenDrive() {
+  QDesktopServices::openUrl(QUrl("file:///" + QString::fromStdString(surefile_api_->mount_path())));
+}
+
 }  // namespace qt_ui
 
 }  // namespace lifestuff
