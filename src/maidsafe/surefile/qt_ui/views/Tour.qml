@@ -7,7 +7,7 @@ ApplicationWindow {
   property int windowWidth : 500
   property int windowHeight : 600
 
-  id: rootWindow
+  id: tourWindow
   title: "SureFile"
   color: "white"
   width: windowWidth
@@ -22,18 +22,43 @@ ApplicationWindow {
     source: "qrc:/images/tour_header.svg"
     fillMode: Image.PreserveAspectFit
   }
-
-  Loader {
-    property int loaderMargin : 30
-
-    id: tourLoader
+  ColumnLayout {
     anchors.fill: parent
-    source: "tour/Page1.qml"
-    onItemChanged: {
-      tourLoader.item.anchors.leftMargin = loaderMargin
-      tourLoader.item.anchors.topMargin = loaderMargin + tourHeaderLogo.height + 60
-      tourLoader.item.anchors.rightMargin = loaderMargin
-      tourLoader.item.anchors.bottomMargin = loaderMargin
+    spacing: 15
+    anchors.topMargin: tourHeaderLogo.height - 40
+    anchors.rightMargin: 30
+    anchors.bottomMargin: 30
+    anchors.leftMargin: 30
+
+    Loader {
+      id: tourLoader
+      anchors.fill: parent
+      source: "tour/Page1.qml"
+      Layout.fillHeight: true
+      Layout.fillWidth: true
+    }
+    RowLayout {
+      Label {
+        id:pageNumber
+        text:qsTr("1 of 5")
+        Layout.alignment: Qt.AlignLeft
+      }
+      Item {
+        Layout.fillWidth: true
+      }
+      Button {
+        text: qsTr("Skip")
+        Layout.alignment: Qt.AlignRight
+      }
+      Button {
+        text: qsTr("Back")
+        Layout.alignment: Qt.AlignRight
+      }
+      Button {
+        text: qsTr("Next")
+        Layout.alignment: Qt.AlignRight
+        onClicked: incrementValue()
+      }
     }
   }
 }
