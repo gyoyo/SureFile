@@ -70,7 +70,8 @@ ColumnLayout {
   Item {
     Layout.fillHeight: true
   }
-  RowLayout {
+  GridLayout {
+    columns: 3
     Layout.alignment: Qt.AlignHCenter
     Button {
       text: qsTr("OK")

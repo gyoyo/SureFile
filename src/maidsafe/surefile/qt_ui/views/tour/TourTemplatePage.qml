@@ -1,11 +1,10 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
-import SureFile 1.0
 
 ColumnLayout {
   property string tourText
-  property string tourImage
+  property string tourImageUrl
   spacing: 15
   anchors.fill: parent
 
@@ -19,12 +18,7 @@ ColumnLayout {
   }
 
   Image {
-    id: tourPicture1
-    source: tourImage
-    visible: true
+    source: tourImageUrl
     Layout.alignment: Qt.AlignHCenter
   }
-  Item {
-      Layout.preferredHeight: 5
-    }
 }

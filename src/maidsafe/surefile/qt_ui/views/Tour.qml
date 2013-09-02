@@ -6,6 +6,7 @@ import SureFile 1.0
 ApplicationWindow {
   property int windowWidth : 500
   property int windowHeight : 600
+  property int pageIndex: 1
 
   id: tourWindow
   title: "SureFile"
@@ -23,8 +24,8 @@ ApplicationWindow {
     fillMode: Image.PreserveAspectFit
   }
   ColumnLayout {
+    spacing: 20
     anchors.fill: parent
-    spacing: 15
     anchors.topMargin: tourHeaderLogo.height - 40
     anchors.rightMargin: 30
     anchors.bottomMargin: 30
@@ -33,31 +34,40 @@ ApplicationWindow {
     Loader {
       id: tourLoader
       anchors.fill: parent
-      source: "tour/Page1.qml"
+      source: ("tour/Page%1.qml").arg(tourWindow.pageIndex)
       Layout.fillHeight: true
       Layout.fillWidth: true
     }
-    RowLayout {
+    GridLayout {
+      columns: 6
       Label {
-        id:pageNumber
-        text:qsTr("1 of 5")
+        text: qsTr("%1 of 5").arg(tourWindow.pageIndex)
         Layout.alignment: Qt.AlignLeft
+        Layout.column: 0
       }
       Item {
         Layout.fillWidth: true
+        Layout.column: 1
       }
       Button {
         text: qsTr("Skip")
+        enabled: tourWindow.pageIndex != 5
+        onClicked: tourWindow.hide();
         Layout.alignment: Qt.AlignRight
+        Layout.column: Qt.platform.os == "windows" ? 5 : 2
       }
       Button {
         text: qsTr("Back")
+        enabled: tourWindow.pageIndex != 1
+        onClicked: tourWindow.pageIndex--
         Layout.alignment: Qt.AlignRight
+        Layout.column: 3
       }
       Button {
-        text: qsTr("Next")
+        text: tourWindow.pageIndex != 5 ? qsTr("Next") : qsTr("Finish")
+        onClicked: tourWindow.pageIndex == 5 ? tourWindow.hide() : tourWindow.pageIndex++
         Layout.alignment: Qt.AlignRight
-        onClicked: incrementValue()
+        Layout.column: 4
       }
     }
   }

@@ -95,7 +95,7 @@ void MainController::CreateAccountCompleted() {
   if (!InitialisePostLogin())
     return;
   system_tray_->showMessage(tr(""), tr("SureFile is running"));
-  // Start procedure for first time tour from here
+  emit showTour();
 }
 
 void MainController::LoginCompleted() {
