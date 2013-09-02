@@ -19,6 +19,12 @@ ColumnLayout {
     Layout.fillHeight: true
   }
 
+  Rectangle {
+    color: "red"
+    width: parent.width
+    height: 50
+  }
+
   Image {
     source: tourImageUrl
     Layout.alignment: Qt.AlignHCenter
