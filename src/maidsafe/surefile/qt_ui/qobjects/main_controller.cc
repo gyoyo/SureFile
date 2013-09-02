@@ -81,9 +81,8 @@ void MainController::EventLoopStarted() {
   root_context_->setContextProperty(kAPIModel, api_model_.get());
   main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(0));
   if (!main_window_) {
-    // TODO(Viv): Throw above warning as an app-exception and handle it gracefully
     QtLog("App Startup Failed");
-    return;
+    throw new std::exception();
   }
 
   main_window_->show();

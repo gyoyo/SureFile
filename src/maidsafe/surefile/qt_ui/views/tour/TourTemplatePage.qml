@@ -14,7 +14,9 @@ ColumnLayout {
     font.pixelSize: 14
     Layout.maximumWidth: parent.width
     horizontalAlignment: Qt.AlignHCenter
+    verticalAlignment: Qt.AlignVCenter
     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+    Layout.fillHeight: true
   }
 
   Image {

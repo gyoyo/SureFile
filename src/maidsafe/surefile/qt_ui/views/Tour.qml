@@ -33,7 +33,6 @@ ApplicationWindow {
 
     Loader {
       id: tourLoader
-      anchors.fill: parent
       source: ("tour/Page%1.qml").arg(tourWindow.pageIndex)
       Layout.fillHeight: true
       Layout.fillWidth: true
@@ -65,6 +64,8 @@ ApplicationWindow {
       }
       Button {
         text: tourWindow.pageIndex != 5 ? qsTr("Next") : qsTr("Finish")
+        isDefault: true
+        focus: true
         onClicked: tourWindow.pageIndex == 5 ? tourWindow.hide() : tourWindow.pageIndex++
         Layout.alignment: Qt.AlignRight
         Layout.column: 4
