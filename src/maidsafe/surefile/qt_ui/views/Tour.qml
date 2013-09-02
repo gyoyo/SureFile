@@ -27,9 +27,9 @@ ApplicationWindow {
     spacing: 20
     anchors.fill: parent
     anchors.topMargin: tourHeaderLogo.height - 40
-    anchors.rightMargin: 30
+    anchors.rightMargin: 37.5
     anchors.bottomMargin: 30
-    anchors.leftMargin: 30
+    anchors.leftMargin: 37.5
 
     Loader {
       id: tourLoader

@@ -17,12 +17,7 @@ ColumnLayout {
     verticalAlignment: Qt.AlignVCenter
     Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
     Layout.fillHeight: true
-  }
-
-  Rectangle {
-    color: "red"
-    width: parent.width
-    height: 50
+    Layout.fillWidth: true
   }
 
   Image {
