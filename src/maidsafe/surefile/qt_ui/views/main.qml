@@ -51,7 +51,12 @@ ApplicationWindow {
     }
   }
   Tour {
-    id:tourView
-    visible: true
+    id: tourView
+    Connections {
+      target: mainController
+      onShowTour: {
+        tourView.show()
+      }
+    }
   }
 }

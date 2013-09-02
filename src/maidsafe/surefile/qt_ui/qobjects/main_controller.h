@@ -45,6 +45,9 @@ class MainController : public QObject {
  protected:
   bool eventFilter(QObject* object, QEvent* event);
 
+ signals:
+  void showTour();
+
  private slots:  // NOLINT - Viv
   void EventLoopStarted();
   void CreateAccountCompleted();

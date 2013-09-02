@@ -35,8 +35,8 @@ class StorePathConverter : public QObject {
                                       WRITE setDisplayStorePath
                                       NOTIFY displayStorePathChanged)
   Q_PROPERTY(QString actualStorePath READ actualStorePath
-                                      WRITE setActualStorePath
-                                      NOTIFY actualStorePathChanged)
+                                     WRITE setActualStorePath
+                                     NOTIFY actualStorePathChanged)
 
  public:
   explicit StorePathConverter(QObject* parent = 0);
