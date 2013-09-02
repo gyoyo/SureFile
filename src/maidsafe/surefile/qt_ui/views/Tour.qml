@@ -65,6 +65,8 @@ ApplicationWindow {
       }
       Button {
         text: tourWindow.pageIndex != 5 ? qsTr("Next") : qsTr("Finish")
+        isDefault: true
+        focus: true
         onClicked: tourWindow.pageIndex == 5 ? tourWindow.hide() : tourWindow.pageIndex++
         Layout.alignment: Qt.AlignRight
         Layout.column: 4

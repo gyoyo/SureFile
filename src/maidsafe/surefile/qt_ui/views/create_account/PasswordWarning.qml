@@ -8,12 +8,16 @@ ColumnLayout {
   id: passwordWarningPage
   spacing: 15
   anchors.fill: parent
+  Component.onCompleted: titleLabel.forceActiveFocus()
 
   Label {
+    id: titleLabel
     text: qsTr("Password Warning")
     font.bold: true
     font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
+    Keys.onEnterPressed: createAccountButton.clicked()
+    Keys.onReturnPressed: createAccountButton.clicked()
   }
 
   Item {
@@ -32,6 +36,8 @@ ColumnLayout {
     text: qsTr("I understand the Password Warning")
     Layout.maximumWidth: parent.width
     Layout.alignment: Qt.AlignHCenter
+    Keys.onEnterPressed: createAccountButton.clicked()
+    Keys.onReturnPressed: createAccountButton.clicked()
     Binding {
       target: passwordWarningPage;
       property: "isValid";

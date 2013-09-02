@@ -6,12 +6,16 @@ ColumnLayout {
   id: licensePage
   property bool isValid : false
   spacing: 10
+  Component.onCompleted: titleLabel.forceActiveFocus()
 
   Label {
+    id: titleLabel
     text: qsTr("License Agreement")
     font.bold: true
     font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
+    Keys.onEnterPressed: createAccountButton.clicked()
+    Keys.onReturnPressed: createAccountButton.clicked()
   }
 
   Item {
@@ -35,6 +39,8 @@ ColumnLayout {
     id: licenseCheckBox
     text: qsTr("I agree")
     Layout.alignment: Qt.AlignHCenter
+    Keys.onEnterPressed: createAccountButton.clicked()
+    Keys.onReturnPressed: createAccountButton.clicked()
     Binding {
       target: licensePage;
       property: "isValid";
