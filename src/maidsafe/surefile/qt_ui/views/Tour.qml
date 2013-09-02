@@ -33,7 +33,6 @@ ApplicationWindow {
 
     Loader {
       id: tourLoader
-      anchors.fill: parent
       source: ("tour/Page%1.qml").arg(tourWindow.pageIndex)
       Layout.fillHeight: true
       Layout.fillWidth: true
