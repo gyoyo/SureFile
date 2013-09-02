@@ -13,12 +13,14 @@ implied. See the License for the specific language governing permissions and lim
 License.
 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_CONTROLLER_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_CONTROLLER_H_
+#ifndef MAIDSAFE_SUREFILE_QT_UI_HELPERS_APPLICATION_H_
+#define MAIDSAFE_SUREFILE_QT_UI_HELPERS_APPLICATION_H_
 
 // std
 #include <memory>
 #include <string>
+
+#include "boost/optional.hpp"
 
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
@@ -29,40 +31,38 @@ namespace surefile {
 
 namespace qt_ui {
 
-class PasswordBox;
-class APIModel;
-class SystemTrayIcon;
+class MainController;
 
-class MainController : public QObject {
-  Q_OBJECT
-
+class ExceptionEvent : public QEvent {
  public:
-  explicit MainController(QObject* parent = 0);
-  ~MainController();
-  Q_INVOKABLE void CreateAccount();
-  Q_INVOKABLE void Login();
-
- protected:
-  bool eventFilter(QObject* object, QEvent* event);
-
- private slots:  // NOLINT - Viv
-  void EventLoopStarted();
-  void CreateAccountCompleted();
-  void LoginCompleted();
-  void ParseConfigurationFileError();
-  void UnhandledException();
-  void InvalidStoreLocationError();
+  ExceptionEvent(const QString& exception_message, Type type = QEvent::User);
+  ~ExceptionEvent() {}
+  QString ExceptionMessage();
 
  private:
-  MainController(const MainController&);
-  MainController& operator=(const MainController&);
-  bool InitialisePostLogin();
+  ExceptionEvent(const ExceptionEvent&);
+  ExceptionEvent& operator=(const ExceptionEvent&);
 
-  QQmlApplicationEngine* main_engine_;
-  QQuickWindow* main_window_;
-  std::unique_ptr<APIModel> api_model_;
-  std::unique_ptr<SystemTrayIcon> system_tray_;
-  QFutureWatcher<bool> future_watcher_;
+  QString exception_message_;
+};
+
+class Application : public QApplication {
+ public:
+  Application(int& argc, char** argv);
+  virtual ~Application() {}
+  QStringList AvailableTranslations();
+  void SwitchLanguage(QString language);
+  virtual bool notify(QObject* receiver, QEvent* event);
+  void SetErrorHandler(boost::optional<MainController&> handler_object);
+
+ private:
+  Application(const Application&);
+  Application& operator=(const Application&);
+  void CreateTranslators();
+
+  boost::optional<MainController&> handler_object_;
+  QMap<QString, QTranslator*> translators_;
+  QTranslator* current_translator_;
 };
 
 }  // namespace qt_ui
@@ -71,5 +71,5 @@ class MainController : public QObject {
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_CONTROLLER_H_
+#endif  // MAIDSAFE_SUREFILE_QT_UI_HELPERS_APPLICATION_H_
 

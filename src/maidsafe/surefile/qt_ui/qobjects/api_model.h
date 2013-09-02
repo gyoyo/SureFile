@@ -68,10 +68,13 @@ class APIModel : public QObject {
   Q_INVOKABLE void SetStorePathForAlias(const QString& alias, const QString& path);
   Q_INVOKABLE void DeleteAlias(const QString& alias);
 
-  void APIConfigurationError();
+  void ParseConfigurationFileError();
   void StorePathRequested(const std::string& alias);
   bool CreateAccount();
   bool Login();
+
+ public slots: // NOLINT - Viv
+  void OpenDrive();
 
  signals:
   void operationStateChanged();
@@ -79,7 +82,9 @@ class APIModel : public QObject {
   void passwordChanged();
   void confirmPasswordChanged();
   void getStorePath(const QString& storeAlias);
-  void APICrashed();
+  void OnParseConfigurationFileError();
+  void UnhandledException();
+  void InvalidStoreLocationError();
 
  private:
   APIModel(const APIModel&);

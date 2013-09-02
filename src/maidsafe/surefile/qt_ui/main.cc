@@ -18,16 +18,18 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
+#include "maidsafe/surefile/qt_ui/helpers/application.h"
 #include "maidsafe/surefile/qt_ui/qobjects/main_controller.h"
 
 int main(int argc, char *argv[]) {
-  QApplication application(argc, argv);
+  maidsafe::surefile::qt_ui::Application application(argc, argv);
   application.setOrganizationDomain("http://www.maidsafe.net");
   application.setOrganizationName("MaidSafe.net Ltd.");
   application.setApplicationName("SureFile");
   application.setApplicationVersion("0.1");
   try {
     maidsafe::surefile::qt_ui::MainController main_controller;
+    application.SetErrorHandler(main_controller);
     return application.exec();
   } catch(const std::exception &ex) {
     std::cerr << "STD Exception Caught: " << ex.what();
