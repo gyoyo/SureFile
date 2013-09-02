@@ -2,15 +2,34 @@
   <qresource prefix="/">
     <file>images/app_header.svg</file>
     <file>images/loading.png</file>    
-    <file>images/surefile_app_normal.png</file>
+    <file>images/surefile_app_mac.png</file>
+    <file>images/surefile_app_windows.png</file>
+    <file>images/tour_header.svg</file>
+    <file>images/tour_picture_linux_01.png</file>
+    <file>images/tour_picture_linux_02.png</file>
+    <file>images/tour_picture_linux_04.png</file>
+    <file>images/tour_picture_mac_01.png</file>
+    <file>images/tour_picture_mac_02.png</file>
+    <file>images/tour_picture_mac_03.png</file>
+    <file>images/tour_picture_mac_04.png</file>
+    <file>images/tour_picture_windows_01.png</file>
+    <file>images/tour_picture_windows_02.png</file>
+    <file>images/tour_picture_windows_04.png</file>
   </qresource>
   <qresource prefix="/">
     <file>views/ChooseStorePath.qml</file>
     <file>views/Main.qml</file>
     <file>views/Login.qml</file>
     <file>views/CreateAccount.qml</file>
+    <file>views/Tour.qml</file>
     <file>views/create_account/Credential.qml</file>
     <file>views/create_account/LicenseAgreement.qml</file>
     <file>views/create_account/PasswordWarning.qml</file>
+    <file>views/tour/Page1.qml</file>
+    <file>views/tour/Page2.qml</file>
+    <file>views/tour/Page3.qml</file>
+    <file>views/tour/Page4.qml</file>
+    <file>views/tour/Page5.qml</file>
+    <file>views/tour/TourTemplatePage.qml</file>
   </qresource>
 </RCC>
