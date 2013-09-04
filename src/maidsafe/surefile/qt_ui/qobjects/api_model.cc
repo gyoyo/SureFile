@@ -26,8 +26,6 @@ namespace surefile {
 
 namespace qt_ui {
 
-namespace surefile_api_imports = maidsafe::lifestuff;
-
 APIModel::APIModel(QObject* parent)
     : QObject(parent),
       operation_state_(APIModel::Ready),
@@ -36,11 +34,11 @@ APIModel::APIModel(QObject* parent)
       error_message_(),
       surefile_api_() {
   emit errorMessageChanged();
-  surefile_api_imports::Slots surefile_slots;
-  surefile_slots.on_service_added = std::bind(&APIModel::StorePathRequested,
-                                              this,
-                                              std::placeholders::_1);
-  surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
+  Slots surefile_slots;
+  // surefile_slots.on_service_added = std::bind(&APIModel::StorePathRequested,
+  //                                            this,
+  //                                            std::placeholders::_1);
+  // surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
   surefile_api_.reset(new SureFile(surefile_slots));
 }
 
@@ -104,8 +102,8 @@ void APIModel::SetStorePathForAlias(const QString& alias, const QString& path) {
   }
 }
 
-void APIModel::DeleteAlias(const QString& alias) {
-  surefile_api_->AddServiceFailed(alias.toStdString());
+void APIModel::DeleteAlias(const QString& /*alias*/) {
+  // surefile_api_->AddServiceFailed(alias.toStdString());
 }
 
 void APIModel::ParseConfigurationFileError() {
@@ -121,14 +119,14 @@ bool APIModel::CreateAccount() {
   try {
     int i = 0;
     foreach(QString character, password()) {
-      surefile_api_->InsertInput(i++, character.toStdString(), surefile_api_imports::kPassword);
+      surefile_api_->InsertInput(i++, character.toStdString(), kPassword);
     }
 
     i = 0;
     foreach(QString character, confirmPassword()) {
       surefile_api_->InsertInput(i++,
                                  character.toStdString(),
-                                 surefile_api_imports::kConfirmationPassword);
+                                 kConfirmationPassword);
     }
 
     surefile_api_->CreateUser();
@@ -157,7 +155,7 @@ bool APIModel::Login() {
   try {
     int i = 0;
     foreach(QString character, password()) {
-      surefile_api_->InsertInput(i++, character.toStdString(), surefile_api_imports::kPassword);
+      surefile_api_->InsertInput(i++, character.toStdString(), kPassword);
     }
 
     surefile_api_->Login();
