@@ -74,11 +74,14 @@ void MainController::EventLoopStarted() {
           this,               SLOT(InvalidStoreLocationError()));
   connect(system_tray_.get(), SIGNAL(OpenDriveRequested()),
           api_model_.get(),   SLOT(OpenDrive()));
+  connect(system_tray_.get(), SIGNAL(OpenSettingsRequested()),
+          this,               SIGNAL(showSettings()));
 
-  main_engine_ = new QQmlApplicationEngine(QUrl("qrc:/views/Main.qml"));
+  main_engine_ = new QQmlApplicationEngine();
   auto root_context_ = main_engine_->rootContext();
   root_context_->setContextProperty(kMainController, this);
   root_context_->setContextProperty(kAPIModel, api_model_.get());
+  main_engine_->load(QUrl("qrc:/views/MainView.qml"));
   main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(0));
   if (!main_window_) {
     QtLog("App Startup Failed");

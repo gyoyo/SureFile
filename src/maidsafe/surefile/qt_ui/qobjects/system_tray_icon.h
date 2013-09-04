@@ -39,6 +39,7 @@ class SystemTrayIcon : public QSystemTrayIcon {
 
  signals:  // NOLINT (Viv)
   void OpenDriveRequested();
+  void OpenSettingsRequested();
 
  private slots:  // NOLINT - Viv
   void QuitApplication();
@@ -49,7 +50,9 @@ class SystemTrayIcon : public QSystemTrayIcon {
   SystemTrayIcon& operator=(const SystemTrayIcon&);
 
   QMenu* menu_;
+  QAction* seperator_;
   QAction* open_drive_;
+  QAction* open_settings_;
   bool is_logged_in_;
 };
 

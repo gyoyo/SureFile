@@ -69,7 +69,9 @@ class APIModel : public QObject {
   Q_INVOKABLE void DeleteAlias(const QString& alias);
 
   void ParseConfigurationFileError();
-  void StorePathRequested(const std::string& alias);
+  void AddServiceRequested();
+  void RemoveServiceRequested(const std::string& folder_name);
+  void StorePathRemove();
   bool CreateAccount();
   bool Login();
 
@@ -81,7 +83,8 @@ class APIModel : public QObject {
   void errorMessageChanged();
   void passwordChanged();
   void confirmPasswordChanged();
-  void getStorePath(const QString& storeAlias);
+  void showAddServiceSettings();
+  void showRemoveServiceSettings(const QString& folder_name);
   void OnParseConfigurationFileError();
   void UnhandledException();
   void InvalidStoreLocationError();

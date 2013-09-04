@@ -25,12 +25,18 @@ namespace qt_ui {
 
 SystemTrayIcon::SystemTrayIcon()
   : menu_(new QMenu),
+    seperator_(),
+    open_drive_(),
+    open_settings_(),
     is_logged_in_() {
   setIcon(QIcon(":/images/surefile_app_mac.png"));
   setToolTip("SureFile");
   open_drive_ = menu_->addAction(tr("Open Drive"), this, SIGNAL(OpenDriveRequested()));
-  open_drive_->setEnabled(false);
-  menu_->addSeparator();
+  open_drive_->setVisible(false);
+  open_settings_ = menu_->addAction(tr("Settings"), this, SIGNAL(OpenSettingsRequested()));
+  open_settings_->setVisible(false);
+  seperator_ = menu_->addSeparator();
+  seperator_->setVisible(false);
   menu_->addAction(tr("Quit"), this, SLOT(QuitApplication()));
   connect(this,
           SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
@@ -41,7 +47,9 @@ SystemTrayIcon::SystemTrayIcon()
 
 void SystemTrayIcon::SetIsLoggedIn(bool is_logged_in) {
   is_logged_in_ = is_logged_in;
-  open_drive_->setEnabled(is_logged_in_);
+  open_drive_->setVisible(is_logged_in_);
+  open_settings_->setVisible(is_logged_in_);
+  seperator_->setVisible(is_logged_in_);
 }
 
 void SystemTrayIcon::QuitApplication() {

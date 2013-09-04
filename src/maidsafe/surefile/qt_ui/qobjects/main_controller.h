@@ -47,6 +47,7 @@ class MainController : public QObject {
 
  signals:
   void showTour();
+  void showSettings();
 
  private slots:  // NOLINT - Viv
   void EventLoopStarted();

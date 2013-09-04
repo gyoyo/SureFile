@@ -35,10 +35,11 @@ APIModel::APIModel(QObject* parent)
       surefile_api_() {
   emit errorMessageChanged();
   Slots surefile_slots;
-  // surefile_slots.on_service_added = std::bind(&APIModel::StorePathRequested,
-  //                                            this,
-  //                                            std::placeholders::_1);
-  // surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
+  surefile_slots.on_service_added = std::bind(&APIModel::AddServiceRequested, this);
+  surefile_slots.on_service_removed = std::bind(&APIModel::RemoveServiceRequested,
+                                                this,
+                                                std::placeholders::_1);
+  surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
   surefile_api_.reset(new SureFile(surefile_slots));
 }
 
@@ -110,8 +111,12 @@ void APIModel::ParseConfigurationFileError() {
   emit OnParseConfigurationFileError();
 }
 
-void APIModel::StorePathRequested(const std::string& alias) {
-  emit getStorePath(QString::fromStdString(alias));
+void APIModel::AddServiceRequested() {
+  emit showAddServiceSettings();
+}
+
+void APIModel::RemoveServiceRequested(const std::string& folder_name) {
+  emit showRemoveServiceSettings(QString::fromStdString(folder_name));
 }
 
 bool APIModel::CreateAccount() {
