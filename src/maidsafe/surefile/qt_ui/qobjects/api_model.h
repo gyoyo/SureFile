@@ -37,9 +37,6 @@ class APIModel : public QObject {
   Q_PROPERTY(OperationState operationState READ operationState
                                            WRITE setOperationState
                                            NOTIFY operationStateChanged)
-  Q_PROPERTY(QString errorMessage READ errorMessage
-                                  WRITE setErrorMessage
-                                  NOTIFY errorMessageChanged)
   Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
   Q_PROPERTY(QString confirmPassword READ confirmPassword
                                      WRITE setConfirmPassword
@@ -57,8 +54,6 @@ class APIModel : public QObject {
 
   OperationState operationState() const;
   void setOperationState(const OperationState& operationState);
-  QString errorMessage() const;
-  void setErrorMessage(const QString& errorMessage);
   QString password() const;
   void setPassword(const QString& password);
   QString confirmPassword() const;
@@ -74,17 +69,21 @@ class APIModel : public QObject {
   void StorePathRemove();
   bool CreateAccount();
   bool Login();
-
- public slots: // NOLINT - Viv
-  void OpenDrive();
+  QString MountPath();
 
  signals:
+  // NPC Signals
   void operationStateChanged();
-  void errorMessageChanged();
   void passwordChanged();
   void confirmPasswordChanged();
+
+  // To QML
   void showAddServiceSettings();
-  void showRemoveServiceSettings(const QString& folder_name);
+  void showRemoveServiceSettings(const QString& folderName);
+  void loginErrorRaised(const QString& errorMessage);
+  void createAccountErrorRaised(const QString& errorMessage);
+
+  // To Main Controller
   void OnParseConfigurationFileError();
   void UnhandledException();
   void InvalidStoreLocationError();
@@ -96,7 +95,6 @@ class APIModel : public QObject {
   OperationState operation_state_;
   QString password_;
   QString confirm_password_;
-  QString error_message_;
   std::unique_ptr<SureFile> surefile_api_;
 };
 

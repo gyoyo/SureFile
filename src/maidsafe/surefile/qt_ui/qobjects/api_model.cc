@@ -31,9 +31,7 @@ APIModel::APIModel(QObject* parent)
       operation_state_(APIModel::Ready),
       password_(),
       confirm_password_(),
-      error_message_(),
       surefile_api_() {
-  emit errorMessageChanged();
   Slots surefile_slots;
   surefile_slots.on_service_added = std::bind(&APIModel::AddServiceRequested, this);
   surefile_slots.on_service_removed = std::bind(&APIModel::RemoveServiceRequested,
@@ -53,18 +51,6 @@ void APIModel::setOperationState(const APIModel::OperationState& operationState)
 
   operation_state_ = operationState;
   emit operationStateChanged();
-}
-
-QString APIModel::errorMessage() const {
-  return error_message_;
-}
-
-void APIModel::setErrorMessage(const QString& errorMessage) {
-  if (error_message_ == errorMessage)
-    return;
-
-  error_message_ = errorMessage;
-  emit errorMessageChanged();
 }
 
 QString APIModel::password() const {
@@ -140,9 +126,9 @@ bool APIModel::CreateAccount() {
     setConfirmPassword(QString());
     setOperationState(APIModel::Error);
     if (error_code.code() == make_error_code(SureFileErrors::invalid_password)) {
-      setErrorMessage(tr("Invalid Password"));
+      emit createAccountErrorRaised(tr("Invalid Password"));
     } else if (error_code.code() == make_error_code(SureFileErrors::password_confirmation_failed)) {
-      setErrorMessage(tr("Entries do not match"));
+      emit createAccountErrorRaised(tr("Entries do not match"));
     }
     return false;
   } catch(...) {
@@ -167,7 +153,7 @@ bool APIModel::Login() {
   } catch(const surefile_error&) {
     setPassword(QString());
     setOperationState(APIModel::Error);
-    setErrorMessage(tr("Invalid Password"));
+    emit loginErrorRaised(tr("Invalid Password"));
     return false;
   } catch(...) {
     emit UnhandledException();
@@ -179,8 +165,8 @@ bool APIModel::Login() {
   return true;
 }
 
-void APIModel::OpenDrive() {
-  QDesktopServices::openUrl(QUrl("file:///" + QString::fromStdString(surefile_api_->mount_path())));
+QString APIModel::MountPath() {
+  return QString::fromStdString(surefile_api_->mount_path());
 }
 
 }  // namespace qt_ui

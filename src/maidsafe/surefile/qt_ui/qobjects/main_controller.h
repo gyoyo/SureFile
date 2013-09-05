@@ -56,6 +56,7 @@ class MainController : public QObject {
   void ParseConfigurationFileError();
   void UnhandledException();
   void InvalidStoreLocationError();
+  void OpenDrive();
 
  private:
   MainController(const MainController&);

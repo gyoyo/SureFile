@@ -73,7 +73,7 @@ void MainController::EventLoopStarted() {
   connect(api_model_.get(),   SIGNAL(InvalidStoreLocationError()),
           this,               SLOT(InvalidStoreLocationError()));
   connect(system_tray_.get(), SIGNAL(OpenDriveRequested()),
-          api_model_.get(),   SLOT(OpenDrive()));
+          this,               SLOT(OpenDrive()));
   connect(system_tray_.get(), SIGNAL(OpenSettingsRequested()),
           this,               SIGNAL(showSettings()));
 
@@ -128,6 +128,10 @@ void MainController::InvalidStoreLocationError() {
   msg.setWindowTitle("SureFile");
   msg.setText(tr("SureFile cannot store data in this chosen location"));
   msg.exec();
+}
+
+void MainController::OpenDrive() {
+  QDesktopServices::openUrl(QUrl("file:///" + api_model_->MountPath()));
 }
 
 bool MainController::InitialisePostLogin() {

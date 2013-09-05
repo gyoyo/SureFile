@@ -56,13 +56,19 @@ ColumnLayout {
     Layout.preferredHeight: 15
   }
   Label {
-    text: apiModel.errorMessage
+    id: errorMessageLabel
     color: "crimson"
     horizontalAlignment: Qt.AlignHCenter
     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
     opacity: apiModel.operationState == APIModel.Error ? 1 : 0
     Layout.fillWidth: true
     Layout.alignment: Qt.AlignHCenter
+    Connections {
+      target: apiModel
+      onCreateAccountErrorRaised: {
+        errorMessageLabel.text = errorMessage
+      }
+    }
   }
   Item {
     Layout.fillHeight: true

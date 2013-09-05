@@ -37,10 +37,16 @@ ColumnLayout {
   }
 
   Label {
-    text: apiModel.errorMessage
+    id: errorMessageLabel
     color: "crimson"
     opacity: apiModel.operationState == APIModel.Error ? 1 : 0
     Layout.alignment: Qt.AlignHCenter
+    Connections {
+      target: apiModel
+      onLoginErrorRaised: {
+        errorMessageLabel.text = errorMessage
+      }
+    }
   }
 
   Item {
