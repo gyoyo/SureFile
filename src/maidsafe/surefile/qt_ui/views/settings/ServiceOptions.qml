@@ -33,6 +33,7 @@ ColumnLayout {
   Button {
     text: qsTr("Remove")
     Layout.alignment: Qt.AlignHCenter
+    onClicked: mainLoader.source = "RemoveService.qml"
   }
   Item {
     Layout.fillHeight: true

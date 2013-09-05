@@ -60,12 +60,12 @@ class APIModel : public QObject {
   void setConfirmPassword(const QString& confirmPassword);
 
   Q_INVOKABLE bool CanCreateAccount();
-  Q_INVOKABLE void SetStorePathForAlias(const QString& alias, const QString& path);
-  Q_INVOKABLE void DeleteAlias(const QString& alias);
+  void AddService(const QString& alias, const QString& path);
+  void RemoveService(const QString& path);
+  void RenameService(const QString& oldAlias, const QString& newAlias);
 
   void ParseConfigurationFileError();
   void AddServiceRequested();
-  void RemoveServiceRequested(const std::string& folder_name);
   void StorePathRemove();
   bool CreateAccount();
   bool Login();
@@ -79,19 +79,20 @@ class APIModel : public QObject {
 
   // To QML
   void showAddServiceSettings();
-  void showRemoveServiceSettings(const QString& folderName);
+  void addServiceErrorRaised(const QString& errorMessage);
+  void removeServiceErrorRaised(const QString& errorMessage);
+  void renameServiceErrorRaised(const QString& errorMessage);
+  void serviceOperationSuccess(const QString& message);
   void loginErrorRaised(const QString& errorMessage);
   void createAccountErrorRaised(const QString& errorMessage);
 
   // To Main Controller
   void OnParseConfigurationFileError();
   void UnhandledException();
-  void InvalidStoreLocationError();
 
  private:
   APIModel(const APIModel&);
   APIModel& operator=(const APIModel&);
-
   OperationState operation_state_;
   QString password_;
   QString confirm_password_;

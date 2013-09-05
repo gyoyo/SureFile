@@ -19,6 +19,7 @@ License.
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
 #include "maidsafe/surefile/qt_ui/helpers/application.h"
+#include "maidsafe/surefile/qt_ui/helpers/custom_message_box.h"
 #include "maidsafe/surefile/qt_ui/helpers/qml_indexers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
 #include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
@@ -56,6 +57,17 @@ void MainController::Login() {
   future_watcher_.setFuture(QtConcurrent::run(api_model_.get(), &APIModel::Login));
 }
 
+void MainController::AddService(const QString& alias, const QString& path) {
+  api_model_->AddService(alias, path);
+}
+
+void MainController::RemoveService(const QString& path) {
+  QtConcurrent::run(api_model_.get(), &APIModel::RemoveService, path);
+}
+
+void MainController::RenameService(const QString& /*oldAlias*/, const QString& /*newAlias*/) {
+}
+
 bool MainController::eventFilter(QObject* object, QEvent* event) {
   if (object == this && event->type() >= QEvent::User && event->type() <= QEvent::MaxUser) {
     UnhandledException();
@@ -70,8 +82,6 @@ void MainController::EventLoopStarted() {
           this,               SLOT(ParseConfigurationFileError()));
   connect(api_model_.get(),   SIGNAL(UnhandledException()),
           this,               SLOT(UnhandledException()));
-  connect(api_model_.get(),   SIGNAL(InvalidStoreLocationError()),
-          this,               SLOT(InvalidStoreLocationError()));
   connect(system_tray_.get(), SIGNAL(OpenDriveRequested()),
           this,               SLOT(OpenDrive()));
   connect(system_tray_.get(), SIGNAL(OpenSettingsRequested()),
@@ -106,28 +116,14 @@ void MainController::LoginCompleted() {
 }
 
 void MainController::ParseConfigurationFileError() {
-  QMessageBox msg;
-  msg.setIcon(QMessageBox::Information);
-  msg.setWindowTitle("SureFile");
-  msg.setText(tr("SureFile is unable to locate all of your data"));
-  msg.exec();
+  CustomMessageBox::Show(tr("SureFile is unable to locate all of your data"));
 }
 
 void MainController::UnhandledException() {
-  QMessageBox msg;
-  msg.setIcon(QMessageBox::Critical);
-  msg.setWindowTitle("SureFile");
-  msg.setText(tr("SureFile has encountered an unexpected error. Please relaunch SureFile"));
-  msg.exec();
+  CustomMessageBox::Show(
+      tr("SureFile has encountered an unexpected error. Please relaunch SureFile"),
+      QMessageBox::Critical);
   qApp->quit();
-}
-
-void MainController::InvalidStoreLocationError() {
-  QMessageBox msg;
-  msg.setIcon(QMessageBox::Critical);
-  msg.setWindowTitle("SureFile");
-  msg.setText(tr("SureFile cannot store data in this chosen location"));
-  msg.exec();
 }
 
 void MainController::OpenDrive() {

@@ -11,6 +11,8 @@ ColumnLayout {
 
   StorePathConverter {
     id: storePathConverter
+    isRemoveService: true
+    Component.onCompleted: storePathConverter.actualStorePath = ""
   }
 
   // Following bugs seem to occur in debug builds(Win-8) very frequently
@@ -36,32 +38,22 @@ ColumnLayout {
     Layout.fillWidth: true
 
     Label {
-      text: "Name"
-      Layout.column: 0
-    }
-    TextField {
-      id: aliasBox
-      placeholderText: qsTr("Folder Name")
-      Layout.column: 1
-      Layout.columnSpan: 2
-      Layout.fillWidth: true
-      onTextChanged: errorMessageLabel.opacity = 0
-    }
-    Label {
-      text: "Path"
+      text: "Path: "
       Layout.column: 0
       Layout.row: 1
+      font.weight: Font.Bold
     }
     Label {
       id: pathField
-      text: storePathConverter.displayStorePath
+      text: storePathConverter.displayStorePath.length == 0 ? "Choose Path" : storePathConverter.displayStorePath
       elide: Text.ElideMiddle
       Layout.column: 1
       Layout.row: 1
       Layout.fillWidth: true
     }
     Button {
-      text: qsTr("Edit")
+      text: qsTr("Choose")
+      enabled: !settingsWindow.isBusy
       Layout.column: 2
       Layout.row: 1
       onClicked: {
@@ -80,10 +72,24 @@ ColumnLayout {
     Layout.alignment: Qt.AlignHCenter
     Connections {
       target: apiModel
-      onAddServiceErrorRaised: {
+      onRemoveServiceErrorRaised: {
+        settingsWindow.isBusy = false
         errorMessageLabel.opacity = 1
         errorMessageLabel.text = errorMessage
       }
+    }
+  }
+
+  Image {
+    source: "../../images/loading.png"
+    opacity: settingsWindow.isBusy ? 1 : 0
+    Layout.alignment: Qt.AlignHCenter
+    NumberAnimation on rotation {
+      from: 0
+      to: 360
+      running: settingsWindow.isBusy ? 1 : 0
+      loops: Animation.Infinite
+      duration: 900
     }
   }
 
@@ -92,8 +98,12 @@ ColumnLayout {
   }
 
   Button {
-    text: qsTr("Create")
+    text: qsTr("Remove")
+    enabled: !settingsWindow.isBusy
     Layout.alignment: Qt.AlignHCenter
-    onClicked: mainController.AddService(aliasBox.text, storePathConverter.displayStorePath)
+    onClicked: {
+      settingsWindow.isBusy = true
+      mainController.RemoveService(storePathConverter.displayStorePath)
+    }
   }
 }

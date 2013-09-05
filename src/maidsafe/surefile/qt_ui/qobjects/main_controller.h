@@ -41,6 +41,9 @@ class MainController : public QObject {
   ~MainController();
   Q_INVOKABLE void CreateAccount();
   Q_INVOKABLE void Login();
+  Q_INVOKABLE void AddService(const QString& alias, const QString& path);
+  Q_INVOKABLE void RemoveService(const QString& path);
+  Q_INVOKABLE void RenameService(const QString& oldAlias, const QString& newAlias);
 
  protected:
   bool eventFilter(QObject* object, QEvent* event);
@@ -55,7 +58,6 @@ class MainController : public QObject {
   void LoginCompleted();
   void ParseConfigurationFileError();
   void UnhandledException();
-  void InvalidStoreLocationError();
   void OpenDrive();
 
  private:

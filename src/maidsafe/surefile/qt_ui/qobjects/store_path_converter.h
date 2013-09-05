@@ -37,6 +37,9 @@ class StorePathConverter : public QObject {
   Q_PROPERTY(QString actualStorePath READ actualStorePath
                                      WRITE setActualStorePath
                                      NOTIFY actualStorePathChanged)
+  Q_PROPERTY(bool isRemoveService READ isRemoveService
+                                  WRITE setIsRemoveService
+                                  NOTIFY isRemoveServiceChanged)
 
  public:
   explicit StorePathConverter(QObject* parent = 0);
@@ -45,10 +48,13 @@ class StorePathConverter : public QObject {
   void setDisplayStorePath(const QString& storePath);
   QString actualStorePath() const;
   void setActualStorePath(const QString& storePathUrl);
+  bool isRemoveService() const;
+  void setIsRemoveService(bool isServiceTypeRemove);
 
  signals:
   void displayStorePathChanged();
   void actualStorePathChanged();
+  void isRemoveServiceChanged();
 
  private:
   StorePathConverter(const StorePathConverter&);
@@ -56,6 +62,7 @@ class StorePathConverter : public QObject {
 
   QString display_store_path_;
   QString actual_store_path_;
+  bool is_remove_service_;
 };
 
 }  // namespace qt_ui

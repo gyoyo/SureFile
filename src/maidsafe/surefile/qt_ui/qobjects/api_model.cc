@@ -34,9 +34,6 @@ APIModel::APIModel(QObject* parent)
       surefile_api_() {
   Slots surefile_slots;
   surefile_slots.on_service_added = std::bind(&APIModel::AddServiceRequested, this);
-  surefile_slots.on_service_removed = std::bind(&APIModel::RemoveServiceRequested,
-                                                this,
-                                                std::placeholders::_1);
   surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
   surefile_api_.reset(new SureFile(surefile_slots));
 }
@@ -81,16 +78,43 @@ bool APIModel::CanCreateAccount() {
   return surefile_api_->CanCreateUser();
 }
 
-void APIModel::SetStorePathForAlias(const QString& alias, const QString& path) {
+void APIModel::AddService(const QString& alias, const QString& path) {
   try {
     surefile_api_->AddService(path.toStdString(), alias.toStdString());
-  } catch(const surefile_error&) {
-    emit InvalidStoreLocationError();
+  } catch(const surefile_error& error_code) {
+    if (error_code.code() == make_error_code(SureFileErrors::invalid_service)) {
+      emit addServiceErrorRaised(tr("Invalid Name or Path"));
+    } else if (error_code.code() == make_error_code(SureFileErrors::duplicate_service)) {
+      emit addServiceErrorRaised(tr("Duplicate Name or Path"));
+    }
+    return;
+  } catch(...) {
+    emit addServiceErrorRaised(tr("SureFile cannot store data in this chosen location"));
+    return;
+  }
+  emit serviceOperationSuccess(tr("Service successfully added"));
+}
+
+void APIModel::RemoveService(const QString& path) {
+  try {
+    if (surefile_api_->RemoveService(QDir(path).dirName().toStdString()))
+      emit serviceOperationSuccess(tr("Service successfully removed"));
+    else
+      emit removeServiceErrorRaised(tr("Unable to remove service"));
+  } catch(...) {
+    emit UnhandledException();
+    QtLog("Unknown Exception");
   }
 }
 
-void APIModel::DeleteAlias(const QString& /*alias*/) {
-  // surefile_api_->AddServiceFailed(alias.toStdString());
+void APIModel::RenameService(const QString& oldAlias, const QString& newAlias) {
+  try {
+    // Invoke rename service here
+    if (oldAlias.isEmpty() || newAlias.isEmpty())
+      return;
+  } catch(const surefile_error&) {
+    emit renameServiceErrorRaised(tr("Unable to change folder name"));
+  }
 }
 
 void APIModel::ParseConfigurationFileError() {
@@ -99,10 +123,6 @@ void APIModel::ParseConfigurationFileError() {
 
 void APIModel::AddServiceRequested() {
   emit showAddServiceSettings();
-}
-
-void APIModel::RemoveServiceRequested(const std::string& folder_name) {
-  emit showRemoveServiceSettings(QString::fromStdString(folder_name));
 }
 
 bool APIModel::CreateAccount() {
