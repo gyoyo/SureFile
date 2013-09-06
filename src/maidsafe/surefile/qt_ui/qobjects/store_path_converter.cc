@@ -76,7 +76,7 @@ bool StorePathConverter::isRemoveService() const {
 }
 
 void StorePathConverter::setIsRemoveService(bool isServiceTypeRemove) {
-  if (is_remove_service_ = isServiceTypeRemove)
+  if (is_remove_service_ == isServiceTypeRemove)
     return;
 
   is_remove_service_ = isServiceTypeRemove;
