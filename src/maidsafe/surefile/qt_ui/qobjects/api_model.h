@@ -34,6 +34,8 @@ namespace surefile {
 
 namespace qt_ui {
 
+struct SureFileService;
+
 class APIModel : public QObject {
   Q_OBJECT
   Q_ENUMS(OperationState)
@@ -65,11 +67,10 @@ class APIModel : public QObject {
   Q_INVOKABLE bool CanCreateAccount();
   void AddService(const QString& alias, const QString& path);
   void RemoveService(const QString& path);
-  void RenameService(const QString& oldAlias, const QString& newAlias);
 
   void ParseConfigurationFileError();
   void AddServiceRequested();
-  void StorePathRemove();
+  void ServiceRenamed(const std::string& old_name, const std::string& new_name);
   bool CreateAccount();
   bool Login();
   QString MountPath();
@@ -84,7 +85,6 @@ class APIModel : public QObject {
   void showAddServiceSettings();
   void addServiceErrorRaised(const QString& errorMessage);
   void removeServiceErrorRaised(const QString& errorMessage);
-  void renameServiceErrorRaised(const QString& errorMessage);
   void serviceOperationSuccess(const QString& message);
   void loginErrorRaised(const QString& errorMessage);
   void createAccountErrorRaised(const QString& errorMessage);
@@ -92,6 +92,12 @@ class APIModel : public QObject {
   // To Main Controller
   void OnParseConfigurationFileError();
   void UnhandledException();
+
+  // To ServiceList
+  void AddToServiceList(const SureFileService& service);
+  void RemoveFromServiceList(const QString& folder_name);
+  void ModifyItemInServiceList(const QString& old_folder_name,
+                               const QString& new_folder_name);
 
  private:
   APIModel(const APIModel&);

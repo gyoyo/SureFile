@@ -16,8 +16,8 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_PASSWORD_BOX_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_PASSWORD_BOX_H_
+#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_SERVICE_LIST_H_
+#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_SERVICE_LIST_H_
 
 // std
 #include <memory>
@@ -32,16 +32,47 @@ namespace surefile {
 
 namespace qt_ui {
 
-class PasswordBox : public QObject {
+struct SureFileService {
+  SureFileService(QString folder_name, QString folder_path)
+    : folder_name_(folder_name),
+      folder_path_(folder_path) {}
+
+  SureFileService()  // DO NOT USE - USED FOR TYPE REGISTRATION
+    : folder_name_(),
+      folder_path_() {}
+
+  QString folder_name_;
+  QString folder_path_;
+};
+
+class ServiceList : public QAbstractListModel {
   Q_OBJECT
 
  public:
-  explicit PasswordBox(QObject* parent = 0);
-  ~PasswordBox() {}
+  enum ServiceRoles {
+      NameRole = Qt::UserRole + 1,
+      PathRole
+  };
+
+  explicit ServiceList(QObject* parent = 0);
+  ~ServiceList() {}
+  int rowCount(const QModelIndex& parent = QModelIndex()) const;
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+
+ public slots:  // NOLINT - Viv
+  void AddService(const SureFileService& service);
+  void RemoveService(const QString& folder_name);
+  void ModifyService(const QString& old_folder_name, const QString& new_folder_name);
+
+ protected:
+  QHash<int, QByteArray> roleNames() const;
 
  private:
-  PasswordBox(const PasswordBox&);
-  PasswordBox& operator=(const PasswordBox&);
+  ServiceList(const ServiceList&);
+  ServiceList& operator=(const ServiceList&);
+  int GetServiceIndex(const QString& folder_name);
+
+  QList<SureFileService> services_;
 };
 
 }  // namespace qt_ui
@@ -50,5 +81,7 @@ class PasswordBox : public QObject {
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_PASSWORD_BOX_H_
+Q_DECLARE_METATYPE(maidsafe::surefile::qt_ui::SureFileService)
+
+#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_SERVICE_LIST_H_
 

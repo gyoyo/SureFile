@@ -22,6 +22,7 @@
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
 #include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
+#include "maidsafe/surefile/qt_ui/qobjects/service_list.h"
 
 namespace maidsafe {
 
@@ -38,6 +39,7 @@ APIModel::APIModel(QObject* parent)
   Slots surefile_slots;
   surefile_slots.on_service_added = std::bind(&APIModel::AddServiceRequested, this);
   surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
+  // Connect to ServiceRenamed() from here with surefile_lib slots
   surefile_api_.reset(new SureFile(surefile_slots));
 }
 
@@ -95,29 +97,25 @@ void APIModel::AddService(const QString& alias, const QString& path) {
     emit addServiceErrorRaised(tr("SureFile cannot store data in this chosen location"));
     return;
   }
+
   emit serviceOperationSuccess(tr("Service successfully added"));
+  emit AddToServiceList(SureFileService(alias, QDir::toNativeSeparators(path)));
 }
 
 void APIModel::RemoveService(const QString& path) {
   try {
-    if (surefile_api_->RemoveService(QDir(path).dirName().toStdString()))
-      emit serviceOperationSuccess(tr("Service successfully removed"));
-    else
+    if (!surefile_api_->RemoveService(QDir(path).dirName().toStdString())) {
       emit removeServiceErrorRaised(tr("Unable to remove service"));
+      return;
+    }
   } catch(...) {
     emit UnhandledException();
     QtLog("Unknown Exception");
+    return;
   }
-}
 
-void APIModel::RenameService(const QString& oldAlias, const QString& newAlias) {
-  try {
-    // Invoke rename service here
-    if (oldAlias.isEmpty() || newAlias.isEmpty())
-      return;
-  } catch(const surefile_error&) {
-    emit renameServiceErrorRaised(tr("Unable to change folder name"));
-  }
+  emit serviceOperationSuccess(tr("Service successfully removed"));
+  emit RemoveFromServiceList(QDir(path).dirName());
 }
 
 void APIModel::ParseConfigurationFileError() {
@@ -126,6 +124,10 @@ void APIModel::ParseConfigurationFileError() {
 
 void APIModel::AddServiceRequested() {
   emit showAddServiceSettings();
+}
+
+void APIModel::ServiceRenamed(const std::string& old_name, const std::string& new_name) {
+  emit ModifyItemInServiceList(QString::fromStdString(old_name), QString::fromStdString(new_name));
 }
 
 bool APIModel::CreateAccount() {

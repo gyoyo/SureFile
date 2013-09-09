@@ -26,7 +26,7 @@
 #include "maidsafe/surefile/qt_ui/helpers/qml_indexers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
 #include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
-#include "maidsafe/surefile/qt_ui/qobjects/password_box.h"
+#include "maidsafe/surefile/qt_ui/qobjects/service_list.h"
 #include "maidsafe/surefile/qt_ui/qobjects/store_path_converter.h"
 #include "maidsafe/surefile/qt_ui/qobjects/system_tray_icon.h"
 
@@ -41,9 +41,10 @@ MainController::MainController(QObject* parent)
       main_engine_(),
       main_window_(),
       api_model_(),
+      service_list_(new ServiceList),
       system_tray_(new SystemTrayIcon),
       future_watcher_() {
-  qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
+  // qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
   qmlRegisterType<APIModel>("SureFile", 1, 0, "APIModel");
   qmlRegisterType<StorePathConverter>("SureFile", 1, 0, "StorePathConverter");
   installEventFilter(this);
@@ -68,9 +69,6 @@ void MainController::RemoveService(const QString& path) {
   QtConcurrent::run(api_model_.get(), &APIModel::RemoveService, path);
 }
 
-void MainController::RenameService(const QString& /*oldAlias*/, const QString& /*newAlias*/) {
-}
-
 bool MainController::eventFilter(QObject* object, QEvent* event) {
   if (object == this && event->type() >= QEvent::User && event->type() <= QEvent::MaxUser) {
     UnhandledException();
@@ -81,19 +79,27 @@ bool MainController::eventFilter(QObject* object, QEvent* event) {
 
 void MainController::EventLoopStarted() {
   api_model_.reset(new APIModel);
-  connect(api_model_.get(),   SIGNAL(OnParseConfigurationFileError()),
-          this,               SLOT(ParseConfigurationFileError()));
-  connect(api_model_.get(),   SIGNAL(UnhandledException()),
-          this,               SLOT(UnhandledException()));
-  connect(system_tray_.get(), SIGNAL(OpenDriveRequested()),
-          this,               SLOT(OpenDrive()));
-  connect(system_tray_.get(), SIGNAL(OpenSettingsRequested()),
-          this,               SIGNAL(showSettings()));
+  connect(api_model_.get(),     SIGNAL(OnParseConfigurationFileError()),
+          this,                 SLOT(ParseConfigurationFileError()));
+  connect(api_model_.get(),     SIGNAL(UnhandledException()),
+          this,                 SLOT(UnhandledException()));
+  connect(api_model_.get(),     SIGNAL(AddToServiceList(const SureFileService&)),
+          service_list_.get(),  SLOT(AddService(const SureFileService&)));
+  connect(api_model_.get(),     SIGNAL(RemoveFromServiceList(const QString&)),
+          service_list_.get(),  SLOT(RemoveService(const QString&)));
+  connect(api_model_.get(),     SIGNAL(ModifyItemInServiceList(const QString&, const QString&)),
+          service_list_.get(),  SLOT(ModifyService(const QString&, const QString&)));
+
+  connect(system_tray_.get(),   SIGNAL(OpenDriveRequested()),
+          this,                 SLOT(OpenDrive()));
+  connect(system_tray_.get(),   SIGNAL(OpenSettingsRequested()),
+          this,                 SIGNAL(showSettings()));
 
   main_engine_ = new QQmlApplicationEngine();
   auto root_context_ = main_engine_->rootContext();
   root_context_->setContextProperty(kMainController, this);
   root_context_->setContextProperty(kAPIModel, api_model_.get());
+  root_context_->setContextProperty(kServiceListModel, service_list_.get());
   main_engine_->load(QUrl("qrc:/views/MainView.qml"));
   main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(0));
   if (!main_window_) {
@@ -140,6 +146,7 @@ bool MainController::InitialisePostLogin() {
   main_window_->hide();
   system_tray_->SetIsLoggedIn(true);
   qApp->setQuitOnLastWindowClosed(false);
+  // Populate service_list_ here
   return true;
 }
 

@@ -56,6 +56,7 @@
 #endif
 
 #include "QtConcurrent/QtConcurrentRun"
+#include "QtCore/QAbstractListModel"
 #include "QtCore/QDebug"
 #include "QtCore/QDir"
 #include "QtCore/QTimer"

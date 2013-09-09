@@ -34,15 +34,15 @@ ColumnLayout {
     font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
   }
-  ListModel {
+  /*ListModel {
       id: storePathList
       Component.onCompleted: {
           for (var i=0 ; i< 500 ; ++i)
               storePathList.append({"name":"Path name "+i , "path": Math.round(Math.random()*100)})
       }
-  }
+  }*/
   TableView {
-      model: storePathList
+      model: serviceListModel
       Layout.fillWidth: true
       Layout.fillHeight: true
 
@@ -85,7 +85,7 @@ ColumnLayout {
       enabled: !settingsWindow.isBusy
       Layout.alignment: Qt.AlignHCenter
       onClicked: {
-        settingsWindow.isBusy = true
+        // settingsWindow.isBusy = true
         mainController.RemoveService(storePathConverter.displayStorePath)
       }
     }

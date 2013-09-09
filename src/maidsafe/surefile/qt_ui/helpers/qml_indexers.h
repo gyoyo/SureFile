@@ -29,7 +29,7 @@ namespace surefile {
 namespace qt_ui {
 
 const QString kMainController("mainController");
-const QString kPasswordBoxHandler("passwordHandler");
+const QString kServiceListModel("serviceListModel");
 const QString kAPIModel("apiModel");
 
 }  // namespace qt_ui

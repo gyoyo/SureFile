@@ -32,8 +32,8 @@ namespace surefile {
 
 namespace qt_ui {
 
-class PasswordBox;
 class APIModel;
+class ServiceList;
 class SystemTrayIcon;
 
 class MainController : public QObject {
@@ -46,7 +46,6 @@ class MainController : public QObject {
   Q_INVOKABLE void Login();
   Q_INVOKABLE void AddService(const QString& alias, const QString& path);
   Q_INVOKABLE void RemoveService(const QString& path);
-  Q_INVOKABLE void RenameService(const QString& oldAlias, const QString& newAlias);
 
  protected:
   bool eventFilter(QObject* object, QEvent* event);
@@ -71,6 +70,7 @@ class MainController : public QObject {
   QQmlApplicationEngine* main_engine_;
   QQuickWindow* main_window_;
   std::unique_ptr<APIModel> api_model_;
+  std::unique_ptr<ServiceList> service_list_;
   std::unique_ptr<SystemTrayIcon> system_tray_;
   QFutureWatcher<bool> future_watcher_;
 };
