@@ -58,6 +58,7 @@ class ServiceList : public QAbstractListModel {
   ~ServiceList() {}
   int rowCount(const QModelIndex& parent = QModelIndex()) const;
   QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+  Q_INVOKABLE QString GetName(int rowIndex);
 
  public slots:  // NOLINT - Viv
   void AddService(const SureFileService& service);

@@ -26,9 +26,8 @@
     <file>views/create_account/LicenseAgreement.qml</file>
     <file>views/create_account/PasswordWarning.qml</file>
     <file>views/settings/AddService.qml</file>
-    <file>views/settings/RemoveService.qml</file>
+    <file>views/settings/RemoveServiceWarning.qml</file>
     <file>views/settings/ServiceOptions.qml</file>
-    <file>views/settings/ServiceSuccess.qml</file>
     <file>views/tour/Page1.qml</file>
     <file>views/tour/Page2.qml</file>
     <file>views/tour/Page3.qml</file>

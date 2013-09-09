@@ -8,6 +8,8 @@ ApplicationWindow {
   property int windowWidth : 350
   property int windowHeight : 450
 
+  onClosing: mainLoader.source = "settings/ServiceOptions.qml"
+
   id: settingsWindow
   title: "SureFile"
   color: "white"
@@ -17,7 +19,6 @@ ApplicationWindow {
   minimumHeight: windowHeight
   maximumWidth: windowWidth
   maximumHeight: windowHeight
-  onClosing: isBusy ? close.accepted = false : mainLoader.source = "settings/ServiceOptions.qml"
 
   Image {
     id: headerLogo
@@ -43,8 +44,7 @@ ApplicationWindow {
       }
       onServiceOperationSuccess: {
         settingsWindow.isBusy = false
-        mainLoader.source = "settings/ServiceSuccess.qml"
-        mainLoader.item.successMessage = message
+        mainLoader.source = "settings/ServiceOptions.qml"
       }
     }
   }

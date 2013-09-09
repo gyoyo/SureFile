@@ -31,15 +31,6 @@ ServiceList::ServiceList(QObject* parent)
     : QAbstractListModel(parent),
       services_() {
   qRegisterMetaType<maidsafe::surefile::qt_ui::SureFileService>("SureFileService");
-
-  // Mock Entries
-  AddService(SureFileService("A", "Some/Path/Folder"));
-  AddService(SureFileService("B", "Some/Path/Folder"));
-  AddService(SureFileService("C", "Some/Path/Folder"));
-  AddService(SureFileService("A", "Some/Path/Folder"));
-  AddService(SureFileService("D", "Some/Path/Folder"));
-  AddService(SureFileService("A", "Some/Path/Folder"));
-  AddService(SureFileService("E", "Some/Path/Folder"));
 }
 
 int ServiceList::rowCount(const QModelIndex& /*parent*/) const {
@@ -59,6 +50,12 @@ QVariant ServiceList::data(const QModelIndex& index, int role) const {
     default:
       return QVariant();
   }
+}
+
+QString ServiceList::GetName(int rowIndex) {
+  if (rowIndex < 0 || rowIndex >= services_.count())
+    return QString();
+  return services_[rowIndex].folder_name_;
 }
 
 void ServiceList::AddService(const SureFileService& service) {

@@ -30,8 +30,7 @@ namespace qt_ui {
 StorePathConverter::StorePathConverter(QObject* parent)
     : QObject(parent),
       display_store_path_(),
-      actual_store_path_(),
-      is_remove_service_(false) {
+      actual_store_path_() {
   setActualStorePath(QUrl::fromLocalFile(QDir::homePath()).toString());
 }
 
@@ -61,29 +60,13 @@ void StorePathConverter::setActualStorePath(const QString& storePathUrl) {
     return;
   }
 
-  if (isRemoveService()) {
-    actual_store_path_ = storePathUrl;
-  } else {
-    QDir dir(QUrl(storePathUrl).toLocalFile());
-    dir.mkdir("SureFile");
-    dir.cd("SureFile");
-    actual_store_path_ = QUrl::fromLocalFile(dir.absolutePath()).toString();
-  }
+  QDir dir(QUrl(storePathUrl).toLocalFile());
+  dir.mkdir("SureFile");
+  dir.cd("SureFile");
+  actual_store_path_ = QUrl::fromLocalFile(dir.absolutePath()).toString();
 
   setDisplayStorePath(QDir::toNativeSeparators(QUrl(actual_store_path_).toLocalFile()));
   emit actualStorePathChanged();
-}
-
-bool StorePathConverter::isRemoveService() const {
-  return is_remove_service_;
-}
-
-void StorePathConverter::setIsRemoveService(bool isServiceTypeRemove) {
-  if (is_remove_service_ == isServiceTypeRemove)
-    return;
-
-  is_remove_service_ = isServiceTypeRemove;
-  emit isRemoveServiceChanged();
 }
 
 }  // namespace qt_ui

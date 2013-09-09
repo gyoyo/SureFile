@@ -66,7 +66,7 @@ class APIModel : public QObject {
 
   Q_INVOKABLE bool CanCreateAccount();
   void AddService(const QString& alias, const QString& path);
-  void RemoveService(const QString& path);
+  void RemoveService(const QString& alias);
 
   void ParseConfigurationFileError();
   void AddServiceRequested();

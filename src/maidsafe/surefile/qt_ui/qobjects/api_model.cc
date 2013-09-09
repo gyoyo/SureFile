@@ -102,9 +102,10 @@ void APIModel::AddService(const QString& alias, const QString& path) {
   emit AddToServiceList(SureFileService(alias, QDir::toNativeSeparators(path)));
 }
 
-void APIModel::RemoveService(const QString& path) {
+void APIModel::RemoveService(const QString& alias) {
   try {
-    if (!surefile_api_->RemoveService(QDir(path).dirName().toStdString())) {
+    QThread::sleep(3);  // Mock - Remove Me
+    if (!surefile_api_->RemoveService(alias.toStdString())) {
       emit removeServiceErrorRaised(tr("Unable to remove service"));
       return;
     }
@@ -115,7 +116,7 @@ void APIModel::RemoveService(const QString& path) {
   }
 
   emit serviceOperationSuccess(tr("Service successfully removed"));
-  emit RemoveFromServiceList(QDir(path).dirName());
+  emit RemoveFromServiceList(alias);
 }
 
 void APIModel::ParseConfigurationFileError() {

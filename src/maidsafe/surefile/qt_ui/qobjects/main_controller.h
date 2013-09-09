@@ -45,7 +45,7 @@ class MainController : public QObject {
   Q_INVOKABLE void CreateAccount();
   Q_INVOKABLE void Login();
   Q_INVOKABLE void AddService(const QString& alias, const QString& path);
-  Q_INVOKABLE void RemoveService(const QString& path);
+  Q_INVOKABLE void RemoveService(const QString& alias);
 
  protected:
   bool eventFilter(QObject* object, QEvent* event);

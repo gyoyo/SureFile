@@ -65,8 +65,8 @@ void MainController::AddService(const QString& alias, const QString& path) {
   api_model_->AddService(alias, path);
 }
 
-void MainController::RemoveService(const QString& path) {
-  QtConcurrent::run(api_model_.get(), &APIModel::RemoveService, path);
+void MainController::RemoveService(const QString& alias) {
+  QtConcurrent::run(api_model_.get(), &APIModel::RemoveService, alias);
 }
 
 bool MainController::eventFilter(QObject* object, QEvent* event) {
