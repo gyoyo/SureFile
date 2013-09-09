@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.0
 import SureFile 1.0
 
 ColumnLayout {
-  spacing: 20
+  spacing: 30
   anchors.fill: parent
 
   StorePathConverter {
@@ -34,7 +34,7 @@ ColumnLayout {
   }
 
   ColumnLayout {
-    spacing: 20
+    spacing: 30
     Layout.fillWidth: true
 
     TextField {
@@ -53,7 +53,7 @@ ColumnLayout {
       horizontalAlignment: Qt.AlignHCenter
     }
     Button {
-      text: qsTr("Edit")
+      text: qsTr("Change")
       Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
       Layout.alignment: Qt.AlignHCenter
       onClicked: {
