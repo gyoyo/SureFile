@@ -31,12 +31,10 @@ ApplicationWindow {
     id: mainLoader
     source: "settings/ServiceOptions.qml"
     anchors.fill: parent
-    onItemChanged: {
-      mainLoader.item.anchors.leftMargin = loaderMargin
-      mainLoader.item.anchors.topMargin = loaderMargin + headerLogo.height + 20
-      mainLoader.item.anchors.rightMargin = loaderMargin
-      mainLoader.item.anchors.bottomMargin = loaderMargin
-    }
+    anchors.topMargin: loaderMargin + headerLogo.height
+    anchors.bottomMargin: loaderMargin
+    anchors.leftMargin: loaderMargin
+    anchors.rightMargin: loaderMargin
     Connections {
       target: apiModel
       onShowAddServiceSettings: {

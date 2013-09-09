@@ -9,25 +9,11 @@ ColumnLayout {
   spacing: 20
   anchors.fill: parent
 
-  StorePathConverter {
-    id: storePathConverter
-    isRemoveService: true
-    Component.onCompleted: storePathConverter.actualStorePath = ""
-  }
-
   // Following bugs seem to occur in debug builds(Win-8) very frequently
   // QtBug: https://bugreports.qt-project.org/browse/QTBUG-32494
   // QtBug: https://bugreports.qt-project.org/browse/QTBUG-32860
   // QtBug: https://bugreports.qt-project.org/browse/QTBUG-32558
   // QtBug: https://bugreports.qt-project.org/browse/QTBUG-32821
-  FileDialog {
-    id: fileDialog
-    selectFolder: true
-    onAccepted: {
-      errorMessageLabel.opacity = 0
-      storePathConverter.actualStorePath = fileUrl
-    }
-  }
 
   Item {
     Layout.fillHeight: true
@@ -103,7 +89,8 @@ ColumnLayout {
     Layout.alignment: Qt.AlignHCenter
     onClicked: {
       settingsWindow.isBusy = true
-      mainController.RemoveService(storePathConverter.displayStorePath)
+      //mainController.RemoveService(storePathConverter.displayStorePath)
+      mainLoader.source = "settings/AddService.qml"
     }
   }
 }

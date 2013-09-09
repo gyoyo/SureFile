@@ -26,44 +26,36 @@ ColumnLayout {
       storePathConverter.actualStorePath = fileUrl
     }
   }
-
-  Item {
-    Layout.fillHeight: true
+  Label {
+    text: qsTr("Name your Store Path")
+    font.weight: Font.Bold
+    font.pixelSize: 18
+    Layout.alignment: Qt.AlignHCenter
   }
 
-  GridLayout {
-    columns: 3
+  ColumnLayout {
+    spacing: 20
     Layout.fillWidth: true
 
-    Label {
-      text: "Name"
-      Layout.column: 0
-    }
     TextField {
       id: aliasBox
-      placeholderText: qsTr("Folder Name")
-      Layout.column: 1
-      Layout.columnSpan: 2
-      Layout.fillWidth: true
+      placeholderText: qsTr("Name your Store Path")
       onTextChanged: errorMessageLabel.opacity = 0
-    }
-    Label {
-      text: "Path"
-      Layout.column: 0
-      Layout.row: 1
+      horizontalAlignment: Qt.AlignHCenter
+      Layout.alignment: Qt.AlignHCenter
+      Layout.preferredWidth: aliasBox.implicitWidth * 2
     }
     Label {
       id: pathField
       text: storePathConverter.displayStorePath
       elide: Text.ElideMiddle
-      Layout.column: 1
-      Layout.row: 1
       Layout.fillWidth: true
+      horizontalAlignment: Qt.AlignHCenter
     }
     Button {
       text: qsTr("Edit")
-      Layout.column: 2
-      Layout.row: 1
+      Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
+      Layout.alignment: Qt.AlignHCenter
       onClicked: {
         // Setting folder uri does not seem to work on Windows-8
         // Might be related to QTBUG-29814
