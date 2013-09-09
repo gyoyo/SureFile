@@ -58,20 +58,6 @@ ColumnLayout {
       }
   }
 
-  Image {
-    source: "../images/loading.png"
-    opacity: apiModel.operationState == APIModel.Progress ? 1 : 0
-    Layout.alignment: Qt.AlignHCenter
-    NumberAnimation on rotation {
-      from: 0
-      to: 360
-      running: apiModel.operationState == APIModel.Progress
-      loops: Animation.Infinite
-      duration: 900
-    }
-  }
-
-
   RowLayout {
     Layout.alignment: Qt.AlignHCenter
     Button {
