@@ -46,13 +46,7 @@ APIModel::APIModel(QObject* parent)
       std::bind(&APIModel::BackEndRenameServiceRequested, this, args::_1, args::_2);
   surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
 
-  std::string cbfs_key;
-#ifdef CBFS_APPLICATION_KEY
-  cbfs_key = BOOST_PP_STRINGIZE(CBFS_APPLICATION_KEY);
-#endif
-
-  // TODO(Brian): Remove following comment once surefile-lib is updated
-  surefile_api_.reset(new SureFile(surefile_slots /*, cbfs_key*/));
+  surefile_api_.reset(new SureFile(surefile_slots));
 }
 
 APIModel::OperationState APIModel::operationState() const {
@@ -126,8 +120,11 @@ bool APIModel::CreateAccount() {
                                  character.toStdString(),
                                  kConfirmationPassword);
     }
-
-    surefile_api_->CreateUser();
+    std::string product_id;
+#ifdef CBFS_APPLICATION_KEY
+    product_id = BOOST_PP_STRINGIZE(CBFS_APPLICATION_KEY);
+#endif
+    surefile_api_->CreateUser(product_id);
   } catch(const surefile_error& error_code) {
     setPassword(QString());
     setConfirmPassword(QString());
@@ -155,8 +152,11 @@ bool APIModel::Login() {
     foreach(QString character, password()) {
       surefile_api_->InsertInput(i++, character.toStdString(), kPassword);
     }
-
-    surefile_api_->Login();
+    std::string product_id;
+#ifdef CBFS_APPLICATION_KEY
+    product_id = BOOST_PP_STRINGIZE(CBFS_APPLICATION_KEY);
+#endif
+    surefile_api_->Login(product_id);
   } catch(const surefile_error&) {
     setPassword(QString());
     setOperationState(APIModel::Error);

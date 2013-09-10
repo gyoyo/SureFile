@@ -77,7 +77,7 @@
   !define MUI_ABORTWARNING
   !define MUI_HEADERIMAGE
   !define MUI_HEADERIMAGE_LEFT
-  @CPACK_NSIS_EXTRA_INSTALL_COMMANDS@
+  @CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS@
   !define MUI_WELCOMEPAGE_TITLE "Welcome to the MaidSafe SureFile ${VERSION} Setup Wizard"
   !define MUI_WELCOMEPAGE_TEXT "SureFile mounts a virtual drive that encrypts your data to any location you choose, be it to a network, shared directory or your local drive. $\r$\n$\r$\nClick Next to install SureFile..."
   !insertmacro MUI_PAGE_WELCOME
@@ -587,7 +587,7 @@ Section -post
   DetailPrint "Installing filesystem driver..."
   SetDetailsPrint listonly
   Push $0
-  nsExec::ExecToStack '"$INSTDIR\cbfs_driver.exe" install @CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS@'
+  nsExec::ExecToStack '"$INSTDIR\cbfs_driver.exe" install @CPACK_NSIS_EXTRA_INSTALL_COMMANDS@'
   Pop $0
   IntCmp $0 0 no_reboot ""
   SetRebootFlag true
