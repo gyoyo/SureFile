@@ -44,7 +44,6 @@ MainController::MainController(QObject* parent)
       service_list_(new ServiceList),
       system_tray_(new SystemTrayIcon),
       future_watcher_() {
-  // qmlRegisterType<PasswordBox>("SureFile", 1, 0, "PasswordBoxHandler");
   qmlRegisterType<APIModel>("SureFile", 1, 0, "APIModel");
   qmlRegisterType<StorePathConverter>("SureFile", 1, 0, "StorePathConverter");
   installEventFilter(this);
@@ -121,7 +120,9 @@ void MainController::CreateAccountCompleted() {
 
 void MainController::LoginCompleted() {
   disconnect(&future_watcher_, SIGNAL(finished()), this, SLOT(LoginCompleted()));
-  InitialisePostLogin();
+  if (!InitialisePostLogin())
+    return;
+  api_model_->PopulateServiceList();
 }
 
 void MainController::ParseConfigurationFileError() {

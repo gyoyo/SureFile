@@ -57,6 +57,7 @@ class APIModel : public QObject {
   explicit APIModel(QObject* parent = 0);
   ~APIModel() {}
 
+  // NPC Helper Functions
   OperationState operationState() const;
   void setOperationState(const OperationState& operationState);
   QString password() const;
@@ -64,16 +65,22 @@ class APIModel : public QObject {
   QString confirmPassword() const;
   void setConfirmPassword(const QString& confirmPassword);
 
+  // QML invokable functions
   Q_INVOKABLE bool CanCreateAccount();
-  void AddService(const QString& alias, const QString& path);
-  void RemoveService(const QString& alias);
 
+  // SureFile-Lib Slots
   void ParseConfigurationFileError();
-  void AddServiceRequested();
-  void ServiceRenamed(const std::string& old_name, const std::string& new_name);
+  void BackEndAddServiceRequested();
+  void BackEndRemoveServiceRequested(const std::string& folder_name);
+  void BackEndRenameServiceRequested(const std::string& old_name, const std::string& new_name);
+
+  // MainController invokable functions
   bool CreateAccount();
   bool Login();
+  void AddService(const QString& alias, const QString& path);
+  void RemoveService(const QString& alias);
   QString MountPath();
+  void PopulateServiceList();
 
  signals:
   // NPC Signals
@@ -85,7 +92,7 @@ class APIModel : public QObject {
   void showAddServiceSettings();
   void addServiceErrorRaised(const QString& errorMessage);
   void removeServiceErrorRaised(const QString& errorMessage);
-  void serviceOperationSuccess(const QString& message);
+  void serviceOperationSuccess();
   void loginErrorRaised(const QString& errorMessage);
   void createAccountErrorRaised(const QString& errorMessage);
 

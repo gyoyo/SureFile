@@ -24,6 +24,8 @@
 #include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
 #include "maidsafe/surefile/qt_ui/qobjects/service_list.h"
 
+namespace args = std::placeholders;
+
 namespace maidsafe {
 
 namespace surefile {
@@ -37,9 +39,12 @@ APIModel::APIModel(QObject* parent)
       confirm_password_(),
       surefile_api_() {
   Slots surefile_slots;
-  surefile_slots.on_service_added = std::bind(&APIModel::AddServiceRequested, this);
+  surefile_slots.on_service_added = std::bind(&APIModel::BackEndAddServiceRequested, this);
+  surefile_slots.on_service_removed =
+      std::bind(&APIModel::BackEndRemoveServiceRequested, this, args::_1);
+  surefile_slots.on_service_renamed =
+      std::bind(&APIModel::BackEndRenameServiceRequested, this, args::_1, args::_2);
   surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
-  // Connect to ServiceRenamed() from here with surefile_lib slots
   surefile_api_.reset(new SureFile(surefile_slots));
 }
 
@@ -83,51 +88,20 @@ bool APIModel::CanCreateAccount() {
   return surefile_api_->CanCreateUser();
 }
 
-void APIModel::AddService(const QString& alias, const QString& path) {
-  try {
-    surefile_api_->AddService(path.toStdString(), alias.toStdString());
-  } catch(const surefile_error& error_code) {
-    if (error_code.code() == make_error_code(SureFileErrors::invalid_service)) {
-      emit addServiceErrorRaised(tr("Invalid Name or Path"));
-    } else if (error_code.code() == make_error_code(SureFileErrors::duplicate_service)) {
-      emit addServiceErrorRaised(tr("Duplicate Name or Path"));
-    }
-    return;
-  } catch(...) {
-    emit addServiceErrorRaised(tr("SureFile cannot store data in this chosen location"));
-    return;
-  }
-
-  emit serviceOperationSuccess(tr("Service successfully added"));
-  emit AddToServiceList(SureFileService(alias, QDir::toNativeSeparators(path)));
-}
-
-void APIModel::RemoveService(const QString& alias) {
-  try {
-    QThread::sleep(3);  // Mock - Remove Me
-    if (!surefile_api_->RemoveService(alias.toStdString())) {
-      emit removeServiceErrorRaised(tr("Unable to remove service"));
-      return;
-    }
-  } catch(...) {
-    emit UnhandledException();
-    QtLog("Unknown Exception");
-    return;
-  }
-
-  emit serviceOperationSuccess(tr("Service successfully removed"));
-  emit RemoveFromServiceList(alias);
-}
-
 void APIModel::ParseConfigurationFileError() {
   emit OnParseConfigurationFileError();
 }
 
-void APIModel::AddServiceRequested() {
+void APIModel::BackEndAddServiceRequested() {
   emit showAddServiceSettings();
 }
 
-void APIModel::ServiceRenamed(const std::string& old_name, const std::string& new_name) {
+void APIModel::BackEndRemoveServiceRequested(const std::string& folder_name) {
+  emit RemoveFromServiceList(QString::fromStdString(folder_name));
+}
+
+void APIModel::BackEndRenameServiceRequested(const std::string& old_name,
+                                             const std::string& new_name) {
   emit ModifyItemInServiceList(QString::fromStdString(old_name), QString::fromStdString(new_name));
 }
 
@@ -191,8 +165,50 @@ bool APIModel::Login() {
   return true;
 }
 
+void APIModel::AddService(const QString& alias, const QString& path) {
+  try {
+    surefile_api_->AddService(path.trimmed().toStdString(), alias.trimmed().toStdString());
+  } catch(const surefile_error& error_code) {
+    if (error_code.code() == make_error_code(SureFileErrors::invalid_service)) {
+      emit addServiceErrorRaised(tr("Invalid Name or Path"));
+    } else if (error_code.code() == make_error_code(SureFileErrors::duplicate_service)) {
+      emit addServiceErrorRaised(tr("Duplicate Name or Path"));
+    }
+    return;
+  } catch(...) {
+    emit addServiceErrorRaised(tr("SureFile cannot store data in this chosen location"));
+    return;
+  }
+
+  emit serviceOperationSuccess();
+  emit AddToServiceList(SureFileService(alias, QDir::toNativeSeparators(path)));
+}
+
+void APIModel::RemoveService(const QString& alias) {
+  try {
+    if (!surefile_api_->RemoveService(alias.trimmed().toStdString())) {
+      emit removeServiceErrorRaised(tr("Unable to remove service"));
+      return;
+    }
+  } catch(...) {
+    emit UnhandledException();
+    QtLog("Unknown Exception");
+    return;
+  }
+
+  emit serviceOperationSuccess();
+}
+
 QString APIModel::MountPath() {
   return QString::fromStdString(surefile_api_->mount_path());
+}
+
+void APIModel::PopulateServiceList() {
+  std::map<std::string, std::string> service_map(surefile_api_->service_pairs());
+  for (auto it(service_map.begin()); it != service_map.end(); ++it) {
+    emit AddToServiceList(
+        SureFileService(QString::fromStdString((*it).second), QString::fromStdString((*it).first)));
+  }
 }
 
 }  // namespace qt_ui
