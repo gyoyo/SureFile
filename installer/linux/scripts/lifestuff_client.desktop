@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=2.0
+Type=Application
+Categories=Network;
+Name=LifeStuff-GUI Client
+Comment=Secure P2P Lifesuff Application
+Exec=/usr/bin/lifestuff
+Icon=/usr/share/maidsafe/lifestuff/resources/icons/lifestuff.png
+Terminal=false

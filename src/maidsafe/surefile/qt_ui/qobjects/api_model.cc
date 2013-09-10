@@ -45,7 +45,14 @@ APIModel::APIModel(QObject* parent)
   surefile_slots.on_service_renamed =
       std::bind(&APIModel::BackEndRenameServiceRequested, this, args::_1, args::_2);
   surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
-  surefile_api_.reset(new SureFile(surefile_slots));
+
+  std::string cbfs_key;
+#ifdef CBFS_APPLICATION_KEY
+  cbfs_key = BOOST_PP_STRINGIZE(CBFS_APPLICATION_KEY);
+#endif
+
+  // TODO(Brian): Remove following comment once surefile-lib is updated
+  surefile_api_.reset(new SureFile(surefile_slots /*, cbfs_key*/));
 }
 
 APIModel::OperationState APIModel::operationState() const {

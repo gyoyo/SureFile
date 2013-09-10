@@ -45,6 +45,7 @@ if(NOT MaidSafeExport)
 else()
   get_filename_component(ExportDir "${MaidSafeExport}" PATH)
   get_filename_component(MAIDSAFE_BINARY_DIR "${ExportDir}" PATH CACHE)
+  file(TO_CMAKE_PATH ${MAIDSAFE_BINARY_DIR} MAIDSAFE_BINARY_DIR)
 endif()
 
 include(${MaidSafeExport})
@@ -266,4 +267,15 @@ endforeach()
 #==================================================================================================#
 if(MaidsafeTesting)
   add_style_test()
+endif()
+
+
+###################################################################################################
+# Installer                                                                                       #
+###################################################################################################
+if(${PACKAGE_BUILD})
+  set(CBFS_APPLICATION_KEY "MaidSafe-SureFile")
+  add_definitions(-DCBFS_APPLICATION_KEY=${CBFS_APPLICATION_KEY})
+  include(surefile_package.cmake)
+  include(CPack)
 endif()
