@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.0
 import SureFile 1.0
 
 ColumnLayout {  
-  spacing: 20
+  spacing: 10
   anchors.fill: parent
 
   Label {
@@ -16,12 +16,18 @@ ColumnLayout {
     Layout.alignment: Qt.AlignHCenter
   }
 
+  Item {
+    Layout.preferredHeight: 2
+  }
+
   TableView {
     id: serviceTableView
     model: serviceListModel
     enabled: !settingsWindow.isBusy
     Layout.fillWidth: true
     Layout.fillHeight: true
+    //height: 300
+    //Layout.minimumHeight: 100
 
     TableViewColumn {
       role: "name"

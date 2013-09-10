@@ -8,31 +8,42 @@ import SureFile 1.0
 ColumnLayout {
   property string folderName : ""
 
-  spacing: 20
+  spacing: 25
   anchors.fill: parent
 
   Label {
     text: qsTr("You are about to delete")
+    font.bold: true
+    font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
   }
 
   Label {
     text: folderName
+    font.bold: true
+    font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
   }
 
   Label {
-    text: qsTr("All of the data stored in this location will be permanently deleted")
+    text: qsTr("All of the data stored in this location will be permanently deleted.")
+    color: "crimson"
     wrapMode: TextEdit.WordWrap
+    font.pixelSize: 14
     Layout.maximumWidth: parent.width
     horizontalAlignment: Qt.AlignHCenter
   }
 
   Label {
-    text: qsTr("Are you sure you want to delete this store path?")
+    text: qsTr("Are you sure you want to <br>delete this store path?")
     wrapMode: TextEdit.WordWrap
+    font.pixelSize: 14
     Layout.maximumWidth: parent.width
     horizontalAlignment: Qt.AlignHCenter
+  }
+
+  Item {
+    Layout.fillHeight: true
   }
 
   RowLayout {
