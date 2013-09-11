@@ -26,8 +26,6 @@ ColumnLayout {
     enabled: !settingsWindow.isBusy
     Layout.fillWidth: true
     Layout.fillHeight: true
-    //height: 300
-    //Layout.minimumHeight: 100
 
     TableViewColumn {
       role: "name"
