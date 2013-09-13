@@ -47,9 +47,10 @@
 #ifdef MAIDSAFE_LINUX
 #  pragma GCC diagnostic push
 #  pragma GCC diagnostic ignored "-Weffc++"
-#  pragma GCC diagnostic ignored "-Wnested-anon-types"
 #ifndef __clang__
 #  pragma GCC diagnostic ignored "-pedantic"
+#else
+#  pragma GCC diagnostic ignored "-Wnested-anon-types"
 #endif
 #  pragma GCC diagnostic ignored "-Wstrict-overflow"
 #  pragma GCC diagnostic ignored "-Wfloat-equal"
