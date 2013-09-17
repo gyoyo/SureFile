@@ -6,8 +6,11 @@ import QtQuick.Layouts 1.0
 import SureFile 1.0
 
 ColumnLayout {  
-  spacing: 10
-  anchors.fill: parent
+  spacing: 5
+
+  Item {
+    Layout.preferredHeight: 17
+  }
 
   Label {
     text: qsTr("Manage Store Paths")
@@ -17,7 +20,7 @@ ColumnLayout {
   }
 
   Item {
-    Layout.preferredHeight: 2
+    Layout.preferredHeight: 7
   }
 
   TableView {
@@ -41,37 +44,39 @@ ColumnLayout {
     onSectionChanged: errorMessageLabel.opacity = 0
   }
 
-  Label {
-    id: errorMessageLabel
-    color: "crimson"
-    opacity: 0
-    Layout.alignment: Qt.AlignHCenter
-    Connections {
-      target: apiModel
-      onRemoveServiceErrorRaised: {
-        settingsWindow.isBusy = false
-        errorMessageLabel.text = errorMessage
-        errorMessageLabel.opacity = 1
-        settingsWindow.show()
+  Item {
+    Layout.fillWidth: true
+    Layout.preferredHeight: Math.max(errorMessageLabel.implicitHeight, progressImage.implicitHeight)
+
+    Label {
+      id: errorMessageLabel
+      color: "crimson"
+      opacity: 0
+      anchors.centerIn: parent
+      Connections {
+        target: apiModel
+        onRemoveServiceErrorRaised: {
+          settingsWindow.isBusy = false
+          errorMessageLabel.opacity = 1
+          errorMessageLabel.text = errorMessage
+          settingsWindow.show()
+        }
       }
     }
-  }
 
-  Image {
-    source: "../../images/loading.png"
-    opacity: settingsWindow.isBusy ? 1 : 0
-    Layout.alignment: Qt.AlignHCenter
-    NumberAnimation on rotation {
-      from: 0
-      to: 360
-      running: settingsWindow.isBusy
-      loops: Animation.Infinite
-      duration: 900
+    Image {
+      id: progressImage
+      source: "../../images/loading.png"
+      opacity: settingsWindow.isBusy ? 1 : 0
+      anchors.centerIn: parent
+      NumberAnimation on rotation {
+        from: 0
+        to: 360
+        running: settingsWindow.isBusy
+        loops: Animation.Infinite
+        duration: 900
+      }
     }
-  }
-
-  Item {
-    Layout.fillHeight: true
   }
 
   RowLayout {

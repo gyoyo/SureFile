@@ -19,33 +19,50 @@ ApplicationWindow {
   minimumHeight: windowHeight
   maximumWidth: windowWidth
   maximumHeight: windowHeight
+  GridLayout {
+    rows: 2
+    columns: 3
 
-  Image {
-    id: headerLogo
-    source: "qrc:/images/app_header.svg"
-    fillMode: Image.PreserveAspectFit
-  }
+    Image {
+      id: headerLogo
+      source: "qrc:/images/app_header.svg"
+      fillMode: Image.PreserveAspectFit
+      Layout.row: 0
+      Layout.column: 0
+      Layout.columnSpan: 3
+    }
+    Item {
+      Layout.row: 1
+      Layout.column: 0
+      Layout.fillHeight: true
+      Layout.preferredWidth: loaderMargin
+    }
 
-  Loader {
-    property int loaderMargin : 30
-
-    id: mainLoader
-    source: "settings/ServiceOptions.qml"
-    anchors.fill: parent
-    anchors.topMargin: loaderMargin + headerLogo.height
-    anchors.bottomMargin: loaderMargin
-    anchors.leftMargin: loaderMargin
-    anchors.rightMargin: loaderMargin
-    Connections {
-      target: apiModel
-      onShowAddServiceSettings: {
-        mainLoader.source = "settings/AddService.qml"
-        settingsWindow.show()
+    Loader {
+      id: mainLoader
+      source: "settings/ServiceOptions.qml"
+      Layout.row: 1
+      Layout.column: 1
+      Layout.fillHeight: true
+      Layout.fillWidth: true
+      Connections {
+        target: apiModel
+        onShowAddServiceSettings: {
+          mainLoader.source = "settings/AddService.qml"
+          settingsWindow.show()
+        }
+        onServiceOperationSuccess: {
+          settingsWindow.isBusy = false
+          mainLoader.source = "settings/ServiceOptions.qml"
+        }
       }
-      onServiceOperationSuccess: {
-        settingsWindow.isBusy = false
-        mainLoader.source = "settings/ServiceOptions.qml"
-      }
+    }
+
+    Item {
+      Layout.row: 1
+      Layout.column: 2
+      Layout.fillHeight: true
+      Layout.preferredWidth: loaderMargin
     }
   }
 }

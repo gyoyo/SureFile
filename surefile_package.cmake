@@ -60,9 +60,9 @@ file(REMOVE ${CPACK_CONFIG_CMAKE_FILES})
 
 set(CPACK_PACKAGE_VENDOR "MaidSafe")
 set(CPACK_PACKAGE_CONTACT "support@maidsafe.net")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY " SureFile")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "SureFile")
 if(NOT APPLE)
-  set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+  set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/installer/shared/eula.txt")
 endif()
 
 if(UNIX AND NOT APPLE)
@@ -119,8 +119,17 @@ elseif(APPLE)#TODO
 elseif(WIN32)
   set(CPACK_PACKAGE_NAME "SureFile")
   # Set the CMAKE_MODULE_PATH to include the path to our modified NSIS.template.in file before the default CMake one.
-  set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/installer/windows ${CMAKE_MODULE_PATH})
+  set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/installer/win ${CMAKE_MODULE_PATH})
   install(FILES ${PACKAGE_BINARY_DIR}/surefile.exe DESTINATION .)
+  find_file(CBFSDriver  NAMES cbfs_driver.exe
+                        PATHS ${MAIDSAFE_BINARY_DIR}/Release/
+                        NO_DEFAULT_PATH)
+  if(NOT CBFSDriver)
+    set(ErrorMessage "\nCannot find cbfs_driver.exe in \"MAIDSAFE_BINARY_DIR/Release\" directory. ")
+    set(ErrorMessage "${ErrorMessage}Make sure the cbfs_driver target is built in Release mode.\n")
+    message(FATAL_ERROR "${ErrorMessage}")
+  endif()
+
   install(FILES ${MAIDSAFE_BINARY_DIR}/Release/cbfs_driver.exe DESTINATION .)
   install(FILES ${Cbfs_INCLUDE_DIR}/../../../Drivers/cbfs.cab DESTINATION driver)
   if(CMAKE_CL_64)
@@ -132,29 +141,30 @@ elseif(WIN32)
   install(FILES ${MSVCP110} DESTINATION .)
   install(FILES ${MSVCR110} DESTINATION .)
   install(FILES ${VCCORLIB110} DESTINATION .)
-  
+
+  # TODO(Viv) Remove un-wanted dependencies of Qt dll's from being packaged with installer
   foreach(QtReleaseDll ${QtLibsRelease})
     file(TO_CMAKE_PATH ${QtReleaseDll} QtReleaseDll)
     install(FILES ${QtReleaseDll} DESTINATION .)
-  endforeach()  
+  endforeach()
 
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "MaidSafe\\\\SureFile")
   set(CPACK_GENERATOR NSIS)
   set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "SureFile")
-  set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/installer/common/icons/WinLinux/install_icon.ico")
-  set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/installer/common/icons/WinLinux/uninstall_icon.ico")
+  set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/installer/shared/icons/win/install.ico")
+  set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/installer/shared/icons/win/uninstall.ico")
   set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "
-    !define MUI_HEADERIMAGE_BITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\common\\\\images\\\\top_left_image.bmp\\\"
-    !define MUI_HEADERIMAGE_UNBITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\common\\\\images\\\\top_left_image.bmp\\\"
-    !define MUI_WELCOMEFINISHPAGE_BITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\common\\\\images\\\\Installer-Image-Beta.bmp\\\"
-    !define MUI_UNWELCOMEFINISHPAGE_BITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\common\\\\images\\\\Installer-Image-Beta.bmp\\\"
+    !define MUI_HEADERIMAGE_BITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\win\\\\images\\\\header_image.bmp\\\"
+    !define MUI_HEADERIMAGE_UNBITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\win\\\\images\\\\header_image.bmp\\\"
+    !define MUI_WELCOMEFINISHPAGE_BITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\win\\\\images\\\\side_banner.bmp\\\"
+    !define MUI_UNWELCOMEFINISHPAGE_BITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\win\\\\images\\\\side_banner.bmp\\\"
   ")
   set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CBFS_APPLICATION_KEY}")
-  set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "")
+  set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CBFS_APPLICATION_KEY}")
   set(CPACK_NSIS_MODIFY_PATH ON)
   set(CPACK_NSIS_DISPLAY_NAME "SureFile")
   set(CPACK_NSIS_PACKAGE_NAME "SureFile")
-  set(CPACK_NSIS_INSTALLED_ICON_NAME "surefile.exe")
+  set(CPACK_NSIS_INSTALLED_ICON_NAME "Surefile.exe")
   set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
   set(CPACK_NSIS_HELP_LINK "http://www.maidsafe.net")
   set(CPACK_NSIS_URL_INFO_ABOUT "http://dev.maidsafe.net/surefile") # Switch me to live link

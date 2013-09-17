@@ -8,8 +8,11 @@ import SureFile 1.0
 ColumnLayout {
   property string folderName : ""
 
-  spacing: 25
-  anchors.fill: parent
+  spacing: 24
+
+  Item {
+   Layout.preferredHeight: 1
+  }
 
   Label {
     text: qsTr("You are about to delete")
@@ -46,8 +49,13 @@ ColumnLayout {
     Layout.fillHeight: true
   }
 
+  Item {
+    Layout.fillHeight: true
+  }
+
   RowLayout {
     Layout.alignment: Qt.AlignHCenter
+
     Button {
       text: qsTr("Yes")
       Layout.alignment: Qt.AlignHCenter

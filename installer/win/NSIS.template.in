@@ -78,8 +78,9 @@
   !define MUI_HEADERIMAGE
   !define MUI_HEADERIMAGE_LEFT
   @CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS@
-  !define MUI_WELCOMEPAGE_TITLE "Welcome to the MaidSafe SureFile ${VERSION} Setup Wizard"
-  !define MUI_WELCOMEPAGE_TEXT "SureFile mounts a virtual drive that encrypts your data to any location you choose, be it to a network, shared directory or your local drive. $\r$\n$\r$\nClick Next to install SureFile..."
+  ;${VERSION}
+  !define MUI_WELCOMEPAGE_TITLE "Placeholder Title for installation"
+  !define MUI_WELCOMEPAGE_TEXT "Placeholder Description for program$\r$\n$\r$\nClick Next to install SureFile..."
   !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE "@CPACK_RESOURCE_FILE_LICENSE@"
   !define MUI_PAGE_CUSTOMFUNCTION_SHOW PreInstallPage
@@ -510,6 +511,14 @@ FunctionEnd
 
 Section -post
 
+; Interim MessageBox to show current app status
+  MessageBox MB_OKCANCEL|MB_USERICON|MB_DEFBUTTON1 "Current Issues:$\r$\n1. Tour Section images not updated$\r$\n2. Folder select dialog box for store path might crash.$\r$\n3. Text kerning is incorrect in Win-8.$\r$\n4. Render issue for buttons in Win-8 with items when first visible being laid out incorrectly" IDCANCEL cancel IDOK ok
+  
+  cancel:
+    Quit
+    
+  ok:
+  
   SetDetailsPrint textonly
   DetailPrint "Installing SureFile Files..."
   SetDetailsPrint listonly
@@ -601,7 +610,7 @@ Section -post
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   SetDetailsPrint both
-
+ 
 SectionEnd
 
 ;--------------------------------
@@ -919,13 +928,11 @@ Section "Uninstall"
   SetDetailsPrint textonly
   DetailPrint "Uninstalling filesystem driver..."
   SetDetailsPrint listonly
-  nsExec::ExecToStack '"$INSTDIR\cbfs_driver.exe" uninstall'
+  nsExec::ExecToStack '"$INSTDIR\cbfs_driver.exe" uninstall @CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS@'
   Pop $0
   IntCmp $0 0 no_reboot ""
   SetRebootFlag true
   no_reboot:
-
-  @CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS@
 
   SetDetailsPrint textonly
   DetailPrint "Deleting registry entries..."

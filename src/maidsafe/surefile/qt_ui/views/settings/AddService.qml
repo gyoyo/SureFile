@@ -7,7 +7,6 @@ import SureFile 1.0
 
 ColumnLayout {
   spacing: 20
-  anchors.fill: parent
 
   StorePathConverter {
     id: storePathConverter
@@ -25,6 +24,10 @@ ColumnLayout {
       errorMessageLabel.opacity = 0
       storePathConverter.actualStorePath = fileUrl
     }
+  }
+
+  Item {
+    Layout.preferredHeight: 2
   }
 
   Label {
