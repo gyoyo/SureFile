@@ -1,0 +1,16 @@
+Win:
+====
+
+1. Tour Section images not updated.
+2. Folder select Dialog box for store path crashes occasionally.
+3. Text kerning is incorrect in Win-8.
+4. Render issue for buttons in Win-8 with items when first visible being laid out incorrectly.
+5. Win-8 Styles are incorrect.
+6. Scrollbar's and Thumbs are incorrect in Win-7 and Win-8.
+
+OSX:
+====
+
+
+Linux:
+======

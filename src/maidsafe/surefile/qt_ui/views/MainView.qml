@@ -34,24 +34,4 @@ ApplicationWindow {
     anchors.rightMargin: loaderMargin
     source: apiModel.CanCreateAccount() ? "CreateAccount.qml" : "Login.qml"
   }
-
-  Tour {
-    id: tourView
-    Connections {
-      target: mainController
-      onShowTour: {
-        tourView.show()
-      }
-    }
-  }
-
-  Settings {
-    id: settingsView
-    Connections {
-      target: mainController
-      onShowSettings: {
-        settingsView.show()
-      }
-    }
-  }
 }

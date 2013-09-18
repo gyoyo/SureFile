@@ -50,10 +50,6 @@ class MainController : public QObject {
  protected:
   bool eventFilter(QObject* object, QEvent* event);
 
- signals:
-  void showTour();
-  void showSettings();
-
  private slots:  // NOLINT - Viv
   void EventLoopStarted();
   void CreateAccountCompleted();
@@ -69,6 +65,8 @@ class MainController : public QObject {
 
   QQmlApplicationEngine* main_engine_;
   QQuickWindow* main_window_;
+  QQuickWindow* settings_window_;
+  QQuickWindow* tour_window_;
   std::unique_ptr<APIModel> api_model_;
   std::unique_ptr<ServiceList> service_list_;
   std::unique_ptr<SystemTrayIcon> system_tray_;

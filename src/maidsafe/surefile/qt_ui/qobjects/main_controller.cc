@@ -40,6 +40,8 @@ MainController::MainController(QObject* parent)
     : QObject(parent),
       main_engine_(),
       main_window_(),
+      settings_window_(),
+      tour_window_(),
       api_model_(),
       service_list_(new ServiceList),
       system_tray_(new SystemTrayIcon),
@@ -88,11 +90,8 @@ void MainController::EventLoopStarted() {
           service_list_.get(),  SLOT(RemoveService(const QString&)));
   connect(api_model_.get(),     SIGNAL(ModifyItemInServiceList(const QString&, const QString&)),
           service_list_.get(),  SLOT(ModifyService(const QString&, const QString&)));
-
   connect(system_tray_.get(),   SIGNAL(OpenDriveRequested()),
           this,                 SLOT(OpenDrive()));
-  connect(system_tray_.get(),   SIGNAL(OpenSettingsRequested()),
-          this,                 SIGNAL(showSettings()));
 
   main_engine_ = new QQmlApplicationEngine();
   auto root_context_ = main_engine_->rootContext();
@@ -100,11 +99,19 @@ void MainController::EventLoopStarted() {
   root_context_->setContextProperty(kAPIModel, api_model_.get());
   root_context_->setContextProperty(kServiceListModel, service_list_.get());
   main_engine_->load(QUrl("qrc:/views/MainView.qml"));
+  main_engine_->load(QUrl("qrc:/views/Settings.qml"));
+  main_engine_->load(QUrl("qrc:/views/Tour.qml"));
   main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(0));
-  if (!main_window_) {
+  settings_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(1));
+  tour_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(2));
+
+  if (!main_window_ || !settings_window_ || !tour_window_) {
     QtLog("App Startup Failed");
     throw new std::exception();
   }
+
+  connect(system_tray_.get(),   SIGNAL(OpenSettingsRequested()),
+          settings_window_,     SLOT(show()));
 
   main_window_->show();
   system_tray_->show();
@@ -115,7 +122,7 @@ void MainController::CreateAccountCompleted() {
   if (!InitialisePostLogin())
     return;
   system_tray_->showMessage(tr(""), tr("SureFile is running"));
-  emit showTour();
+  tour_window_->show();
 }
 
 void MainController::LoginCompleted() {
@@ -147,13 +154,14 @@ bool MainController::InitialisePostLogin() {
   main_window_->hide();
   system_tray_->SetIsLoggedIn(true);
   qApp->setQuitOnLastWindowClosed(false);
-  // Populate service_list_ here
   return true;
 }
 
 MainController::~MainController() {
   future_watcher_.waitForFinished();
   delete main_window_;
+  delete settings_window_;
+  delete tour_window_;
 }
 
 }  // namespace qt_ui

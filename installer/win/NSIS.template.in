@@ -511,8 +511,8 @@ FunctionEnd
 
 Section -post
 
-; Interim MessageBox to show current app status
-  MessageBox MB_OKCANCEL|MB_USERICON|MB_DEFBUTTON1 "Current Issues:$\r$\n1. Tour Section images not updated$\r$\n2. Folder select dialog box for store path might crash.$\r$\n3. Text kerning is incorrect in Win-8.$\r$\n4. Render issue for buttons in Win-8 with items when first visible being laid out incorrectly" IDCANCEL cancel IDOK ok
+; Interim MessageBox to show known app status
+  MessageBox MB_OKCANCEL|MB_USERICON|MB_DEFBUTTON1 "Known Issues:$\r$\n1. Tour Section images not updated$\r$\n2. Folder select dialog box for store path might crash.$\r$\n3. Text kerning is incorrect in Win-8.$\r$\n4. Render issue for buttons in Win-8 with items when first visible being laid out incorrectly$\r$\n5. Win-8 Styles are incorrect.$\r$\n6. Scrollbar's and Thumbs are incorrect in Win-7 and Win-8." IDCANCEL cancel IDOK ok
   
   cancel:
     Quit

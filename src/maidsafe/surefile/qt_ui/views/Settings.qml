@@ -7,6 +7,7 @@ ApplicationWindow {
   property bool isBusy : false
   property int windowWidth : 350
   property int windowHeight : 450
+  property int leftRightMargin : 30
 
   onClosing: mainLoader.source = "settings/ServiceOptions.qml"
 
@@ -35,7 +36,7 @@ ApplicationWindow {
       Layout.row: 1
       Layout.column: 0
       Layout.fillHeight: true
-      Layout.preferredWidth: loaderMargin
+      Layout.preferredWidth: leftRightMargin
     }
 
     Loader {
@@ -62,7 +63,7 @@ ApplicationWindow {
       Layout.row: 1
       Layout.column: 2
       Layout.fillHeight: true
-      Layout.preferredWidth: loaderMargin
+      Layout.preferredWidth: leftRightMargin
     }
   }
 }

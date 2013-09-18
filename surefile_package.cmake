@@ -142,10 +142,26 @@ elseif(WIN32)
   install(FILES ${MSVCR110} DESTINATION .)
   install(FILES ${VCCORLIB110} DESTINATION .)
 
-  # TODO(Viv) Remove un-wanted dependencies of Qt dll's from being packaged with installer
-  foreach(QtReleaseDll ${QtLibsRelease})
-    file(TO_CMAKE_PATH ${QtReleaseDll} QtReleaseDll)
-    install(FILES ${QtReleaseDll} DESTINATION .)
+  # Required Qt Libraries
+  set(REQUIRED_QT_LIBS  "d3dcompiler_46"
+                        "icudt51"
+                        "icuin51"
+                        "icuuc51"
+                        "libEGL"
+                        "libGLESv2"
+                        "Qt5Concurrent"
+                        "Qt5Core"
+                        "Qt5Gui"
+                        "Qt5Network"
+                        "Qt5Qml"
+                        "Qt5Quick"
+                        "Qt5QuickParticles"
+                        "Qt5Svg"
+                        "Qt5V8"
+                        "Qt5Widgets")
+  file(TO_CMAKE_PATH ${QT_BIN_DIR} QT_BIN_DIR)
+  foreach(REQUIRED_QT_LIB ${REQUIRED_QT_LIBS})
+    install(FILES "${QT_BIN_DIR}/${REQUIRED_QT_LIB}.dll" DESTINATION .)
   endforeach()
 
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "MaidSafe\\\\SureFile")
