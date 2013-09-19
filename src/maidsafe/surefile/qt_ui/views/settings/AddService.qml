@@ -92,7 +92,7 @@ ColumnLayout {
 
     Image {
       id: progressImage
-      source: "../../images/loading.png"
+      source: "../../images/progress.png"
       opacity: settingsWindow.isBusy ? 1 : 0
       anchors.centerIn: parent
       NumberAnimation on rotation {

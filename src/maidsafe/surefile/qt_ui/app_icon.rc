@@ -1,1 +1,1 @@
- IDI_ICON1               ICON    DISCARDABLE     "images\\app_icon_win.ico"
+ IDI_ICON1               ICON    DISCARDABLE     "..\\..\\..\\..\\installer\\shared\\icons\\win\\app_icon.ico"

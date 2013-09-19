@@ -167,8 +167,8 @@ elseif(WIN32)
   set(CPACK_PACKAGE_INSTALL_DIRECTORY "MaidSafe\\\\SureFile")
   set(CPACK_GENERATOR NSIS)
   set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "SureFile")
-  set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/installer/shared/icons/win/install.ico")
-  set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/installer/shared/icons/win/uninstall.ico")
+  set(CPACK_NSIS_MUI_ICON "${CMAKE_SOURCE_DIR}/installer/shared/icons/win/app_icon.ico")
+  set(CPACK_NSIS_MUI_UNIICON "${CMAKE_SOURCE_DIR}/installer/shared/icons/win/app_icon.ico")
   set(CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS "
     !define MUI_HEADERIMAGE_BITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\win\\\\images\\\\header_image.bmp\\\"
     !define MUI_HEADERIMAGE_UNBITMAP \\\"${CMAKE_SOURCE_DIR}\\\\installer\\\\win\\\\images\\\\header_image.bmp\\\"
