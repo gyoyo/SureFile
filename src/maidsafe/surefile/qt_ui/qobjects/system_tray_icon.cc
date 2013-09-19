@@ -33,7 +33,14 @@ SystemTrayIcon::SystemTrayIcon()
     open_drive_(),
     open_settings_(),
     is_logged_in_() {
-  setIcon(QIcon(":/images/surefile_app_mac.png"));
+#ifdef MAIDSAFE_WIN32
+  setIcon(QIcon(":/images/tray_icon_win.png"));
+#elif MAIDSAFE_APPLE
+  setIcon(QIcon(":/images/tray_icon_osx.png"));
+#else
+  setIcon(QIcon(":/images/tray_icon_osx.png"));
+#endif
+
   setToolTip("SureFile");
   open_drive_ = menu_->addAction(tr("Open Drive"), this, SIGNAL(OpenDriveRequested()));
   open_drive_->setVisible(false);

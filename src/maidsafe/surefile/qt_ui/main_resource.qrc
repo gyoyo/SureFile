@@ -2,8 +2,6 @@
   <qresource prefix="/">
     <file>images/app_header.svg</file>
     <file>images/loading.png</file>
-    <file>images/surefile_app_mac.png</file>
-    <file>images/surefile_app_windows.png</file>
     <file>images/tour_header.svg</file>
     <file>images/tour_image_linux_01.png</file>
     <file>images/tour_image_linux_02.png</file>
@@ -15,6 +13,8 @@
     <file>images/tour_image_windows_01.png</file>
     <file>images/tour_image_windows_02.png</file>
     <file>images/tour_image_windows_04.png</file>
+    <file>images/tray_icon_osx.png</file>
+    <file>images/tray_icon_win.png</file>
   </qresource>
   <qresource prefix="/">
     <file>views/MainView.qml</file>
