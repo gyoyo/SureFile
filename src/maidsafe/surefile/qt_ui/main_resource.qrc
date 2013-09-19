@@ -1,20 +1,24 @@
 <RCC>
   <qresource prefix="/">
     <file>images/app_header.svg</file>
-    <file>images/loading.png</file>
+    <file>images/progress.png</file>
     <file>images/tour_header.svg</file>
-    <file>images/tour_image_linux_01.png</file>
-    <file>images/tour_image_linux_02.png</file>
-    <file>images/tour_image_linux_04.png</file>
-    <file>images/tour_image_osx_01.png</file>
-    <file>images/tour_image_osx_02.png</file>
-    <file>images/tour_image_osx_03.png</file>
-    <file>images/tour_image_osx_04.png</file>
-    <file>images/tour_image_windows_01.png</file>
-    <file>images/tour_image_windows_02.png</file>
-    <file>images/tour_image_windows_04.png</file>
     <file>images/tray_icon_osx.png</file>
     <file>images/tray_icon_win.png</file>
+  </qresource>
+  <qresource prefix="/">
+    <file>images/tour/linux/01.png</file>
+    <file>images/tour/linux/02.png</file>
+    <file>images/tour/linux/03.png</file>
+    <file>images/tour/linux/04.png</file>
+    <file>images/tour/osx/01.png</file>
+    <file>images/tour/osx/02.png</file>
+    <file>images/tour/osx/03.png</file>
+    <file>images/tour/osx/04.png</file>
+    <file>images/tour/windows/01.png</file>
+    <file>images/tour/windows/02.png</file>
+    <file>images/tour/windows/03.png</file>
+    <file>images/tour/windows/04.png</file>
   </qresource>
   <qresource prefix="/">
     <file>views/MainView.qml</file>

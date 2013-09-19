@@ -24,7 +24,7 @@ ColumnLayout {
   }
 
   Image {
-    source: "../images/loading.png"
+    source: "../images/progress.png"
     opacity: apiModel.operationState == APIModel.Progress ? 1 : 0
     Layout.alignment: Qt.AlignHCenter
     NumberAnimation on rotation {
