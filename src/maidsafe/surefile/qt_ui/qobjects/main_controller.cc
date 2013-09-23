@@ -38,6 +38,7 @@ namespace qt_ui {
 
 MainController::MainController(QObject* parent)
     : QObject(parent),
+      root_objects_count_(0),
       main_engine_(),
       main_window_(),
       settings_window_(),
@@ -92,6 +93,8 @@ void MainController::EventLoopStarted() {
           service_list_.get(),  SLOT(ModifyService(const QString&, const QString&)));
   connect(system_tray_.get(),   SIGNAL(OpenDriveRequested()),
           this,                 SLOT(OpenDrive()));
+  connect(system_tray_.get(),   SIGNAL(OpenSettingsRequested()),
+          this,                 SLOT(OpenSettings()));
 
   main_engine_ = new QQmlApplicationEngine();
   auto root_context_ = main_engine_->rootContext();
@@ -101,17 +104,14 @@ void MainController::EventLoopStarted() {
   main_engine_->load(QUrl("qrc:/views/MainView.qml"));
   main_engine_->load(QUrl("qrc:/views/Settings.qml"));
   main_engine_->load(QUrl("qrc:/views/Tour.qml"));
-  main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(0));
-  settings_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(1));
-  tour_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(2));
+  main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
+  settings_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
+  tour_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
 
   if (!main_window_ || !settings_window_ || !tour_window_) {
     QtLog("App Startup Failed");
     throw new std::exception();
   }
-
-  connect(system_tray_.get(),   SIGNAL(OpenSettingsRequested()),
-          settings_window_,     SLOT(show()));
 
   main_window_->show();
   system_tray_->show();
@@ -145,6 +145,17 @@ void MainController::UnhandledException() {
 
 void MainController::OpenDrive() {
   QDesktopServices::openUrl(QUrl("file:///" + api_model_->MountPath()));
+}
+
+void MainController::OpenSettings() {
+#ifdef MAIDSAFE_APPLE
+  if (settings_window_)
+    settings_window_->deleteLater();
+  main_engine_->load(QUrl("qrc:/views/Settings.qml"));
+  settings_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
+#endif
+
+  settings_window_->show();
 }
 
 bool MainController::InitialisePostLogin() {

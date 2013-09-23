@@ -146,7 +146,7 @@ bool APIModel::CreateAccount() {
 }
 
 bool APIModel::Login() {
-    setOperationState(APIModel::Progress);
+  setOperationState(APIModel::Progress);
   try {
     int i = 0;
     foreach(QString character, password()) {

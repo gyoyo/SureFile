@@ -57,12 +57,14 @@ class MainController : public QObject {
   void ParseConfigurationFileError();
   void UnhandledException();
   void OpenDrive();
+  void OpenSettings();
 
  private:
   MainController(const MainController&);
   MainController& operator=(const MainController&);
   bool InitialisePostLogin();
 
+  int root_objects_count_;
   QQmlApplicationEngine* main_engine_;
   QQuickWindow* main_window_;
   QQuickWindow* settings_window_;
