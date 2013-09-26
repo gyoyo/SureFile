@@ -33,9 +33,9 @@ SystemTrayIcon::SystemTrayIcon()
     open_drive_(),
     open_settings_(),
     is_logged_in_() {
-#ifdef MAIDSAFE_WIN32
+#if defined MAIDSAFE_WIN32
   setIcon(QIcon(":/images/tray_icon_win.png"));
-#elif MAIDSAFE_APPLE
+#elif defined MAIDSAFE_APPLE
   setIcon(QIcon(":/images/tray_icon_osx.png"));
 #else
   setIcon(QIcon(":/images/tray_icon_osx.png"));
