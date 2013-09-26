@@ -89,6 +89,13 @@ if(WIN32)
   include(maidsafe_find_cbfs)
 endif()
 
+# Set Application Version
+set(CPACK_PACKAGE_VERSION_MAJOR ${ApplicationVersionMajor})
+set(CPACK_PACKAGE_VERSION_MINOR ${ApplicationVersionMinor})
+set(CPACK_PACKAGE_VERSION_PATCH ${ApplicationVersionPatch})
+
+set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+
 #==================================================================================================#
 # Qt library search                                                                                #
 #==================================================================================================#
@@ -185,6 +192,21 @@ target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Q
 
 if(WIN32)
   set_target_properties(surefile PROPERTIES WIN32_EXECUTABLE TRUE)
+elseif(APPLE)
+  set_target_properties(surefile PROPERTIES MACOSX_BUNDLE TRUE)
+
+  execute_process(COMMAND mkdir -p ${CMAKE_BINARY_DIR}/SureFile.app/Contents/Resources)
+  execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/installer/shared/icons/osx/app_icon.icns ${CMAKE_BINARY_DIR}/SureFile.app/Contents/Resources/)
+  execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/installer/shared/eula.txt ${CMAKE_BINARY_DIR}/SureFile.app/Contents/Resources/)
+
+  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_BUNDLE_NAME SureFile)
+  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_GUI_IDENTIFIER "SureFile")
+  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_ICON_FILE app_icon.icns)
+  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_INFO_STRING "${CPACK_PACKAGE_VERSION}, Copyright 2013 MaidSafe")
+  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_SHORT_VERSION_STRING "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}")
+  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_LONG_VERSION_STRING "${CPACK_PACKAGE_VERSION}")
+  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_BUNDLE_VERSION "${CPACK_PACKAGE_VERSION}")
+  set_target_properties(surefile PROPERTIES  MACOSX_BUNDLE_COPYRIGHT "(C) 2013 MaidSafe")
 endif()
 
 rename_outdated_built_exes()
@@ -210,12 +232,6 @@ else(UNIX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-stack-protector")
 endif()
 
-# Set Application Version
-set(CPACK_PACKAGE_VERSION_MAJOR ${ApplicationVersionMajor})
-set(CPACK_PACKAGE_VERSION_MINOR ${ApplicationVersionMinor})
-set(CPACK_PACKAGE_VERSION_PATCH ${ApplicationVersionPatch})
-
-set(CPACK_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 #==================================================================================================#
 # Generate Qt .pro file                                                                            #

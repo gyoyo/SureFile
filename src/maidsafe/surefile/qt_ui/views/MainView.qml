@@ -15,7 +15,7 @@ ApplicationWindow {
   minimumWidth: windowWidth
   minimumHeight: windowHeight
   maximumWidth: windowWidth
-  maximumHeight: windowHeight
+  maximumHeight: Qt.platform.os == "linux" ? windowHeight + 1 : windowHeight
 
   Image {
     id: headerLogo

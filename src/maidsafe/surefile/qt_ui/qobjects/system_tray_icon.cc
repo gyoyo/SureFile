@@ -33,9 +33,9 @@ SystemTrayIcon::SystemTrayIcon()
     open_drive_(),
     open_settings_(),
     is_logged_in_() {
-#ifdef MAIDSAFE_WIN32
+#if defined MAIDSAFE_WIN32
   setIcon(QIcon(":/images/tray_icon_win.png"));
-#elif MAIDSAFE_APPLE
+#elif defined MAIDSAFE_APPLE
   setIcon(QIcon(":/images/tray_icon_osx.png"));
 #else
   setIcon(QIcon(":/images/tray_icon_osx.png"));
@@ -44,7 +44,8 @@ SystemTrayIcon::SystemTrayIcon()
   setToolTip("SureFile");
   open_drive_ = menu_->addAction(tr("Open Drive"), this, SIGNAL(OpenDriveRequested()));
   open_drive_->setVisible(false);
-  open_settings_ = menu_->addAction(tr("Settings"), this, SIGNAL(OpenSettingsRequested()));
+  open_settings_ =
+      menu_->addAction(tr("Manage Store Paths"), this, SIGNAL(OpenSettingsRequested()));
   open_settings_->setVisible(false);
   seperator_ = menu_->addSeparator();
   seperator_->setVisible(false);
