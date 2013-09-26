@@ -63,6 +63,7 @@ class MainController : public QObject {
   MainController(const MainController&);
   MainController& operator=(const MainController&);
   bool InitialisePostLogin();
+  void CenterToScreen(QQuickWindow* widget);
 
   int root_objects_count_;
   QQmlApplicationEngine* main_engine_;

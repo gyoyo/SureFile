@@ -112,7 +112,7 @@ void MainController::EventLoopStarted() {
     QtLog("App Startup Failed");
     throw new std::exception();
   }
-
+  CenterToScreen(main_window_);
   main_window_->show();
   system_tray_->show();
 }
@@ -122,6 +122,7 @@ void MainController::CreateAccountCompleted() {
   if (!InitialisePostLogin())
     return;
   system_tray_->showMessage(tr(""), tr("SureFile is running"));
+  CenterToScreen(tour_window_);
   tour_window_->show();
 }
 
@@ -154,7 +155,7 @@ void MainController::OpenSettings() {
   main_engine_->load(QUrl("qrc:/views/Settings.qml"));
   settings_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
 #endif
-
+  CenterToScreen(settings_window_);
   settings_window_->show();
 }
 
@@ -166,6 +167,18 @@ bool MainController::InitialisePostLogin() {
   system_tray_->SetIsLoggedIn(true);
   qApp->setQuitOnLastWindowClosed(false);
   return true;
+}
+
+void MainController::CenterToScreen(QQuickWindow* widget) {
+  if (!widget)
+    return;
+  QDesktopWidget* m = QApplication::desktop();
+  QRect desk_rect = m->screenGeometry(m->screenNumber(QCursor::pos()));
+  int desk_x = desk_rect.width();
+  int desk_y = desk_rect.height();
+  int x = widget->width();
+  int y = widget->height();
+  widget->setFramePosition(QPoint(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top()));
 }
 
 MainController::~MainController() {
