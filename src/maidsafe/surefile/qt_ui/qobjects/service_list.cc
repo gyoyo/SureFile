@@ -99,6 +99,6 @@ int ServiceList::GetServiceIndex(const QString& folder_name) {
 
 }  // namespace qt_ui
 
-}  // namespace lifestuff
+}  // namespace surefile
 
 }  // namespace maidsafe

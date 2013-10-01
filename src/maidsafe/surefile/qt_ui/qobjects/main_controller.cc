@@ -104,9 +104,12 @@ void MainController::EventLoopStarted() {
   main_engine_->load(QUrl("qrc:/views/MainView.qml"));
   main_engine_->load(QUrl("qrc:/views/Settings.qml"));
   main_engine_->load(QUrl("qrc:/views/Tour.qml"));
-  main_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
-  settings_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
-  tour_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
+  main_window_ =
+      qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
+  settings_window_ =
+      qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
+  tour_window_ =
+      qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
 
   if (!main_window_ || !settings_window_ || !tour_window_) {
     QtLog("App Startup Failed");
@@ -153,7 +156,8 @@ void MainController::OpenSettings() {
   if (settings_window_)
     settings_window_->deleteLater();
   main_engine_->load(QUrl("qrc:/views/Settings.qml"));
-  settings_window_ = qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
+  settings_window_ =
+      qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
 #endif
   CenterToScreen(settings_window_);
   settings_window_->show();
@@ -178,7 +182,8 @@ void MainController::CenterToScreen(QQuickWindow* widget) {
   int desk_y = desk_rect.height();
   int x = widget->width();
   int y = widget->height();
-  widget->setFramePosition(QPoint(desk_x / 2 - x / 2 + desk_rect.left(), desk_y / 2 - y / 2 + desk_rect.top()));
+  widget->setFramePosition(QPoint(desk_x / 2 - x / 2 + desk_rect.left(),
+                           desk_y / 2 - y / 2 + desk_rect.top()));
 }
 
 MainController::~MainController() {
@@ -190,6 +195,6 @@ MainController::~MainController() {
 
 }  // namespace qt_ui
 
-}  // namespace lifestuff
+}  // namespace surefile
 
 }  // namespace maidsafe

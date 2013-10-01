@@ -71,6 +71,6 @@ void StorePathConverter::setActualStorePath(const QString& storePathUrl) {
 
 }  // namespace qt_ui
 
-}  // namespace lifestuff
+}  // namespace surefile
 
 }  // namespace maidsafe

@@ -50,7 +50,7 @@ ApplicationWindow {
       }
       Button {
         text: qsTr("Skip")
-        enabled: tourWindow.pageIndex != 5
+        enabled: tourWindow.pageIndex != 4
         onClicked: tourWindow.hide();
         Layout.alignment: Qt.AlignRight
         Layout.column: Qt.platform.os == "windows" ? 5 : 2
@@ -63,10 +63,10 @@ ApplicationWindow {
         Layout.column: 3
       }
       Button {
-        text: tourWindow.pageIndex != 5 ? qsTr("Next") : qsTr("Finish")
+        text: tourWindow.pageIndex != 4 ? qsTr("Next") : qsTr("Finish")
         isDefault: true
         focus: true
-        onClicked: tourWindow.pageIndex == 5 ? tourWindow.hide() : tourWindow.pageIndex++
+        onClicked: tourWindow.pageIndex == 4 ? tourWindow.hide() : tourWindow.pageIndex++
         Layout.alignment: Qt.AlignRight
         Layout.column: 4
       }

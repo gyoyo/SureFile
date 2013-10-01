@@ -36,7 +36,6 @@
     <file>views/tour/Page2.qml</file>
     <file>views/tour/Page3.qml</file>
     <file>views/tour/Page4.qml</file>
-    <file>views/tour/Page5.qml</file>
     <file>views/tour/TourTemplatePage.qml</file>
   </qresource>
 </RCC>

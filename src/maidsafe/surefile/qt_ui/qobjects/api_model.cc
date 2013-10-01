@@ -18,6 +18,8 @@
 
 #include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
 
+#include <map>
+
 #include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
 #include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
 
@@ -220,6 +222,6 @@ void APIModel::PopulateServiceList() {
 
 }  // namespace qt_ui
 
-}  // namespace lifestuff
+}  // namespace surefile
 
 }  // namespace maidsafe

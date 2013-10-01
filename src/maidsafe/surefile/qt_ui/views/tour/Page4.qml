@@ -3,6 +3,6 @@ import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 
 TourTemplatePage {
-  tourText: qsTr("To access your encrypted files again, simply open them from this same location. They will be unreadable from the store path, ensuring only you can open them.")
+  tourText: qsTr("To access your encrypted files, simply open them from your SureFile drive which you can locate in the tray menu by selecting Open Drive.")
   tourImageUrl: ("../../images/tour/%1/04.png").arg(Qt.platform.os)
 }
