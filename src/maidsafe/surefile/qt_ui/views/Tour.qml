@@ -40,7 +40,7 @@ ApplicationWindow {
     GridLayout {
       columns: 6
       Label {
-        text: qsTr("%1 of 5").arg(tourWindow.pageIndex)
+        text: qsTr("%1 of 4").arg(tourWindow.pageIndex)
         Layout.alignment: Qt.AlignLeft
         Layout.column: 0
       }

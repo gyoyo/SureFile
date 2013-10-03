@@ -79,8 +79,8 @@
   !define MUI_HEADERIMAGE_LEFT
   @CPACK_NSIS_EXTRA_PREINSTALL_COMMANDS@
   ;${VERSION}
-  !define MUI_WELCOMEPAGE_TITLE "Placeholder Title for installation"
-  !define MUI_WELCOMEPAGE_TEXT "Placeholder Description for program$\r$\n$\r$\nClick Next to install SureFile..."
+  !define MUI_WELCOMEPAGE_TITLE "Welcome to SureFile Setup Wizard"
+  !define MUI_WELCOMEPAGE_TEXT "The Setup Wizard will install SureFile on your computer. Click next to continue or cancel to exit the Setup Wizard."
   !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE "@CPACK_RESOURCE_FILE_LICENSE@"
   !define MUI_PAGE_CUSTOMFUNCTION_SHOW PreInstallPage
@@ -510,15 +510,6 @@ FunctionEnd
 ; Installer Sections
 
 Section -post
-
-; Interim MessageBox to show known app status
-  MessageBox MB_OKCANCEL|MB_USERICON|MB_DEFBUTTON1 "Known Issues:$\r$\n1. Tour Section images not updated$\r$\n2. Folder select dialog box for store path might crash.$\r$\n3. Text kerning is incorrect in Win-8.$\r$\n4. Render issue for buttons in Win-8 with items when first visible being laid out incorrectly$\r$\n5. Win-8 Styles are incorrect.$\r$\n6. Scrollbar's and Thumbs are incorrect in Win-7 and Win-8." IDCANCEL cancel IDOK ok
-  
-  cancel:
-    Quit
-    
-  ok:
-  
   SetDetailsPrint textonly
   DetailPrint "Installing SureFile Files..."
   SetDetailsPrint listonly
