@@ -26,6 +26,7 @@
 
 int main(int argc, char *argv[]) {
   maidsafe::surefile::qt_ui::Application application(argc, argv);
+  application.addLibraryPath(qApp->applicationDirPath() + "/plugins");
   application.setOrganizationDomain("http://www.maidsafe.net");
   application.setOrganizationName("MaidSafe.net Ltd.");
   application.setApplicationName("SureFile");

@@ -97,6 +97,8 @@ void MainController::EventLoopStarted() {
           this,                 SLOT(OpenSettings()));
 
   main_engine_ = new QQmlApplicationEngine();
+  main_engine_->addImportPath(qApp->applicationDirPath() + "/qml");
+  main_engine_->addPluginPath(qApp->applicationDirPath() + "/plugins");
   auto root_context_ = main_engine_->rootContext();
   root_context_->setContextProperty(kMainController, this);
   root_context_->setContextProperty(kAPIModel, api_model_.get());
