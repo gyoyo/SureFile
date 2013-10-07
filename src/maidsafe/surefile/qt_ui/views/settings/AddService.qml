@@ -50,8 +50,10 @@ ColumnLayout {
     id: pathField
     text: storePathConverter.displayStorePath
     elide: Text.ElideMiddle
-    Layout.fillWidth: true
     horizontalAlignment: Qt.AlignHCenter
+    Layout.alignment: Qt.AlignHCenter
+    Layout.fillWidth: true
+    Layout.maximumWidth: aliasBox.width
   }
 
   Item {
