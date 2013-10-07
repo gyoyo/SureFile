@@ -39,7 +39,8 @@ Application::Application(int& argc, char** argv)
     : QApplication(argc, argv),
       handler_object_(),
       translators_(),
-      current_translator_() {
+      current_translator_(),
+      shared_memory_() {
   CreateTranslators();
   SwitchLanguage("en");
 }
@@ -74,6 +75,11 @@ bool Application::notify(QObject* receiver, QEvent* event) {
 void Application::SetErrorHandler(boost::optional<MainController&> handler_object) {
   if (handler_object)
     handler_object_ = handler_object;
+}
+
+bool Application::IsUniqueInstance() {
+  shared_memory_.setKey("MaidSafe-SureFile");
+  return shared_memory_.create(1);
 }
 
 void Application::CreateTranslators() {

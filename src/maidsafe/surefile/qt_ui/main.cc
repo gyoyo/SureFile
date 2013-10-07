@@ -26,6 +26,13 @@
 
 int main(int argc, char *argv[]) {
   maidsafe::surefile::qt_ui::Application application(argc, argv);
+
+#ifdef MAIDSAFE_WIN32
+  // Check and exit if duplicate instance
+  if (!application.IsUniqueInstance())
+    return 0;
+#endif
+
   application.addLibraryPath(qApp->applicationDirPath() + "/plugins");
   application.setOrganizationDomain("http://www.maidsafe.net");
   application.setOrganizationName("MaidSafe.net Ltd.");

@@ -57,6 +57,7 @@ class Application : public QApplication {
   void SwitchLanguage(QString language);
   virtual bool notify(QObject* receiver, QEvent* event);
   void SetErrorHandler(boost::optional<MainController&> handler_object);
+  bool IsUniqueInstance();
 
  private:
   Application(const Application&);
@@ -66,6 +67,7 @@ class Application : public QApplication {
   boost::optional<MainController&> handler_object_;
   QMap<QString, QTranslator*> translators_;
   QTranslator* current_translator_;
+  QSharedMemory shared_memory_;
 };
 
 }  // namespace qt_ui

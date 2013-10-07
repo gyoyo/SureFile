@@ -66,6 +66,7 @@
 #include "QtCore/QFutureWatcher"
 #include "QtCore/QMap"
 #include "QtCore/QUrl"
+#include "QtCore/QSharedMemory"
 #include "QtCore/QTranslator"
 #include "QtGui/QDesktopServices"
 #include "QtGui/QSurfaceFormat"
