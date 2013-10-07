@@ -21,7 +21,7 @@
 #include "maidsafe/common/test.h"
 #include "maidsafe/common/utils.h"
 
-#include "maidsafe/surefile/surefile.h"
+#include "maidsafe/surefile/surefile_api.h"
 
 namespace maidsafe {
 namespace surefile {
@@ -44,7 +44,7 @@ class SureFileTest {
 };
 
 TEST_CASE_METHOD(SureFileTest, "Create user", "[SureFile][Behavioural]") {
-  SureFile surefile(slots_);
+  SureFileAPI surefile(slots_);
   std::string product_id;
   surefile.InsertInput(0, "password", kPassword);
   // CHECK(surefile.CanCreateUser());
