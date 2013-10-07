@@ -16,25 +16,25 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#include "maidsafe/surefile/qt_ui/qobjects/main_controller.h"
+#include "maidsafe/surefile/ui/qobjects/main_controller.h"
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_push_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_pop_headers.h"
 
-#include "maidsafe/surefile/qt_ui/helpers/application.h"
-#include "maidsafe/surefile/qt_ui/helpers/custom_message_box.h"
-#include "maidsafe/surefile/qt_ui/helpers/qml_indexers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
-#include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
-#include "maidsafe/surefile/qt_ui/qobjects/service_list.h"
-#include "maidsafe/surefile/qt_ui/qobjects/store_path_converter.h"
-#include "maidsafe/surefile/qt_ui/qobjects/system_tray_icon.h"
+#include "maidsafe/surefile/ui/helpers/application.h"
+#include "maidsafe/surefile/ui/helpers/custom_message_box.h"
+#include "maidsafe/surefile/ui/helpers/qml_indexers.h"
+#include "maidsafe/surefile/ui/helpers/qt_log.h"
+#include "maidsafe/surefile/ui/qobjects/api_model.h"
+#include "maidsafe/surefile/ui/qobjects/service_list.h"
+#include "maidsafe/surefile/ui/qobjects/store_path_converter.h"
+#include "maidsafe/surefile/ui/qobjects/system_tray_icon.h"
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
 MainController::MainController(QObject* parent)
     : QObject(parent),
@@ -195,7 +195,7 @@ MainController::~MainController() {
   delete tour_window_;
 }
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 

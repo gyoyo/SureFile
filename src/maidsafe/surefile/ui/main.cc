@@ -18,14 +18,14 @@
 
 #include <iostream>
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_push_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_pop_headers.h"
 
-#include "maidsafe/surefile/qt_ui/helpers/application.h"
-#include "maidsafe/surefile/qt_ui/qobjects/main_controller.h"
+#include "maidsafe/surefile/ui/helpers/application.h"
+#include "maidsafe/surefile/ui/qobjects/main_controller.h"
 
 int main(int argc, char *argv[]) {
-  maidsafe::surefile::qt_ui::Application application(argc, argv);
+  maidsafe::surefile::ui::Application application(argc, argv);
 
 #ifdef MAIDSAFE_WIN32
   // Check and exit if duplicate instance
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
   application.setApplicationName("SureFile");
   application.setApplicationVersion("0.1");
   try {
-    maidsafe::surefile::qt_ui::MainController main_controller;
+    maidsafe::surefile::ui::MainController main_controller;
     application.SetErrorHandler(main_controller);
     return application.exec();
   } catch(const std::exception &ex) {

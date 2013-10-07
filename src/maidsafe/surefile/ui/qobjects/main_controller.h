@@ -16,21 +16,21 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_CONTROLLER_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_CONTROLLER_H_
+#ifndef MAIDSAFE_SUREFILE_UI_QOBJECTS_MAIN_CONTROLLER_H_
+#define MAIDSAFE_SUREFILE_UI_QOBJECTS_MAIN_CONTROLLER_H_
 
 // std
 #include <memory>
 #include <string>
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_push_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_pop_headers.h"
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
 class APIModel;
 class ServiceList;
@@ -76,11 +76,11 @@ class MainController : public QObject {
   QFutureWatcher<bool> future_watcher_;
 };
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_MAIN_CONTROLLER_H_
+#endif  // MAIDSAFE_SUREFILE_UI_QOBJECTS_MAIN_CONTROLLER_H_
 

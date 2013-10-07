@@ -16,33 +16,54 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_HELPERS_CUSTOM_MESSAGE_BOX_H_
-#define MAIDSAFE_SUREFILE_QT_UI_HELPERS_CUSTOM_MESSAGE_BOX_H_
+#ifndef MAIDSAFE_SUREFILE_UI_QOBJECTS_SYSTEM_TRAY_ICON_H_
+#define MAIDSAFE_SUREFILE_UI_QOBJECTS_SYSTEM_TRAY_ICON_H_
 
-// std
-#include <memory>
 #include <string>
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_push_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_pop_headers.h"
+
+class QMenu;
+class QAction;
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
-class CustomMessageBox {
+class SystemTrayIcon : public QSystemTrayIcon {
+  Q_OBJECT
+
  public:
-  static void Show(const QString& message);
-  static void Show(const QString& message, QMessageBox::Icon icon);
+  SystemTrayIcon();
+  ~SystemTrayIcon();
+  void SetIsLoggedIn(bool is_logged_in);
+
+ signals:  // NOLINT (Viv)
+  void OpenDriveRequested();
+  void OpenSettingsRequested();
+
+ private slots:  // NOLINT - Viv
+  void QuitApplication();
+  void OnSystrayActivate(QSystemTrayIcon::ActivationReason reason);
+
+ private:
+  SystemTrayIcon(const SystemTrayIcon&);
+  SystemTrayIcon& operator=(const SystemTrayIcon&);
+
+  QMenu* menu_;
+  QAction* seperator_;
+  QAction* open_drive_;
+  QAction* open_settings_;
+  bool is_logged_in_;
 };
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_HELPERS_CUSTOM_MESSAGE_BOX_H_
-
+#endif  // MAIDSAFE_SUREFILE_UI_QOBJECTS_SYSTEM_TRAY_ICON_H_

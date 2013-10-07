@@ -16,25 +16,32 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_HELPERS_APP_RETURN_CODE_H_
-#define MAIDSAFE_SUREFILE_QT_UI_HELPERS_APP_RETURN_CODE_H_
+#include "maidsafe/surefile/error.h"
+
+#include "boost/throw_exception.hpp"
+
+#include "maidsafe/surefile/error_categories.h"
+
 
 namespace maidsafe {
-
 namespace surefile {
 
-namespace qt_ui {
+std::error_code make_error_code(SureFileErrors code) {
+  return std::error_code(static_cast<int>(code), GetSureFileCategory());
+}
 
-enum class AppReturnCode {
-  kSuccess = 0,
-  kError  // TODO(Viv) Remove this code once Exception Details are finalised
-};
+std::error_condition make_error_condition(SureFileErrors code) {
+  return std::error_condition(static_cast<int>(code), GetSureFileCategory());
+}
 
-}  // namespace qt_ui
+surefile_error MakeError(SureFileErrors code) {
+  return surefile_error(make_error_code(code));
+}
+
+const std::error_category& GetSureFileCategory() {
+  static SureFileCategory instance;
+  return instance;
+}
 
 }  // namespace surefile
-
 }  // namespace maidsafe
-
-#endif  // MAIDSAFE_SUREFILE_QT_UI_HELPERS_APP_RETURN_CODE_H_
-

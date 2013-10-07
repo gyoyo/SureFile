@@ -16,16 +16,16 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#include "maidsafe/surefile/qt_ui/helpers/application.h"
+#include "maidsafe/surefile/ui/helpers/application.h"
 
-#include "maidsafe/surefile/qt_ui/qobjects/main_controller.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
+#include "maidsafe/surefile/ui/qobjects/main_controller.h"
+#include "maidsafe/surefile/ui/helpers/qt_log.h"
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
 ExceptionEvent::ExceptionEvent(const QString& exception_message, Type type)
     : QEvent(type),
@@ -94,7 +94,7 @@ void Application::CreateTranslators() {
   }
 }
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 

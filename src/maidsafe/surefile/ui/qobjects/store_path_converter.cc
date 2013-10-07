@@ -16,16 +16,16 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#include "maidsafe/surefile/qt_ui/qobjects/store_path_converter.h"
+#include "maidsafe/surefile/ui/qobjects/store_path_converter.h"
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_push_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_pop_headers.h"
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
 StorePathConverter::StorePathConverter(QObject* parent)
     : QObject(parent),
@@ -69,7 +69,7 @@ void StorePathConverter::setActualStorePath(const QString& storePathUrl) {
   emit actualStorePathChanged();
 }
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 

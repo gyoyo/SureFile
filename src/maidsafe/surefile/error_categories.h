@@ -16,5 +16,28 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
+#ifndef MAIDSAFE_SUREFILE_ERROR_CATEGORIES_H_
+#define MAIDSAFE_SUREFILE_ERROR_CATEGORIES_H_
 
+#include <string>
+#include <system_error>
+
+#include "maidsafe/common/config.h"
+
+
+namespace maidsafe {
+
+namespace surefile {
+
+class SureFileCategory : public std::error_category {
+ public:
+  virtual const char* name() const MAIDSAFE_NOEXCEPT;
+  virtual std::string message(int error_value) const MAIDSAFE_NOEXCEPT;
+  virtual std::error_condition default_error_condition(int error_value) const MAIDSAFE_NOEXCEPT;
+};
+
+}  // namespace surefile
+
+}  // namespace maidsafe
+
+#endif  // MAIDSAFE_SUREFILE_ERROR_CATEGORIES_H_

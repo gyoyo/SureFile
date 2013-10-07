@@ -1,4 +1,4 @@
-/*  Copyright 2012 MaidSafe.net limited
+/*  Copyright 2013 MaidSafe.net limited
 
     This MaidSafe Software is licensed to you under (1) the MaidSafe.net Commercial License,
     version 1.0 or later, or (2) The General Public License (GPL), version 3, depending on which
@@ -16,28 +16,49 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#include "maidsafe/surefile/qt_ui/helpers/custom_message_box.h"
+#include "maidsafe/common/error.h"
+#include "maidsafe/common/log.h"
+#include "maidsafe/common/test.h"
+#include "maidsafe/common/utils.h"
+
+#include "maidsafe/surefile/surefile.h"
 
 namespace maidsafe {
-
 namespace surefile {
 
-namespace qt_ui {
+namespace test {
 
-void CustomMessageBox::Show(const QString& message) {
-  Show(message, QMessageBox::Information);
+class SureFileTest {
+ public:
+  SureFileTest() {
+    slots_.configuration_error = [] { LOG(kError) << "Configuration error."; };  // NOLINT
+    slots_.on_service_added = [] { LOG(kInfo) << "Attempt to add a service."; };  // NOLINT
+  }
+
+  Slots slots_;
+
+ private:
+  SureFileTest(const SureFileTest&);
+  SureFileTest(SureFileTest&&);
+  SureFileTest& operator=(const SureFileTest&);
+};
+
+TEST_CASE_METHOD(SureFileTest, "Create user", "[SureFile][Behavioural]") {
+  SureFile surefile(slots_);
+  std::string product_id;
+  surefile.InsertInput(0, "password", kPassword);
+  // CHECK(surefile.CanCreateUser());
+  // CHECK_NOTHROW(surefile.CreateUser());
+
+  CHECK_FALSE(surefile.CanCreateUser());
+  CHECK_NOTHROW(surefile.Login(product_id));
 }
 
-void CustomMessageBox::Show(const QString& message, QMessageBox::Icon icon) {
-  QMessageBox msg;
-  msg.setIcon(icon);
-  msg.setWindowTitle("SureFile");
-  msg.setText(message);
-  msg.exec();
-}
-
-}  // namespace qt_ui
+}  // namespace test
 
 }  // namespace surefile
-
 }  // namespace maidsafe
+
+int main(int argc, char **argv) {
+  return maidsafe::test::ExecuteMain(argc, argv);
+}

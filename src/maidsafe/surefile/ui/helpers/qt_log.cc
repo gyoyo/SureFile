@@ -16,25 +16,24 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_HELPERS_QT_LOG_H_
-#define MAIDSAFE_SUREFILE_QT_UI_HELPERS_QT_LOG_H_
-
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_log.h"
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
-void QtLog(const QString& message);
+void QtLog(const QString& message) {
+#ifdef DEBUG
+  qDebug() << message;
+#endif
+  message.isEmpty();
+}
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 
 }  // namespace maidsafe
-
-#endif  // MAIDSAFE_SUREFILE_QT_UI_HELPERS_QT_LOG_H_
 

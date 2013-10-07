@@ -16,23 +16,23 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_API_MODEL_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_API_MODEL_H_
+#ifndef MAIDSAFE_SUREFILE_UI_QOBJECTS_API_MODEL_H_
+#define MAIDSAFE_SUREFILE_UI_QOBJECTS_API_MODEL_H_
 
 // std
 #include <memory>
 #include <string>
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_push_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_pop_headers.h"
 
-#include "maidsafe/surefile/surefile.h"
+#include "maidsafe/surefile/surefile_api.h"
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
 struct SureFileService;
 
@@ -112,14 +112,14 @@ class APIModel : public QObject {
   OperationState operation_state_;
   QString password_;
   QString confirm_password_;
-  std::unique_ptr<SureFile> surefile_api_;
+  std::unique_ptr<SureFileAPI> surefile_api_;
 };
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_API_MODEL_H_
+#endif  // MAIDSAFE_SUREFILE_UI_QOBJECTS_API_MODEL_H_
 

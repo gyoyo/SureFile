@@ -16,54 +16,39 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_SYSTEM_TRAY_ICON_H_
-#define MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_SYSTEM_TRAY_ICON_H_
+#include "maidsafe/surefile/error_categories.h"
 
-#include <string>
+#include "maidsafe/surefile/error.h"
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
-
-class QMenu;
-class QAction;
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+const char* SureFileCategory::name() const MAIDSAFE_NOEXCEPT {
+  return "SureFile Library";
+}
 
-class SystemTrayIcon : public QSystemTrayIcon {
-  Q_OBJECT
+std::string SureFileCategory::message(int error_value) const MAIDSAFE_NOEXCEPT {
+  switch (static_cast<SureFileErrors>(error_value)) {
+    case SureFileErrors::invalid_password:
+      return "Invalid Password";
+    case SureFileErrors::password_confirmation_failed:
+      return "Password Confirmation Failed";
+    case SureFileErrors::invalid_service:
+      return "Invalid Service Path";
+    case SureFileErrors::duplicate_service:
+      return "Service Already Exists";
+    default:
+      return "Unknown error in SureFile";
+  }
+}
 
- public:
-  SystemTrayIcon();
-  ~SystemTrayIcon();
-  void SetIsLoggedIn(bool is_logged_in);
-
- signals:  // NOLINT (Viv)
-  void OpenDriveRequested();
-  void OpenSettingsRequested();
-
- private slots:  // NOLINT - Viv
-  void QuitApplication();
-  void OnSystrayActivate(QSystemTrayIcon::ActivationReason reason);
-
- private:
-  SystemTrayIcon(const SystemTrayIcon&);
-  SystemTrayIcon& operator=(const SystemTrayIcon&);
-
-  QMenu* menu_;
-  QAction* seperator_;
-  QAction* open_drive_;
-  QAction* open_settings_;
-  bool is_logged_in_;
-};
-
-}  // namespace qt_ui
+std::error_condition SureFileCategory::default_error_condition(int error_value)
+    const MAIDSAFE_NOEXCEPT {
+  return std::error_condition(error_value, *this);
+}
 
 }  // namespace surefile
 
 }  // namespace maidsafe
-
-#endif  // MAIDSAFE_SUREFILE_QT_UI_QOBJECTS_SYSTEM_TRAY_ICON_H_

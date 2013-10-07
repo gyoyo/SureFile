@@ -16,27 +16,25 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#ifndef MAIDSAFE_SUREFILE_QT_UI_HELPERS_QML_INDEXERS_H_
-#define MAIDSAFE_SUREFILE_QT_UI_HELPERS_QML_INDEXERS_H_
-
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#ifndef MAIDSAFE_SUREFILE_UI_HELPERS_APP_RETURN_CODE_H_
+#define MAIDSAFE_SUREFILE_UI_HELPERS_APP_RETURN_CODE_H_
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
-const QString kMainController("mainController");
-const QString kServiceListModel("serviceListModel");
-const QString kAPIModel("apiModel");
+enum class AppReturnCode {
+  kSuccess = 0,
+  kError  // TODO(Viv) Remove this code once Exception Details are finalised
+};
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 
 }  // namespace maidsafe
 
-#endif  // MAIDSAFE_SUREFILE_QT_UI_HELPERS_QML_INDEXERS_H_
+#endif  // MAIDSAFE_SUREFILE_UI_HELPERS_APP_RETURN_CODE_H_
 

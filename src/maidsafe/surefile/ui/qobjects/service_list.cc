@@ -16,21 +16,21 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#include "maidsafe/surefile/qt_ui/qobjects/service_list.h"
+#include "maidsafe/surefile/ui/qobjects/service_list.h"
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_push_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_pop_headers.h"
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
 ServiceList::ServiceList(QObject* parent)
     : QAbstractListModel(parent),
       services_() {
-  qRegisterMetaType<maidsafe::surefile::qt_ui::SureFileService>("SureFileService");
+  qRegisterMetaType<maidsafe::surefile::ui::SureFileService>("SureFileService");
 }
 
 int ServiceList::rowCount(const QModelIndex& /*parent*/) const {
@@ -97,7 +97,7 @@ int ServiceList::GetServiceIndex(const QString& folder_name) {
   return -1;
 }
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 

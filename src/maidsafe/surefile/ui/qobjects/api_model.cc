@@ -16,15 +16,15 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#include "maidsafe/surefile/qt_ui/qobjects/api_model.h"
+#include "maidsafe/surefile/ui/qobjects/api_model.h"
 
 #include <map>
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_push_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_pop_headers.h"
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_log.h"
-#include "maidsafe/surefile/qt_ui/qobjects/service_list.h"
+#include "maidsafe/surefile/ui/helpers/qt_log.h"
+#include "maidsafe/surefile/ui/qobjects/service_list.h"
 
 namespace args = std::placeholders;
 
@@ -32,7 +32,7 @@ namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
 APIModel::APIModel(QObject* parent)
     : QObject(parent),
@@ -48,7 +48,7 @@ APIModel::APIModel(QObject* parent)
       std::bind(&APIModel::BackEndRenameServiceRequested, this, args::_1, args::_2);
   surefile_slots.configuration_error = std::bind(&APIModel::ParseConfigurationFileError, this);
 
-  surefile_api_.reset(new SureFile(surefile_slots));
+  surefile_api_.reset(new SureFileAPI(surefile_slots));
 }
 
 APIModel::OperationState APIModel::operationState() const {
@@ -220,7 +220,7 @@ void APIModel::PopulateServiceList() {
   }
 }
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 

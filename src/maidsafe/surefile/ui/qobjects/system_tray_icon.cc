@@ -16,16 +16,16 @@
     See the Licences for the specific language governing permissions and limitations relating to
     use of the MaidSafe Software.                                                                 */
 
-#include "maidsafe/surefile/qt_ui/qobjects/system_tray_icon.h"
+#include "maidsafe/surefile/ui/qobjects/system_tray_icon.h"
 
-#include "maidsafe/surefile/qt_ui/helpers/qt_push_headers.h"
-#include "maidsafe/surefile/qt_ui/helpers/qt_pop_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_push_headers.h"
+#include "maidsafe/surefile/ui/helpers/qt_pop_headers.h"
 
 namespace maidsafe {
 
 namespace surefile {
 
-namespace qt_ui {
+namespace ui {
 
 SystemTrayIcon::SystemTrayIcon()
   : menu_(new QMenu),
@@ -79,7 +79,7 @@ SystemTrayIcon::~SystemTrayIcon() {
   menu_ = nullptr;
 }
 
-}  // namespace qt_ui
+}  // namespace ui
 
 }  // namespace surefile
 
