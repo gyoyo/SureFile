@@ -2,7 +2,11 @@ Current Release
 ===============
 *
 
-v0.1.001 - Requires maidsafe_drive v0.7.000
+v0.1.002 - Requires maidsafe_drive v0.7.002
+===========================================
+* Fixes for Issues 19, 21
+
+v0.1.001 - Requires maidsafe_drive v0.7.001
 ===========================================
 * Fixes for Issues 13, 14, 17, 20, 15
 * Re-worked the Add-Store Page
