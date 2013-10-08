@@ -193,7 +193,7 @@ endif()
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
 add_library(maidsafe_surefile STATIC ${SOURCE_FILES_SUREFILE_DIR} ${HEADER_FILES_SUREFILE_DIR} ${RootProtos})
-target_link_libraries(maidsafe_surefile maidsafe_drive)
+target_link_libraries(maidsafe_surefile maidsafe_drive ${BoostLocaleLibs})
 set_target_properties(maidsafe_surefile PROPERTIES FOLDER "Library")
 
 if(MaidsafeTesting)

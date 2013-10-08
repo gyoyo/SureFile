@@ -176,6 +176,8 @@ bool APIModel::Login() {
 
 void APIModel::AddService(const QString& alias, const QString& path) {
   try {
+    if (path.startsWith(MountPath()))
+      ThrowError(SureFileErrors::invalid_service);
     surefile_api_->AddService(path.trimmed().toStdString(), alias.trimmed().toStdString());
   } catch(const surefile_error& error_code) {
     if (error_code.code() == make_error_code(SureFileErrors::invalid_service)) {
