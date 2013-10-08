@@ -89,7 +89,6 @@ class APIModel : public QObject {
   void confirmPasswordChanged();
 
   // To QML
-  void showAddServiceSettings();
   void addServiceErrorRaised(const QString& errorMessage);
   void removeServiceErrorRaised(const QString& errorMessage);
   void serviceOperationSuccess();
@@ -97,6 +96,7 @@ class APIModel : public QObject {
   void createAccountErrorRaised(const QString& errorMessage);
 
   // To Main Controller
+  void ShowAddServiceSettings();
   void OnParseConfigurationFileError();
   void UnhandledException();
 

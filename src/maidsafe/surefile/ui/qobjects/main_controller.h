@@ -47,6 +47,9 @@ class MainController : public QObject {
   Q_INVOKABLE void AddService(const QString& alias, const QString& path);
   Q_INVOKABLE void RemoveService(const QString& alias);
 
+ signals:
+  void showAddServiceSettings();
+
  protected:
   bool eventFilter(QObject* object, QEvent* event);
 
@@ -58,6 +61,7 @@ class MainController : public QObject {
   void UnhandledException();
   void OpenDrive();
   void OpenSettings();
+  void OpenAddService();
 
  private:
   MainController(const MainController&);

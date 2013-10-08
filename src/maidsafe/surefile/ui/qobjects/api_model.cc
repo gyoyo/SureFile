@@ -96,7 +96,7 @@ void APIModel::ParseConfigurationFileError() {
 }
 
 void APIModel::BackEndAddServiceRequested() {
-  emit showAddServiceSettings();
+  emit ShowAddServiceSettings();
 }
 
 void APIModel::BackEndRemoveServiceRequested(const std::string& folder_name) {
