@@ -59,7 +59,7 @@ remove_definitions(-DAPPLICATION_VERSION_MAJOR=${ApplicationVersionMajor}
                    -DAPPLICATION_VERSION_PATCH=${ApplicationVersionPatch})
 set(ApplicationVersionMajor 0)
 set(ApplicationVersionMinor 1)
-set(ApplicationVersionPatch 002)
+set(ApplicationVersionPatch 003)
 
 math(EXPR MaidsafeTesting ${ApplicationVersionMinor}%2)
 
