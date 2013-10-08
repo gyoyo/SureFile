@@ -33,12 +33,14 @@ ColumnLayout {
     TableViewColumn {
       role: "name"
       title: qsTr("Name")
-      width: 120
+      elideMode: Text.ElideMiddle
+      width: 110
     }
 
     TableViewColumn {
       role: "path"
       title: qsTr("Path")
+      elideMode: Text.ElideMiddle
     }
 
     onSectionChanged: errorMessageLabel.opacity = 0
