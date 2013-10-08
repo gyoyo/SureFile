@@ -24,7 +24,7 @@ ColumnLayout {
 
   Label {
     textFormat: Text.RichText
-    text: qsTr("You must read and agree to the <br><a href=\"http://google.com\">SureFile License Agreement</a>.")
+    text: qsTr("You must read and agree to the <br><a href=\"http://maidsafe.net/licenses/SureFile-EULA.txt\">SureFile License Agreement</a>.")
     wrapMode: TextEdit.WordWrap
     onLinkActivated: Qt.openUrlExternally(link)
     horizontalAlignment: Qt.AlignHCenter
