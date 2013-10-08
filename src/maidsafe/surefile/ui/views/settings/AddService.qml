@@ -6,7 +6,7 @@ import QtQuick.Layouts 1.0
 import SureFile 1.0
 
 ColumnLayout {
-  spacing: 20
+  spacing: 15
 
   StorePathConverter {
     id: storePathConverter
@@ -27,54 +27,84 @@ ColumnLayout {
   }
 
   Item {
-    Layout.preferredHeight: 2
+    Layout.preferredHeight: 7
   }
 
   Label {
-    text: qsTr("Add Store Path")
+    text: qsTr("Add Store")
     font.weight: Font.Bold
     font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
   }
 
+  Label {
+    text: qsTr("Choose the location in which you want to store your encrypted data")
+    wrapMode: TextEdit.WordWrap
+    horizontalAlignment: Qt.AlignHCenter
+    font.pixelSize: 12
+    Layout.alignment: Qt.AlignHCenter
+    Layout.maximumWidth: aliasBox.width
+  }
+
+  RowLayout {
+    Layout.fillWidth: true
+
+    Item {
+      Layout.preferredWidth: 10
+    }
+
+    Label {
+      id: pathField
+      text: storePathConverter.displayStorePath
+      color: "gray"
+      elide: Text.ElideMiddle
+      horizontalAlignment: Qt.AlignLeft
+      Layout.alignment: Qt.AlignLeft
+      Layout.fillWidth: true
+      Layout.maximumWidth: 175
+    }
+
+    Button {
+      id: changeButton
+      text: qsTr("Change")
+      enabled: !settingsWindow.isBusy
+      Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
+      Layout.alignment: Qt.AlignRight
+      onClicked: {
+        // Setting folder uri does not seem to work on Windows-8
+        // Might be related to QTBUG-29814
+        fileDialog.folder = storePathConverter.actualStorePath
+        fileDialog.open()
+      }
+    }
+  }
+
+  Item {
+    Layout.preferredHeight: 1
+  }
+
+  Label {
+    text: qsTr("What would you like to call this?")
+    wrapMode: TextEdit.WordWrap
+    horizontalAlignment: Qt.AlignHCenter
+    font.pixelSize: 12
+    Layout.alignment: Qt.AlignHCenter
+    Layout.maximumWidth: aliasBox.width
+  }
+
   TextField {
     id: aliasBox
     enabled: !settingsWindow.isBusy
-    placeholderText: qsTr("Store Path Name")
+    placeholderText: qsTr("Store Name")
     onTextChanged: errorMessageLabel.opacity = 0
     horizontalAlignment: Qt.AlignHCenter
     Layout.alignment: Qt.AlignHCenter
     Layout.preferredWidth: aliasBox.implicitWidth * 2
   }
-  Label {
-    id: pathField
-    text: storePathConverter.displayStorePath
-    elide: Text.ElideMiddle
-    horizontalAlignment: Qt.AlignHCenter
-    Layout.alignment: Qt.AlignHCenter
-    Layout.fillWidth: true
-    Layout.maximumWidth: aliasBox.width
-  }
 
   Item {
+    Layout.fillWidth: true
     Layout.fillHeight: true
-  }
-
-  Button {
-    text: qsTr("Change")
-    enabled: !settingsWindow.isBusy
-    Layout.minimumWidth: implicitWidth > 75 ? implicitWidth + 20 : implicitWidth
-    Layout.alignment: Qt.AlignHCenter
-    onClicked: {
-      // Setting folder uri does not seem to work on Windows-8
-      // Might be related to QTBUG-29814
-      fileDialog.folder = storePathConverter.actualStorePath
-      fileDialog.open()
-    }
-  }
-
-  Item {
-    Layout.fillWidth: true
     Layout.preferredHeight: Math.max(errorMessageLabel.implicitHeight, progressImage.implicitHeight)
 
     Label {
@@ -106,15 +136,29 @@ ColumnLayout {
       }
     }
   }
-
-  Button {
-    text: qsTr("Create")
-    visible: true
-    enabled: !settingsWindow.isBusy
+  RowLayout {
     Layout.alignment: Qt.AlignHCenter
-    onClicked:  {
-      settingsWindow.isBusy = true
-      mainController.AddService(aliasBox.text, storePathConverter.displayStorePath)
+
+    Button {
+      text: qsTr("Back")
+      visible: true
+      enabled: !settingsWindow.isBusy
+      Layout.alignment: Qt.AlignVCenter
+      onClicked:  {
+        mainLoader.source = "ServiceOptions.qml"
+        aliasBox.text = ""
+      }
+    }
+
+    Button {
+      text: qsTr("Create")
+      visible: true
+      enabled: !settingsWindow.isBusy
+      Layout.alignment: Qt.AlignVCenter
+      onClicked:  {
+        settingsWindow.isBusy = true
+        mainController.AddService(aliasBox.text, storePathConverter.displayStorePath)
+      }
     }
   }
 }

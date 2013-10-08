@@ -47,6 +47,10 @@ ColumnLayout {
   }
 
   Item {
+    Layout.preferredHeight: 9
+  }
+
+  Item {
     Layout.fillWidth: true
     Layout.preferredHeight: Math.max(errorMessageLabel.implicitHeight, progressImage.implicitHeight)
 

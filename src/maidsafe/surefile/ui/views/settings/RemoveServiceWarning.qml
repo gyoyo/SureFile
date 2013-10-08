@@ -23,9 +23,11 @@ ColumnLayout {
 
   Label {
     text: folderName
+    elide: Text.ElideMiddle
     font.bold: true
     font.pixelSize: 18
     Layout.alignment: Qt.AlignHCenter
+    Layout.maximumWidth: parent.width
   }
 
   Label {
@@ -46,7 +48,7 @@ ColumnLayout {
   }
 
   Item {
-    Layout.fillHeight: true
+    Layout.preferredHeight: 18
   }
 
   Item {
