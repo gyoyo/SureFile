@@ -194,6 +194,9 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 
 add_library(maidsafe_surefile STATIC ${SOURCE_FILES_SUREFILE_DIR} ${HEADER_FILES_SUREFILE_DIR} ${RootProtos})
 target_link_libraries(maidsafe_surefile maidsafe_drive ${BoostLocaleLibs})
+if(APPLE)
+  target_link_libraries(maidsafe_surefile iconv)
+endif()
 set_target_properties(maidsafe_surefile PROPERTIES FOLDER "Library")
 
 if(MaidsafeTesting)
@@ -209,7 +212,7 @@ add_executable(surefile ${UI_MAIN_CC}
                         ${RESOURCE_FILES_SUREFILE_UI_RESOURCES_DIR}
                         ${SUREFILE_UI_APP_ICON_RESOURCE})
 
-target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml maidsafe_surefile)
+target_link_libraries(surefile Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Quick Qt5::Qml Qt5::Svg maidsafe_surefile)
 
 if(WIN32)
   set_target_properties(surefile PROPERTIES WIN32_EXECUTABLE TRUE)
