@@ -2,6 +2,12 @@ Current Release
 ===============
 *
 
+v0.1.004 - Requires maidsafe_drive v0.7.003
+===========================================
+* Include QtSVG as required lib dependency
+* Fixes for Issues 12, 16
+* Updated NSIS Installer to use correct program files path in windows for x64 installs
+
 v0.1.003 - Requires maidsafe_drive v0.7.002
 ===========================================
 * Fix to page render on subsequent calls to Settings Window show event.
