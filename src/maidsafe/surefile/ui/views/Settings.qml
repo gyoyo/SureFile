@@ -20,6 +20,14 @@ ApplicationWindow {
   minimumHeight: windowHeight
   maximumWidth: windowWidth
   maximumHeight: Qt.platform.os == "linux" ? windowHeight + 1 : windowHeight
+
+  Connections {
+    target: mainController
+    onShowAddServiceSettings: {
+      mainLoader.source = "settings/AddService.qml"
+    }
+  }
+
   GridLayout {
     rows: 2
     columns: 3
@@ -48,10 +56,6 @@ ApplicationWindow {
       Layout.fillWidth: true
       Connections {
         target: apiModel
-        onShowAddServiceSettings: {
-          mainLoader.source = "settings/AddService.qml"
-          settingsWindow.show()
-        }
         onServiceOperationSuccess: {
           settingsWindow.isBusy = false
           mainLoader.source = "settings/ServiceOptions.qml"

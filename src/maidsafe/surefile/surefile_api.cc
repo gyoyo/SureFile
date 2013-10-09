@@ -29,7 +29,9 @@
 #  pragma warning(pop)
 #endif
 
+#include "boost/algorithm/string/predicate.hpp"
 #include "boost/filesystem/operations.hpp"
+#include "boost/locale.hpp"
 
 #include "maidsafe/common/utils.h"
 #include "maidsafe/common/crypto.h"
@@ -57,7 +59,10 @@ SureFileAPI::SureFileAPI(Slots slots)
     pending_service_additions_(),
     mutex_(),
     mount_thread_(),
-    mount_status_(false) {}
+    mount_status_(false) {
+    std::locale::global(boost::locale::generator().generate(""));
+    fs::path::imbue(std::locale());
+}
 
 SureFileAPI::~SureFileAPI() {
   if (logged_in_)
@@ -440,7 +445,7 @@ std::pair<Identity, Identity> SureFileAPI::GetIds(const fs::path& storage_path) 
 void SureFileAPI::CheckValid(const std::string& storage_path,
                              const std::string& service_alias) const {
   if (!fs::exists(storage_path) || drive::detail::ExcludedFilename(service_alias) ||
-      service_alias.empty())
+      service_alias.empty() || boost::starts_with(storage_path, mount_path_.string()))
     ThrowError(SureFileErrors::invalid_service);
 }
 

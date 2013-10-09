@@ -48,7 +48,7 @@ TEST_CASE_METHOD(SureFileTest, "Create user", "[SureFile][Behavioural]") {
   std::string product_id;
   surefile.InsertInput(0, "password", kPassword);
   // CHECK(surefile.CanCreateUser());
-  // CHECK_NOTHROW(surefile.CreateUser());
+  // CHECK_NOTHROW(surefile.CreateUser(product_id));
 
   CHECK_FALSE(surefile.CanCreateUser());
   CHECK_NOTHROW(surefile.Login(product_id));

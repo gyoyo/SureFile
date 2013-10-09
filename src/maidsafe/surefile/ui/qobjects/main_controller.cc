@@ -95,6 +95,8 @@ void MainController::EventLoopStarted() {
           this,                 SLOT(OpenDrive()));
   connect(system_tray_.get(),   SIGNAL(OpenSettingsRequested()),
           this,                 SLOT(OpenSettings()));
+  connect(api_model_.get(),     SIGNAL(ShowAddServiceSettings()),
+          this,                 SLOT(OpenAddService()));
 
   main_engine_ = new QQmlApplicationEngine();
   main_engine_->addImportPath(qApp->applicationDirPath() + "/qml");
@@ -154,15 +156,18 @@ void MainController::OpenDrive() {
 }
 
 void MainController::OpenSettings() {
-#ifdef MAIDSAFE_APPLE
   if (settings_window_)
     settings_window_->deleteLater();
   main_engine_->load(QUrl("qrc:/views/Settings.qml"));
   settings_window_ =
       qobject_cast<QQuickWindow*>(main_engine_->rootObjects().value(root_objects_count_++));
-#endif
   CenterToScreen(settings_window_);
   settings_window_->show();
+}
+
+void MainController::OpenAddService() {
+  OpenSettings();
+  emit showAddServiceSettings();
 }
 
 bool MainController::InitialisePostLogin() {
