@@ -24,8 +24,11 @@
 #include "maidsafe/surefile/ui/helpers/application.h"
 #include "maidsafe/surefile/ui/qobjects/main_controller.h"
 
+#include "maidsafe/common/log.h"
+
 int main(int argc, char *argv[]) {
   maidsafe::surefile::ui::Application application(argc, argv);
+  auto log_options(maidsafe::log::Logging::Instance().Initialise(argc, argv));
 
 #ifdef MAIDSAFE_WIN32
   // Check and exit if duplicate instance
