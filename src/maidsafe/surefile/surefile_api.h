@@ -60,31 +60,48 @@ class SureFileAPI {
   typedef std::map<std::string, std::string> ServiceMap;
   typedef std::pair<std::string, std::string> ServicePair;
 
-  // SureFileAPI constructor, refer to discussion in LifeStuff.h for Slots. Throws
+  // Constructor, refer to discussion in config.h for Slots. Throws
   // CommonErrors::uninitialised if any 'slots' member has not been initialised.
   explicit SureFileAPI(Slots slots);
+  // Destructor frees up resources acquired during construction and running.
   ~SureFileAPI();
 
   // Creates and/or inserts a string of 'characters' at position 'position' in the input type,
-  // password, confirmation password etc., determined by 'input_field', see lifestuff.h for the
+  // password or confirmation password, determined by 'input_field', see config.h for the
   // definition of InputField. Implicitly accepts Unicode characters converted to std::string.
   void InsertInput(uint32_t position, const std::string& characters, InputField input_field);
   // Removes the sequence of characters starting at position 'position' and ending at position
   // 'position' + 'length' from the input type determined by 'input_field'.
   void RemoveInput(uint32_t position, uint32_t length, InputField input_field);
 
+  // The following methods may propogate unhandled exceptions from lower level maidsafe libraries,
+  // third-party libraries used by maidsafe or other OS calls documented elsewhere. For SureFile
+  // API specific exceptions see error.h.
+
+  // Returns a boolean based on whether an account has already been created for the current user.
   bool CanCreateUser() const;
+  // Creates a configuration file for the current user, and writes an encrypted authentication
+  // string derived from the user supplied password to the file. Mount's the virtual drive.
+  // Throws on invalid password/confirmation password and filesystem error's.
   void CreateUser(const std::string& product_id);
-  // Mounts virtual drive and initialises services if any. Throws on exception.
+  // Mounts the virtual drive and initialises services if any. Throws on invalid password and
+  // filesystem error's.
   void Login(const std::string& product_id);
 
+  // Creates a directory at the root of drive with name 'service_alias' and sets up a storage class
+  // to store encrypted data generated within that directory to the location defined by
+  // 'storage_path'. Update's the configuration file to include the 'storage_path'/'service_alias'
+  // pair. Throws on invalid/duplicate 'service_alias' or non-existent/duplicate 'storage_path'.
   void AddService(const std::string& storage_path, const std::string& service_alias);
+  // Deletes the content stored at the storage path associated with 'service_alias' and removes
+  // the pair from the configuration file. Throws on filesystem error's.
   bool RemoveService(const std::string& service_alias);
 
   // Returns whether user is logged in or not.
   bool logged_in() const;
   // Root path of mounted virtual drive or empty if unmounted.
   std::string mount_path() const;
+  // Returns the storage path/service alias pairs recorded in the configuration file.
   ServiceMap service_pairs() const;
 
   friend class test::SureFileTest;

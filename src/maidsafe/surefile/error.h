@@ -28,6 +28,7 @@
 namespace maidsafe {
 namespace surefile {
 
+// SureFile API specific error-codes.
 enum class SureFileErrors {
   invalid_password = 1,
   password_confirmation_failed,

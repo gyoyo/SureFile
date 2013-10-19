@@ -26,7 +26,7 @@
 namespace maidsafe {
 namespace surefile {
 
-// Type passed to input functions in SureFile class to determine which variable(s) to process.
+// Type passed to input functions in SureFileAPI class to determine which variable(s) to process.
 enum InputField { kPassword, kConfirmationPassword };
 
 // Config file parsing error.
@@ -39,7 +39,8 @@ typedef std::function<void(const std::string& /*service_alias*/)> OnServiceRemov
 typedef std::function<void(const std::string& /*old_service_alias*/,
                            const std::string& /*new_service_alias*/)> OnServiceRenamedFunction;
 
-// Slots are used to provide useful information back to the client application.
+// Slots are used to communicate configuration problems and actions on the drive to the client
+// application.
 struct Slots {
   ConfigurationErrorFunction configuration_error;
   OnServiceAddedFunction on_service_added;
